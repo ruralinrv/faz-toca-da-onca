@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Vencimento — Collar BGIU26 | Fazenda Toca da Onça</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <style>
+        :root{--primary:#1a5c2a;--primary-light:#2d8a44;--primary-dark:#0f3d1a;--accent:#d4a017;--accent-light:#f0c950;--bg-dark:#0b1a0f;--bg-card:#12231a;--bg-card-alt:#162b1f;--text-primary:#e8f0eb;--text-secondary:#a3b8a9;--text-muted:#6b8570;--green:#22c55e;--green-bg:rgba(34,197,94,0.12);--red:#ef4444;--red-bg:rgba(239,68,68,0.12);--yellow:#eab308;--yellow-bg:rgba(234,179,8,0.12);--blue:#3b82f6;--border:#1e3a28;}
+        *{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.6;min-height:100vh;}.container{max-width:1100px;margin:0 auto;padding:20px;}
+        .header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);border-radius:16px;padding:40px;margin-bottom:24px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08);}.header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(212,160,23,.15) 0%,transparent 70%);border-radius:50%;}.header-content{position:relative;z-index:1;}.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.4);color:var(--accent-light);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}.header h1{font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px;}.header h2{font-size:1.1rem;font-weight:400;color:rgba(255,255,255,.7);margin-bottom:20px;}.header-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}.header-info-item{background:rgba(0,0,0,.2);border-radius:10px;padding:12px 16px;border:1px solid rgba(255,255,255,.06);}.header-info-item .label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:2px;}.header-info-item .value{font-size:.95rem;font-weight:600;color:#fff;}
+        .section-title{display:flex;align-items:center;gap:12px;margin-bottom:20px;margin-top:8px;}.section-title .icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}.section-title .icon.sim{background:linear-gradient(135deg,#7c3aed,#a855f7);}.section-title .icon.mec{background:linear-gradient(135deg,#0891b2,#22d3ee);}.section-title .icon.vis{background:linear-gradient(135deg,#d97706,#f59e0b);}.section-title .icon.rec{background:linear-gradient(135deg,#1a5c2a,#2d8a44);}.section-title h3{font-size:1.3rem;font-weight:700;}.section-title h3 span{font-weight:400;color:var(--text-secondary);font-size:.9rem;}
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;}
+        .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px;}.kpi-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}.kpi-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}.kpi-box.green::before{background:var(--green);}.kpi-box.yellow::before{background:var(--yellow);}.kpi-box.blue::before{background:var(--blue);}.kpi-box.gold::before{background:linear-gradient(135deg,#d4a017,#f0c950);}.kpi-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:6px;}.kpi-value{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;}.kpi-sub{font-size:.78rem;color:var(--text-muted);margin-top:4px;}
+        .table-wrapper{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:16px;}table{width:100%;border-collapse:collapse;font-size:.85rem;}thead th{background:var(--bg-card-alt);padding:12px 14px;text-align:center;font-weight:600;color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);}tbody td{padding:11px 14px;border-bottom:1px solid rgba(30,58,40,.5);text-align:center;}tbody tr:last-child td{border-bottom:none;}tbody tr:hover{background:rgba(45,138,68,.06);}
+        .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:.74rem;font-weight:600;}.tag-green{background:var(--green-bg);color:var(--green);}.tag-red{background:var(--red-bg);color:var(--red);}.tag-yellow{background:var(--yellow-bg);color:var(--yellow);}.tag-blue{background:rgba(59,130,246,.12);color:var(--blue);}.tag-purple{background:rgba(168,85,247,.12);color:#a855f7;}
+        .chart-container{position:relative;width:100%;margin:16px 0;}.chart-container.large{height:400px;}.chart-container.medium{height:340px;}.chart-container.small{height:260px;}
+        .highlight-box{border-radius:14px;padding:20px 24px;margin-bottom:24px;text-align:center;border:1px solid;}.highlight-box.info{background:linear-gradient(135deg,rgba(59,130,246,.06),rgba(59,130,246,.02));border-color:rgba(59,130,246,.2);}.highlight-box.green{background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.02));border-color:rgba(34,197,94,.2);}.highlight-box .hl-emoji{font-size:2rem;margin-bottom:8px;}.highlight-box .hl-title{font-size:1rem;font-weight:700;margin-bottom:6px;}.highlight-box .hl-text{font-size:.88rem;color:var(--text-secondary);line-height:1.7;}
+        .mec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}.mec-card{border-radius:14px;padding:24px;border:1px solid;text-align:center;}.mec-card.red{background:linear-gradient(135deg,rgba(239,68,68,.06),rgba(239,68,68,.02));border-color:rgba(239,68,68,.2);}.mec-card.green{background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.02));border-color:rgba(34,197,94,.2);}.mec-card.yellow{background:linear-gradient(135deg,rgba(234,179,8,.06),rgba(234,179,8,.02));border-color:rgba(234,179,8,.2);}.mec-card .mec-icon{font-size:2.5rem;margin-bottom:12px;}.mec-card h4{font-size:.95rem;font-weight:700;margin-bottom:8px;}.mec-card .mec-range{font-size:.8rem;color:var(--text-muted);margin-bottom:10px;}.mec-card .mec-detail{font-size:.82rem;color:var(--text-secondary);line-height:1.6;text-align:left;}.mec-card .mec-result{font-size:1.1rem;font-weight:800;margin-top:12px;}
+        .scenario-bar{position:relative;margin:30px 0 20px;height:56px;border-radius:10px;overflow:visible;}.scenario-labels{display:flex;justify-content:space-between;margin-top:14px;font-size:.72rem;color:var(--text-muted);}
+        .rec-box{border-radius:12px;padding:20px 24px;margin:14px 0;border-left:4px solid;}.rec-box.hold{background:var(--green-bg);border-color:var(--green);}.rec-box.info{background:rgba(59,130,246,.08);border-color:var(--blue);}.rec-box h4{font-size:.95rem;font-weight:700;margin-bottom:8px;}.rec-box.hold h4{color:var(--green);}.rec-box.info h4{color:var(--blue);}.rec-box p{font-size:.88rem;color:var(--text-secondary);line-height:1.7;}
+        .philosophy-banner{background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:14px;padding:32px;text-align:center;margin:24px 0;border:1px solid rgba(255,255,255,.08);}.philosophy-banner .content{position:relative;z-index:1;}.philosophy-banner .emoji{font-size:2.2rem;margin-bottom:12px;}.philosophy-banner h4{font-size:1.1rem;color:var(--accent-light);margin-bottom:8px;}.philosophy-banner p{color:rgba(255,255,255,.7);font-size:.92rem;max-width:700px;margin:0 auto;line-height:1.7;}
+        .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:32px 0;}
+        .sim-input-section{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;text-align:center;}.sim-input-section label{font-size:.9rem;font-weight:600;color:var(--text-secondary);margin-right:12px;}.sim-input-section input[type=range]{width:60%;max-width:400px;margin:12px 0;accent-color:var(--green);height:8px;}.sim-result{margin-top:16px;padding:20px;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid var(--border);}.sim-result .sr-price{font-size:2rem;font-weight:800;margin-bottom:8px;}.sim-result .sr-detail{font-size:.88rem;color:var(--text-secondary);line-height:1.8;}
+        .cost-table{margin:16px 0;}.cost-table .ct-row{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;}.cost-table .ct-row:last-child{border-bottom:none;}.cost-table .ct-row .ct-label{color:var(--text-muted);}.cost-table .ct-row .ct-value{font-weight:600;}.ct-total{background:rgba(34,197,94,.08);border-radius:10px;margin-top:8px;}.ct-total .ct-label,.ct-total .ct-value{color:var(--green);font-weight:700;}
+        .footer{margin-top:32px;padding:32px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;}.footer-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}.footer-info h4{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:2px;}.footer-info .ftitle{font-size:.82rem;color:var(--green);font-weight:600;margin-bottom:4px;}.footer-info .fsubtitle{font-size:.8rem;color:var(--text-muted);margin-bottom:12px;line-height:1.6;font-style:italic;}.footer-contact{display:flex;flex-direction:column;gap:6px;}.footer-contact a,.footer-contact span{font-size:.84rem;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:8px;}.footer-contact a:hover{color:var(--green);}.footer-logo{text-align:right;}.footer-logo .brand{font-size:1.8rem;font-weight:800;color:var(--primary-light);letter-spacing:-1px;}.footer-logo .brand span{color:var(--accent);}.footer-logo .tagline{font-size:.72rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;}.disclaimer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted);text-align:center;line-height:1.6;}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}.animate{animation:fadeInUp .5s ease-out forwards;}.delay-1{animation-delay:.1s;}.delay-2{animation-delay:.2s;}.delay-3{animation-delay:.3s;}.delay-4{animation-delay:.4s;}
+        @media(max-width:768px){.container{padding:12px;}.header{padding:24px;}.header h1{font-size:1.5rem;}.mec-grid{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;text-align:center;}.footer-logo{text-align:center;}.kpi-row{grid-template-columns:repeat(2,1fr);}}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header animate">
+        <div class="header-content">
+            <div class="header-badge">🎯 Simulador de Vencimento — Collar BGIU26</div>
+            <h1>Fazenda Toca da Onça</h1>
+            <h2>Projeção de Resultado Final no Vencimento — Todos os cenários possíveis</h2>
+            <div class="header-info">
+                <div class="header-info-item"><div class="label">Estratégia</div><div class="value">🐂 COLLAR — BGIU26</div></div>
+                <div class="header-info-item"><div class="label">Entrada no Futuro</div><div class="value">R$ 347,00/@</div></div>
+                <div class="header-info-item"><div class="label">PUT Comprada</div><div class="value">Strike R$ 335,00</div></div>
+                <div class="header-info-item"><div class="label">CALL Vendida</div><div class="value">Strike R$ 355,00</div></div>
+                <div class="header-info-item"><div class="label">Prêmio Líquido</div><div class="value">R$ 0,65/@ (já pago)</div></div>
+                <div class="header-info-item"><div class="label">Vencimento</div><div class="value">30/09/2026 (177 dias)</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMO FUNCIONA -->
+    <div class="section-title animate delay-1"><div class="icon mec">⚙️</div><h3>Como Funciona no Vencimento <span>| Mecânica do Collar</span></h3></div>
+
+    <div class="highlight-box info animate delay-1">
+        <div class="hl-emoji">💡</div>
+        <div class="hl-title" style="color:var(--blue);">Custo Adicional Até o Vencimento = R$ 0,00</div>
+        <div class="hl-text">
+            Todo o custo já foi pago na montagem (R$ 0,65/@). As opções que ficarem <strong>fora do dinheiro viram pó</strong> (desaparecem sem custo).
+            As que ficarem <strong>no dinheiro são exercidas automaticamente</strong> pela B3 via liquidação financeira.
+            <strong>O produtor não precisa fazer nada.</strong>
+        </div>
+    </div>
+
+    <div class="mec-grid animate delay-1">
+        <div class="mec-card red">
+            <div class="mec-icon">🛡️</div>
+            <h4 style="color:var(--red);">Zona de Proteção</h4>
+            <div class="mec-range">Boi fecha ≤ R$ 335/@</div>
+            <div class="mec-detail">
+                • <strong>PUT 335:</strong> Exercida automaticamente ✅<br>
+                • <strong>CALL 355:</strong> Vira pó ❌<br>
+                • Você recebe R$ 335 − preço<br>
+                • Piso efetivo: <strong>R$ 334,35/@</strong>
+            </div>
+            <div class="mec-result" style="color:var(--red);">Perda limitada a −R$ 12,65/@</div>
+        </div>
+        <div class="mec-card green">
+            <div class="mec-icon">✅</div>
+            <h4 style="color:var(--green);">Zona de Lucro</h4>
+            <div class="mec-range">Boi fecha entre R$ 335 e R$ 355</div>
+            <div class="mec-detail">
+                • <strong>PUT 335:</strong> Vira pó ❌<br>
+                • <strong>CALL 355:</strong> Vira pó ❌<br>
+                • <strong>Ambas viram pó!</strong><br>
+                • Ganho: preço − R$ 347 − R$ 0,65
+            </div>
+            <div class="mec-result" style="color:var(--green);">Ganho de −R$ 12,65 a +R$ 7,35/@</div>
+        </div>
+        <div class="mec-card yellow">
+            <div class="mec-icon">🔒</div>
+            <h4 style="color:var(--yellow);">Zona Teto (Trava)</h4>
+            <div class="mec-range">Boi fecha ≥ R$ 355/@</div>
+            <div class="mec-detail">
+                • <strong>PUT 335:</strong> Vira pó ❌<br>
+                • <strong>CALL 355:</strong> Exercida contra você ⚠️<br>
+                • Você paga preço − R$ 355<br>
+                • Teto efetivo: <strong>R$ 354,35/@</strong>
+            </div>
+            <div class="mec-result" style="color:var(--yellow);">Ganho travado em +R$ 7,35/@</div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SIMULADOR INTERATIVO -->
+    <div class="section-title animate delay-2"><div class="icon sim">🎛️</div><h3>Simulador Interativo <span>| Arraste para ver o resultado</span></h3></div>
+
+    <div class="sim-input-section animate delay-2">
+        <label for="priceSlider">🐂 Preço do Boi no Vencimento (R$/@):</label><br>
+        <input type="range" id="priceSlider" min="310" max="380" value="352" step="0.5">
+        <div style="font-size:1.4rem;font-weight:800;margin:8px 0;" id="sliderValue">R$ 352,00/@</div>
+        <div class="sim-result" id="simResult">
+            <div class="sr-price" id="srPrice" style="color:var(--green);">+R$ 4,35/@</div>
+            <div class="sr-detail" id="srDetail"></div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TABELA DE CENÁRIOS -->
+    <div class="section-title animate delay-2"><div class="icon vis">📊</div><h3>Tabela Completa de Cenários <span>| Resultado no vencimento para cada faixa</span></h3></div>
+
+    <div class="card animate delay-2">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">📋 Resultado por Arroba (@) e por Contrato (330 @)</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Preço Ajuste<br>(R$/@)</th>
+                        <th>PUT 335</th>
+                        <th>CALL 355</th>
+                        <th>Ganho Futuro<br>(R$/@)</th>
+                        <th>Resultado<br>Opções (R$/@)</th>
+                        <th>Prêmio<br>Pago</th>
+                        <th>Resultado<br>Final (R$/@)</th>
+                        <th>Resultado<br>por Contrato</th>
+                        <th>Zona</th>
+                    </tr>
+                </thead>
+                <tbody id="scenarioTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRÁFICO PAYOFF DETALHADO -->
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">📈 Gráfico de Resultado no Vencimento — Collar BGIU26</h4>
+        <div class="chart-container large"><canvas id="payoffChart"></canvas></div>
+    </div>
+
+    <!-- GRÁFICO RESULTADO POR CONTRATO -->
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">💰 Resultado em Reais por Contrato (330 @)</h4>
+        <div class="chart-container medium"><canvas id="contractChart"></canvas></div>
+    </div>
+
+    <!-- GRÁFICO COMPARATIVO: COM vs SEM COLLAR -->
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">⚖️ Comparativo: Com Collar vs Sem Hedge (Futuro Puro)</h4>
+        <div class="chart-container medium"><canvas id="compareChart"></canvas></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CUSTOS DETALHADOS -->
+    <div class="section-title animate delay-3"><div class="icon mec">💰</div><h3>Estrutura de Custos <span>| O que já foi pago e o que resta</span></h3></div>
+
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">💵 Custos Totais da Operação</h4>
+        <div class="cost-table">
+            <div class="ct-row"><span class="ct-label">Prêmio PUT 335 (comprada)</span><span class="ct-value" style="color:var(--red);">−R$ 4,50/@ (pago)</span></div>
+            <div class="ct-row"><span class="ct-label">Prêmio CALL 355 (vendida)</span><span class="ct-value" style="color:var(--green);">+R$ 3,85/@ (recebido)</span></div>
+            <div class="ct-row"><span class="ct-label">Prêmio líquido</span><span class="ct-value" style="color:var(--red);">−R$ 0,65/@ (custo total)</span></div>
+            <div class="ct-row"><span class="ct-label">Corretagem + emolumentos</span><span class="ct-value" style="color:var(--text-muted);">✅ Pago na montagem</span></div>
+            <div class="ct-row"><span class="ct-label">Margem de garantia</span><span class="ct-value" style="color:var(--blue);">Alocada (devolvida no vencimento)</span></div>
+            <div class="ct-row" style="border-top:2px solid var(--border);padding-top:14px;margin-top:8px;">
+                <span class="ct-label" style="font-weight:700;color:var(--accent);">⏳ Custo adicional até o vencimento</span>
+                <span class="ct-value" style="font-size:1.2rem;color:var(--green);">R$ 0,00 ✅</span>
+            </div>
+            <div class="ct-row ct-total">
+                <span class="ct-label">CUSTO TOTAL DA OPERAÇÃO</span>
+                <span class="ct-value">R$ 0,65/@ = R$ 214,50/contrato</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CENÁRIOS DE PROBABILIDADE -->
+    <div class="section-title animate delay-3"><div class="icon rec">🎯</div><h3>Cenários Mais Prováveis <span>| Baseado no mercado atual</span></h3></div>
+
+    <div class="kpi-row animate delay-4">
+        <div class="kpi-box green">
+            <div class="kpi-label">Se mantiver nível atual (~R$352)</div>
+            <div class="kpi-value" style="color:var(--green);">+R$ 4,35/@</div>
+            <div class="kpi-sub">+R$ 1.435,50 por contrato</div>
+        </div>
+        <div class="kpi-box gold">
+            <div class="kpi-label">Se for ao teto (R$355+)</div>
+            <div class="kpi-value" style="color:var(--accent);">+R$ 7,35/@</div>
+            <div class="kpi-sub">+R$ 2.425,50 por contrato 🏆</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Se voltar à entrada (R$347)</div>
+            <div class="kpi-value" style="color:var(--yellow);">−R$ 0,65/@</div>
+            <div class="kpi-sub">−R$ 214,50 (apenas o prêmio)</div>
+        </div>
+        <div class="kpi-box blue">
+            <div class="kpi-label">Breakeven exato</div>
+            <div class="kpi-value" style="color:var(--blue);">R$ 347,65/@</div>
+            <div class="kpi-sub">Acima disso = lucro garantido</div>
+        </div>
+    </div>
+
+    <div class="card animate delay-4">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px;">🎯 Probabilidades Estimadas — Baseado na Curva de Futuros</h4>
+        <div class="chart-container small"><canvas id="probChart"></canvas></div>
+    </div>
+
+    <div class="rec-box hold animate delay-4">
+        <h4>✅ O Collar está fazendo EXATAMENTE o que foi desenhado para fazer</h4>
+        <p>
+            Pedro Henrique e Rogério, esta tabela mostra que <strong>não importa para onde o boi vá</strong>:
+            a perda máxima é de R$ 12,65/@ (se boi desabar para R$ 320) e o ganho máximo é de R$ 7,35/@ (se boi explodir para R$ 400).
+            <br><br>
+            <strong>Com o BGIU26 hoje a R$ 351,95:</strong><br>
+            • Se mantiver esse nível → <strong style="color:var(--green)">+R$ 4,35/@ (+R$ 1.435/ctt)</strong><br>
+            • Se subir para R$ 355 → <strong style="color:var(--green)">+R$ 7,35/@ (+R$ 2.425/ctt)</strong> 🏆<br>
+            • Se cair para R$ 340 → <strong>−R$ 7,65/@</strong>, mas sem o hedge perderia R$ 7,00/@ de qualquer forma<br>
+            • <strong>Não há custo nenhum para manter até o vencimento</strong><br><br>
+            O custo de R$ 0,65/@ (R$ 214,50/ctt) é o <strong>seguro mais barato da fazenda</strong>. 🛡️
+        </p>
+    </div>
+
+    <div class="rec-box info animate delay-4">
+        <h4>📌 Quando valeria sair antes do vencimento?</h4>
+        <p>
+            Sair antes só faz sentido em <strong>duas situações extremas</strong>:<br><br>
+            1️⃣ <strong>Boi rompe R$ 360+ e há convicção total de que vai a R$ 370+</strong> → aí o custo de recomprar a CALL (estimado R$ 10-15/@)
+            poderia se pagar se o boi de fato ultrapassar R$ 370<br><br>
+            2️⃣ <strong>Boi despenca abaixo de R$ 325 e há oportunidade de remontar a preços melhores</strong> → improvável no cenário atual<br><br>
+            <strong>Fora dessas situações: levar até o vencimento é a melhor estratégia.</strong> O tempo está trabalhando a favor da operação.
+        </p>
+    </div>
+
+    <div class="philosophy-banner animate delay-4">
+        <div class="content">
+            <div class="emoji">🛡️🐂💰</div>
+            <h4>O Collar É o Airbag da Pecuária</h4>
+            <p>
+                Assim como o airbag do carro: você paga uma vez, torce para não precisar, mas se precisar ele salva.
+                <strong>O custo de R$ 0,65/@ já foi pago. Agora é só colher o resultado.</strong><br><br>
+                Se o boi ficar acima de R$ 347,65/@ no vencimento, <strong style="color:var(--accent-light)">a operação é lucrativa</strong>.
+                Com o boi hoje a R$ 351,95, estamos <strong style="color:var(--accent-light)">R$ 4,30 acima do breakeven</strong>.<br><br>
+                <strong style="color:var(--accent-light)">Não mexam em time que está ganhando. 🏆</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer animate delay-4">
+        <div class="footer-grid">
+            <div class="footer-info">
+                <h4>Dr. Sidney Souza</h4>
+                <div class="ftitle">Economista Agrícola · Estrategista Econômico do Produtor</div>
+                <div class="fsubtitle">Especialista em economia da fazenda e gestão de risco no agro<br>Transformamos dados da fazenda em decisões econômicas</div>
+                <div class="footer-contact"><a href="mailto:sidneyagro@gmail.com">📧 sidneyagro@gmail.com</a><span>📱 (64) 9 9226-6886</span><a href="https://instagram.com/ruralin.ai" target="_blank">📸 @ruralin.ai</a></div>
+            </div>
+            <div class="footer-logo"><div class="brand">rural<span>in</span>.ai</div><div class="tagline">Inteligência para o agro</div></div>
+        </div>
+        <div class="disclaimer">Simulação com caráter educativo e estratégico. Prêmios e custos reais podem variar conforme condições de mercado no momento da execução. Dados base: B3 06/04/2026.</div>
+    </div>
+</div>
+
+<script>
+Chart.defaults.color='#a3b8a9';Chart.defaults.borderColor='rgba(30,58,40,.4)';Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+
+// --- CONSTANTES ---
+const ENTRY=347,PUT=335,CALL=355,PREMIUM=0.65,LOT=330;
+
+function calcResult(price){
+    let futuroGain=price-ENTRY;
+    let optResult=0;
+    if(price<=PUT) optResult=PUT-price; // PUT exercida a favor
+    if(price>=CALL) optResult=-(price-CALL); // CALL exercida contra
+    return futuroGain+optResult-PREMIUM;
+}
+
+// --- SIMULADOR INTERATIVO ---
+const slider=document.getElementById('priceSlider');
+const sliderVal=document.getElementById('sliderValue');
+const srPrice=document.getElementById('srPrice');
+const srDetail=document.getElementById('srDetail');
+
+function updateSim(){
+    const p=parseFloat(slider.value);
+    sliderVal.textContent=`R$ ${p.toFixed(2)}/@`;
+    const r=calcResult(p);
+    const rCtt=(r*LOT);
+    const futG=p-ENTRY;
+    let putStatus,callStatus,zone;
+    if(p<=PUT){putStatus='✅ Exercida (+R$'+(PUT-p).toFixed(2)+')';callStatus='❌ Vira pó';zone='🛡️ Proteção';}
+    else if(p>=CALL){putStatus='❌ Vira pó';callStatus='⚠️ Exercida (-R$'+(p-CALL).toFixed(2)+')';zone='🔒 Teto';}
+    else{putStatus='❌ Vira pó';callStatus='❌ Vira pó';zone='✅ Zona de lucro';}
+    srPrice.textContent=`${r>=0?'+':''}R$ ${r.toFixed(2)}/@`;
+    srPrice.style.color=r>=0?'var(--green)':'var(--red)';
+    srDetail.innerHTML=`
+        <strong>Zona:</strong> ${zone}<br>
+        <strong>Ganho no futuro:</strong> ${futG>=0?'+':''}R$ ${futG.toFixed(2)}/@ <br>
+        <strong>PUT 335:</strong> ${putStatus}<br>
+        <strong>CALL 355:</strong> ${callStatus}<br>
+        <strong>Prêmio pago:</strong> −R$ ${PREMIUM.toFixed(2)}/@<br>
+        <strong style="font-size:1.1rem;">Resultado final: ${r>=0?'+':''}R$ ${r.toFixed(2)}/@ = ${rCtt>=0?'+':''}R$ ${rCtt.toFixed(2)} por contrato</strong>
+    `;
+}
+slider.addEventListener('input',updateSim);
+updateSim();
+
+// --- TABELA DE CENÁRIOS ---
+const prices=[310,315,320,325,330,334.35,335,340,345,347,347.65,350,351.95,353,354.35,355,360,365,370,375,380];
+const tbody=document.getElementById('scenarioTable');
+prices.forEach(p=>{
+    const r=calcResult(p);
+    const rCtt=(r*LOT);
+    const futG=p-ENTRY;
+    let putS,callS,zone,zoneTag;
+    if(p<=PUT){putS='Exercida ✅';callS='Vira pó';zone='Proteção';zoneTag='tag-red';}
+    else if(p>=CALL){putS='Vira pó';callS='Exercida ⚠️';zone='Teto';zoneTag='tag-yellow';}
+    else{putS='Vira pó';callS='Vira pó';zone='Livre';zoneTag='tag-green';}
+    let optR=0;
+    if(p<=PUT) optR=PUT-p;
+    if(p>=CALL) optR=-(p-CALL);
+    const isToday=p===351.95;
+    const isBE=p===347.65;
+    const isMax=p===354.35||p>=355;
+    const isPiso=p===334.35;
+    let rowStyle='';
+    if(isToday) rowStyle='background:rgba(34,197,94,.08);';
+    else if(isBE) rowStyle='background:rgba(59,130,246,.06);';
+    else if(isPiso) rowStyle='background:rgba(239,68,68,.06);';
+    let priceLabel=`R$ ${p.toFixed(2)}`;
+    if(isToday) priceLabel+=` <span class="tag tag-green">HOJE</span>`;
+    if(isBE) priceLabel+=` <span class="tag tag-blue">BREAKEVEN</span>`;
+    if(p===334.35) priceLabel+=` <span class="tag tag-red">PISO EFET.</span>`;
+    if(p===354.35) priceLabel+=` <span class="tag tag-yellow">TETO EFET.</span>`;
+    tbody.innerHTML+=`<tr style="${rowStyle}">
+        <td style="text-align:left;font-weight:600;">${priceLabel}</td>
+        <td>${putS}</td>
+        <td>${callS}</td>
+        <td style="color:${futG>=0?'var(--green)':'var(--red)'}">${futG>=0?'+':''}R$ ${futG.toFixed(2)}</td>
+        <td style="color:${optR>=0?(optR>0?'var(--green)':'var(--text-muted)'):'var(--red)'}">${optR>0?'+':''}R$ ${optR.toFixed(2)}</td>
+        <td style="color:var(--red)">−R$ ${PREMIUM.toFixed(2)}</td>
+        <td style="font-weight:700;color:${r>=0?'var(--green)':'var(--red)'};">${r>=0?'+':''}R$ ${r.toFixed(2)}</td>
+        <td style="font-weight:700;color:${rCtt>=0?'var(--green)':'var(--red)'};">${rCtt>=0?'+':''}R$ ${rCtt.toFixed(2)}</td>
+        <td><span class="tag ${zoneTag}">${zone}</span></td>
+    </tr>`;
+});
+
+// --- GRÁFICO PAYOFF ---
+const ppLabels=[],ppData=[],ppZero=[];
+for(let p=310;p<=380;p+=0.5){ppLabels.push(p);ppData.push(calcResult(p));ppZero.push(0);}
+new Chart(document.getElementById('payoffChart').getContext('2d'),{type:'line',data:{labels:ppLabels,datasets:[{label:'Resultado Collar',data:ppData,borderColor:'#a855f7',backgroundColor:ctx=>ctx.raw>=0?'rgba(34,197,94,.15)':'rgba(239,68,68,.12)',borderWidth:3,fill:true,tension:0,pointRadius:0},{label:'Zero',data:ppZero,borderColor:'rgba(255,255,255,.15)',borderWidth:1,borderDash:[5,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#12231a',borderColor:'#1e3a28',borderWidth:1,callbacks:{title:i=>`Boi: R$ ${Number(i[0].label).toFixed(2)}/@`,label:i=>{if(i.datasetIndex===0){const v=i.raw;return`Resultado: ${v>=0?'+':''}R$ ${v.toFixed(2)}/@ | ${v>=0?'+':''}R$ ${(v*330).toFixed(2)}/ctt`;}}}},annotation:{annotations:{put:{type:'line',xMin:50,xMax:50,borderColor:'#ef4444',borderWidth:2,borderDash:[6,3],label:{display:true,content:'PUT 335',position:'start',backgroundColor:'rgba(239,68,68,.8)',font:{size:10}}},call:{type:'line',xMin:90,xMax:90,borderColor:'#eab308',borderWidth:2.5,borderDash:[6,3],label:{display:true,content:'CALL 355',position:'start',backgroundColor:'rgba(234,179,8,.9)',font:{size:11,weight:'bold'}}},entry:{type:'line',xMin:74,xMax:74,borderColor:'#6b8570',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Entrada 347',position:'end',backgroundColor:'rgba(107,133,112,.7)',font:{size:10}}},be:{type:'line',xMin:75.3,xMax:75.3,borderColor:'#3b82f6',borderWidth:2,borderDash:[4,3],label:{display:true,content:'BE 347,65',position:'start',backgroundColor:'rgba(59,130,246,.8)',font:{size:10}}},today:{type:'line',xMin:83.9,xMax:83.9,borderColor:'#22c55e',borderWidth:3,label:{display:true,content:'📍 HOJE 351,95',position:'end',backgroundColor:'rgba(34,197,94,.9)',font:{size:12,weight:'bold'}}},maxGain:{type:'box',yMin:7.35,yMax:7.35,borderColor:'rgba(212,160,23,.4)',borderWidth:1,borderDash:[3,3],label:{display:true,content:'Ganho máx: +R$ 7,35/@',position:'start',backgroundColor:'rgba(212,160,23,.6)',font:{size:9}}}}}},scales:{x:{title:{display:true,text:'Preço Boi no Vencimento (R$/@)',color:'#6b8570'},ticks:{callback:(v,i)=>(i%10===0)?ppLabels[i]:'',maxRotation:0},grid:{display:false}},y:{title:{display:true,text:'Resultado (R$/@)',color:'#6b8570'},grid:{color:'rgba(30,58,40,.3)'}}}}});
+
+// --- GRÁFICO POR CONTRATO ---
+const ccLabels=[320,325,330,335,340,345,347,347.65,350,351.95,355,360,365,370];
+const ccData=ccLabels.map(p=>calcResult(p)*LOT);
+new Chart(document.getElementById('contractChart').getContext('2d'),{type:'bar',data:{labels:ccLabels.map(p=>{if(p===351.95)return'351,95\n📍 HOJE';if(p===347.65)return'347,65\nBE';if(p===347)return'347\nEntrada';return p.toString();}),datasets:[{data:ccData,backgroundColor:ccData.map(v=>v>=0?'rgba(34,197,94,.6)':'rgba(239,68,68,.5)'),borderColor:ccData.map(v=>v>=0?'#22c55e':'#ef4444'),borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>`${ccData[i.dataIndex]>=0?'+':''}R$ ${ccData[i.dataIndex].toFixed(2)} por contrato`}}},scales:{x:{grid:{display:false},title:{display:true,text:'Preço no Vencimento (R$/@)',color:'#6b8570'}},y:{grid:{color:'rgba(30,58,40,.3)'},title:{display:true,text:'Resultado (R$/contrato)',color:'#6b8570'}}}}});
+
+// --- GRÁFICO COMPARATIVO ---
+const cmpLabels=[],cmpCollar=[],cmpFuturo=[];
+for(let p=310;p<=380;p+=1){cmpLabels.push(p);cmpCollar.push(calcResult(p));cmpFuturo.push(p-ENTRY);}
+new Chart(document.getElementById('compareChart').getContext('2d'),{type:'line',data:{labels:cmpLabels,datasets:[{label:'COM Collar (protegido)',data:cmpCollar,borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.06)',borderWidth:3,fill:false,tension:0,pointRadius:0},{label:'SEM Hedge (futuro puro)',data:cmpFuturo,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.06)',borderWidth:2,borderDash:[6,4],fill:false,tension:0,pointRadius:0},{label:'Zero',data:cmpLabels.map(()=>0),borderColor:'rgba(255,255,255,.12)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:14,font:{size:11}}},tooltip:{callbacks:{label:i=>`${i.dataset.label}: ${i.raw>=0?'+':''}R$ ${i.raw.toFixed(2)}/@`}},annotation:{annotations:{today:{type:'line',xMin:41.95,xMax:41.95,borderColor:'#22c55e',borderWidth:2,label:{display:true,content:'HOJE',position:'end',backgroundColor:'rgba(34,197,94,.8)',font:{size:10}}}}}},scales:{x:{title:{display:true,text:'Preço no Vencimento (R$/@)',color:'#6b8570'},ticks:{callback:(v,i)=>(i%5===0)?cmpLabels[i]:''},grid:{display:false}},y:{title:{display:true,text:'Resultado (R$/@)',color:'#6b8570'},grid:{color:'rgba(30,58,40,.3)'}}}}});
+
+// --- GRÁFICO DE PROBABILIDADE ---
+new Chart(document.getElementById('probChart').getContext('2d'),{type:'doughnut',data:{labels:['Lucro (>R$347,65)','Prejuízo (<R$347,65)','Lucro máximo (≥R$355)'],datasets:[{data:[60,15,25],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.5)','rgba(212,160,23,.7)'],borderColor:['#22c55e','#ef4444','#d4a017'],borderWidth:2,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,padding:16,font:{size:12}}},tooltip:{callbacks:{label:i=>`${i.label}: ~${i.raw}% de probabilidade`}}}}});
+</script>
+</body>
+</html>
