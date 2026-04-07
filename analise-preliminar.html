@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Financeiro | Grupo Econômico Família Silva</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a2235;
+            --bg-card-hover: #1f2a40;
+            --border-color: #2a3550;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #06b6d4);
+            --gradient-danger: linear-gradient(135deg, #ef4444, #f97316);
+            --gradient-success: linear-gradient(135deg, #10b981, #06b6d4);
+            --gradient-warning: linear-gradient(135deg, #f59e0b, #f97316);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-glow-blue: 0 0 30px rgba(59, 130, 246, 0.15);
+            --shadow-glow-red: 0 0 30px rgba(239, 68, 68, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-logo {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .sidebar-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .sidebar-nav {
+            padding: 16px 0;
+        }
+
+        .nav-section-label {
+            padding: 12px 20px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(59, 130, 246, 0.08);
+            color: var(--accent-blue);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-item .nav-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item .nav-badge {
+            margin-left: auto;
+            background: var(--accent-red);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            position: relative;
+            padding: 60px 48px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.7;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 32px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .hero-meta-item strong {
+            color: var(--text-secondary);
+        }
+
+        /* ========== KPI CARDS ========== */
+        .kpi-section {
+            padding: 32px 48px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi-card.blue::before { background: var(--gradient-primary); }
+        .kpi-card.red::before { background: var(--gradient-danger); }
+        .kpi-card.green::before { background: var(--gradient-success); }
+        .kpi-card.yellow::before { background: var(--gradient-warning); }
+        .kpi-card.purple::before { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 4px;
+        }
+
+        .kpi-card.blue .kpi-value { color: var(--accent-blue); }
+        .kpi-card.red .kpi-value { color: var(--accent-red); }
+        .kpi-card.green .kpi-value { color: var(--accent-green); }
+        .kpi-card.yellow .kpi-value { color: var(--accent-yellow); }
+        .kpi-card.purple .kpi-value { color: var(--accent-purple); }
+
+        .kpi-detail {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .kpi-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .kpi-change.up {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .kpi-change.down {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+        }
+
+        /* ========== SECTIONS ========== */
+        .section {
+            padding: 40px 48px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .section-icon.blue { background: rgba(59, 130, 246, 0.1); }
+        .section-icon.red { background: rgba(239, 68, 68, 0.1); }
+        .section-icon.green { background: rgba(16, 185, 129, 0.1); }
+        .section-icon.yellow { background: rgba(245, 158, 11, 0.1); }
+        .section-icon.purple { background: rgba(139, 92, 246, 0.1); }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 48px 48px;
+        }
+
+        /* ========== CHART CONTAINERS ========== */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .chart-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .chart-description {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-wrapper.h300 {
+            height: 300px;
+        }
+
+        .chart-wrapper.h350 {
+            height: 350px;
+        }
+
+        .chart-wrapper.h400 {
+            height: 400px;
+        }
+
+        /* ========== TABLES ========== */
+        .data-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .data-table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead th {
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .data-table tbody td {
+            padding: 12px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(42, 53, 80, 0.5);
+            color: var(--text-secondary);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.04);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .data-table .value.negative { color: var(--accent-red); }
+        .data-table .value.positive { color: var(--accent-green); }
+        .data-table .value.neutral { color: var(--text-primary); }
+        .data-table .value.highlight { color: var(--accent-yellow); }
+
+        .data-table .row-total {
+            background: rgba(59, 130, 246, 0.06);
+            font-weight: 700;
+        }
+
+        .data-table .row-total td {
+            color: var(--text-primary);
+            border-top: 2px solid var(--border-color);
+        }
+
+        /* ========== ALERT CARDS ========== */
+        .alerts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .alert-card {
+            display: flex;
+            gap: 16px;
+            padding: 20px 24px;
+            border-radius: 14px;
+            border: 1px solid;
+            transition: all 0.3s ease;
+        }
+
+        .alert-card:hover {
+            transform: translateX(4px);
+        }
+
+        .alert-card.critical {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .alert-card.warning {
+            background: rgba(245, 158, 11, 0.05);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .alert-card.info {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .alert-card.critical .alert-icon {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .alert-card.warning .alert-icon {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .alert-card.info .alert-icon {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .alert-card.critical .alert-title { color: var(--accent-red); }
+        .alert-card.warning .alert-title { color: var(--accent-yellow); }
+        .alert-card.info .alert-title { color: var(--accent-blue); }
+
+        .alert-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .alert-metric {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .alert-card.critical .alert-metric {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .alert-card.warning .alert-metric {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-yellow);
+        }
+
+        /* ========== GROUP STRUCTURE ========== */
+        .structure-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .structure-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .structure-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 24px;
+            min-width: 220px;
+            text-align: center;
+            position: relative;
+        }
+
+        .structure-box.primary {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        .structure-box.danger {
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        .structure-box.pending {
+            border-color: rgba(245, 158, 11, 0.3);
+            border-style: dashed;
+            opacity: 0.7;
+        }
+
+        .structure-box-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .structure-box-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .structure-box-detail {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .structure-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            color: var(--text-muted);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 32px 48px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ========== BADGE / TAG ========== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag.red { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+        .tag.green { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .tag.yellow { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .tag.blue { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .tag.purple { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .hero, .section, .kpi-section, .section-divider {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .hero h1 {
+                font-size: 24px;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .kpi-value {
+                font-size: 22px;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <!-- ========== SIDEBAR ========== -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">📊 Diagnóstico Financeiro</div>
+            <div class="sidebar-title">Grupo Família Silva</div>
+            <div class="sidebar-subtitle">Confinamento Toca da Onça | Boipore</div>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-section-label">Visão Geral</div>
+            <a class="nav-item active" href="#overview">
+                <span class="nav-icon">🏠</span> Painel Executivo
+            </a>
+            <a class="nav-item" href="#structure">
+                <span class="nav-icon">🏗️</span> Estrutura do Grupo
+            </a>
+
+            <div class="nav-section-label">Bloco 1 — Custos</div>
+            <a class="nav-item" href="#costs-overview">
+                <span class="nav-icon">💰</span> Visão Geral de Custos
+            </a>
+            <a class="nav-item" href="#costs-breakdown">
+                <span class="nav-icon">📊</span> Composição por Categoria
+            </a>
+            <a class="nav-item" href="#costs-monthly">
+                <span class="nav-icon">📈</span> Evolução Mensal
+            </a>
+            <a class="nav-item" href="#payroll">
+                <span class="nav-icon">👥</span> Folha de Pagamento
+            </a>
+            <a class="nav-item" href="#suppliers">
+                <span class="nav-icon">🏭</span> Fornecedores
+            </a>
+
+            <div class="nav-section-label">Bloco 2 — Bancário</div>
+            <a class="nav-item" href="#bank">
+                <span class="nav-icon">🏦</span> Contas & Saldos
+            </a>
+
+            <div class="nav-section-label">Bloco 4 — Alertas</div>
+            <a class="nav-item" href="#alerts">
+                <span class="nav-icon">⚠️</span> Pontos Críticos
+                <span class="nav-badge">6</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-content">
+
+        <!-- HERO -->
+        <section class="hero" id="overview">
+            <div class="hero-content">
+                <div class="hero-badge animate-in">📋 RELATÓRIO PRELIMINAR — ABRIL 2026</div>
+                <h1 class="animate-in delay-1">Diagnóstico Financeiro<br><span>Grupo Econômico Família Silva</span></h1>
+                <p class="hero-description animate-in delay-2">
+                    Análise da estrutura de custos do confinamento (Faz. Toca da Onça), fluxo bancário e identificação de pontos críticos. Período: Janeiro a Março/2026.
+                </p>
+                <div class="hero-meta animate-in delay-3">
+                    <div class="hero-meta-item">
+                        📅 <strong>Período:</strong>&nbsp;Jan–Mar/2026
+                    </div>
+                    <div class="hero-meta-item">
+                        🏢 <strong>Entidades:</strong>&nbsp;Confinamento + Boipore (frigorífico)
+                    </div>
+                    <div class="hero-meta-item">
+                        👤 <strong>Titulares:</strong>&nbsp;Renato M. Silva / Pedro H. C. Silva
+                    </div>
+                    <div class="hero-meta-item">
+                        📆 <strong>Apresentação:</strong>&nbsp;13/04/2026
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KPI CARDS -->
+        <section class="kpi-section" id="kpi">
+            <div class="kpi-grid">
+                <div class="kpi-card blue animate-in delay-1">
+                    <div class="kpi-label">Despesas Totais (Jan–Mar)</div>
+                    <div class="kpi-value">R$ 3,56M</div>
+                    <div class="kpi-detail">Total acumulado no trimestre</div>
+                </div>
+                <div class="kpi-card red animate-in delay-2">
+                    <div class="kpi-label">Média Mensal de Custos</div>
+                    <div class="kpi-value">R$ 1,19M</div>
+                    <div class="kpi-detail">Média ponderada Jan–Mar</div>
+                    <div class="kpi-change up">▲ Crescente mês a mês</div>
+                </div>
+                <div class="kpi-card yellow animate-in delay-3">
+                    <div class="kpi-label">Folha Total (CLT + Informal)</div>
+                    <div class="kpi-value">R$ 65,9K</div>
+                    <div class="kpi-detail">Mensal estimado com encargos</div>
+                </div>
+                <div class="kpi-card purple animate-in delay-4">
+                    <div class="kpi-label">Saldo Bancário (31/Mar)</div>
+                    <div class="kpi-value">R$ 2.272</div>
+                    <div class="kpi-detail">Soma das 2 contas Sicoob</div>
+                    <div class="kpi-change up">▼ 99,2% vs. Janeiro</div>
+                </div>
+                <div class="kpi-card green animate-in delay-5">
+                    <div class="kpi-label">Receita Identificada (Boipore)</div>
+                    <div class="kpi-value">R$ 562K</div>
+                    <div class="kpi-detail">TEDs intragrupo — Fev+Mar</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== ESTRUTURA DO GRUPO ========== -->
+        <section class="section" id="structure">
+            <div class="section-header">
+                <div class="section-icon blue">🏗️</div>
+                <div>
+                    <div class="section-title">Estrutura do Grupo Econômico</div>
+                    <div class="section-subtitle">Operação verticalmente integrada — Confinamento → Frigorífico</div>
+                </div>
+            </div>
+
+            <div class="structure-visual">
+                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 700;">FAMÍLIA SILVA — Renato + Pedro Henrique (Sucessão Familiar)</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">Não é sociedade — é processo de sucessão. Pedro Henrique é filho do Renato.</div>
+                <div class="structure-boxes">
+                    <div class="structure-box primary">
+                        <div class="structure-box-icon">🐂</div>
+                        <div class="structure-box-title">Confinamento</div>
+                        <div class="structure-box-detail">Faz. Toca da Onça<br>CPFs: Renato + Pedro H.<br>Gado próprio + de terceiros<br><strong>Centro de Custo</strong></div>
+                    </div>
+                    <div class="structure-arrow">➡️</div>
+                    <div class="structure-box primary">
+                        <div class="structure-box-icon">🏭</div>
+                        <div class="structure-box-title">Frigorífico Boipore</div>
+                        <div class="structure-box-detail">CNPJ 29.233.371/0004-48<br>Abate e processa o gado<br>Consome lotes do confinamento<br><strong>Centro de Receita</strong></div>
+                    </div>
+                    <div class="structure-arrow">➡️</div>
+                    <div class="structure-box pending">
+                        <div class="structure-box-icon">❓</div>
+                        <div class="structure-box-title">Mercado Final</div>
+                        <div class="structure-box-detail">Venda de carne/subprodutos<br>Dados não disponíveis<br><span class="tag yellow">AGUARDANDO</span></div>
+                    </div>
+                </div>
+                <div style="margin-top: 24px; padding: 16px; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 10px; text-align: left;">
+                    <div style="font-size: 13px; font-weight: 700; color: var(--accent-yellow); margin-bottom: 4px;">⚠️ Atenção: Análise Parcial</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">O confinamento é um centro de custo. O resultado final (lucro ou prejuízo) se realiza no frigorífico Boipore. Sem os dados da Boipore, <strong>não é possível calcular o resultado real</strong> da operação. O gestor Rogério (Adm/Fin) é o ponto focal para integração dos dados.</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== BLOCO 1: CUSTOS ========== -->
+        <section class="section" id="costs-overview">
+            <div class="section-header">
+                <div class="section-icon blue">💰</div>
+                <div>
+                    <div class="section-title">Estrutura de Custos — Confinamento</div>
+                    <div class="section-subtitle">Período: Janeiro a Março de 2026 | Dados da planilha analítica</div>
+                </div>
+            </div>
+
+            <!-- Tabela de Custos Mensais -->
+            <div class="data-table-container" style="margin-bottom: 24px;">
+                <div class="data-table-header">
+                    <div class="chart-title">Despesas Totais por Mês</div>
+                    <div class="chart-description">Valores em Reais (R$) — Consolidado Renato + Pedro Henrique</div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Despesa Total</th>
+                            <th>Variação</th>
+                            <th>% do Trimestre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Janeiro/2026</strong></td>
+                            <td class="value neutral">R$ 778.027,19</td>
+                            <td>—</td>
+                            <td>21,9%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fevereiro/2026</strong></td>
+                            <td class="value neutral">R$ 1.154.986,71</td>
+                            <td class="value negative">+48,5%</td>
+                            <td>32,5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Março/2026</strong></td>
+                            <td class="value neutral">R$ 1.623.440,04</td>
+                            <td class="value negative">+40,6%</td>
+                            <td>45,6%</td>
+                        </tr>
+                        <tr class="row-total">
+                            <td><strong>TOTAL TRIMESTRE</strong></td>
+                            <td class="value highlight">R$ 3.556.453,94</td>
+                            <td></td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gráficos lado a lado -->
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Evolução Mensal de Despesas</div>
+                    <div class="chart-description">Crescimento acelerado — custos dobraram em 3 meses</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartMonthlyExpenses"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Composição por Categoria (Trimestre)</div>
+                    <div class="chart-description">Compra de gado domina a estrutura de custos</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartCategoryPie"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPOSIÇÃO DETALHADA -->
+        <section class="section" id="costs-breakdown">
+            <div class="section-header">
+                <div class="section-icon purple">📊</div>
+                <div>
+                    <div class="section-title">Composição Detalhada por Categoria</div>
+                    <div class="section-subtitle">Top categorias que concentram os custos do confinamento</div>
+                </div>
+            </div>
+
+            <div class="data-table-container" style="margin-bottom: 24px;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Categoria</th>
+                            <th>Janeiro</th>
+                            <th>Fevereiro</th>
+                            <th>Março</th>
+                            <th>Total Trim.</th>
+                            <th>% Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>🐂 Compra de Gado</strong></td>
+                            <td class="value neutral">R$ 299.060</td>
+                            <td class="value neutral">R$ 623.046</td>
+                            <td class="value neutral">R$ 1.050.000</td>
+                            <td class="value highlight">R$ 1.972.106</td>
+                            <td><span class="tag red">55,5%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>🌾 Ração / Nutrição</strong></td>
+                            <td class="value neutral">R$ 195.742</td>
+                            <td class="value neutral">R$ 227.858</td>
+                            <td class="value neutral">R$ 273.144</td>
+                            <td class="value highlight">R$ 696.744</td>
+                            <td><span class="tag yellow">19,6%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>👥 Pessoal (CLT + Informal)</strong></td>
+                            <td class="value neutral">R$ 65.900</td>
+                            <td class="value neutral">R$ 65.900</td>
+                            <td class="value neutral">R$ 65.900</td>
+                            <td class="value highlight">R$ 197.700</td>
+                            <td><span class="tag blue">5,6%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>🏡 Arrendamento</strong></td>
+                            <td class="value neutral">R$ 38.500</td>
+                            <td class="value neutral">R$ 38.500</td>
+                            <td class="value neutral">R$ 38.500</td>
+                            <td class="value highlight">R$ 115.500</td>
+                            <td><span class="tag blue">3,2%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>🚚 Frete / Transporte</strong></td>
+                            <td class="value neutral">R$ 47.831</td>
+                            <td class="value neutral">R$ 53.240</td>
+                            <td class="value neutral">R$ 55.987</td>
+                            <td class="value highlight">R$ 157.058</td>
+                            <td><span class="tag blue">4,4%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>⛽ Combustível</strong></td>
+                            <td class="value neutral">R$ 28.400</td>
+                            <td class="value neutral">R$ 37.190</td>
+                            <td class="value neutral">R$ 30.415</td>
+                            <td class="value highlight">R$ 96.005</td>
+                            <td><span class="tag green">2,7%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>🔧 Manutenção / Estrutura</strong></td>
+                            <td class="value neutral">R$ 32.187</td>
+                            <td class="value neutral">R$ 39.650</td>
+                            <td class="value neutral">R$ 31.420</td>
+                            <td class="value highlight">R$ 103.257</td>
+                            <td><span class="tag green">2,9%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>📋 Contabilidade / Admin</strong></td>
+                            <td class="value neutral">R$ 4.863</td>
+                            <td class="value neutral">R$ 4.863</td>
+                            <td class="value neutral">R$ 4.863</td>
+                            <td class="value highlight">R$ 14.589</td>
+                            <td><span class="tag green">0,4%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>📦 Outros</strong></td>
+                            <td class="value neutral">R$ 65.544</td>
+                            <td class="value neutral">R$ 64.740</td>
+                            <td class="value neutral">R$ 73.211</td>
+                            <td class="value highlight">R$ 203.495</td>
+                            <td><span class="tag purple">5,7%</span></td>
+                        </tr>
+                        <tr class="row-total">
+                            <td><strong>TOTAL</strong></td>
+                            <td class="value highlight">R$ 778.027</td>
+                            <td class="value highlight">R$ 1.154.987</td>
+                            <td class="value highlight">R$ 1.623.440</td>
+                            <td class="value highlight">R$ 3.556.454</td>
+                            <td><strong>100%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-grid single">
+                <div class="chart-card full-width">
+                    <div class="chart-title">Evolução por Categoria — Jan a Mar/2026</div>
+                    <div class="chart-description">Destaque para a escalada na compra de gado (mais que triplicou no trimestre)</div>
+                    <div class="chart-wrapper h400">
+                        <canvas id="chartCategoryStacked"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== FOLHA DE PAGAMENTO ========== -->
+        <section class="section" id="payroll">
+            <div class="section-header">
+                <div class="section-icon green">👥</div>
+                <div>
+                    <div class="section-title">Folha de Pagamento — Análise Detalhada</div>
+                    <div class="section-subtitle">CLT formal + pagamentos informais | Custo real com encargos estimados</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Distribuição por Vínculo</div>
+                    <div class="chart-description">Formal (CLT) vs. Informal — risco trabalhista identificado</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartPayrollType"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Custo por CPF Patronal</div>
+                    <div class="chart-description">Renato concentra 7 funcionários CLT, Pedro Henrique 3</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartPayrollCPF"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-table-container" style="margin-top: 24px;">
+                <div class="data-table-header">
+                    <div class="chart-title">Composição da Folha Mensal</div>
+                    <div class="chart-description">Inclui salários, encargos patronais estimados (INSS, FGTS) e pagamentos informais</div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Qtde Pessoas</th>
+                            <th>Valor Mensal</th>
+                            <th>% da Folha</th>
+                            <th>Risco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CLT — Renato</strong> (7 funcionários)</td>
+                            <td>7</td>
+                            <td class="value neutral">R$ 19.215,66</td>
+                            <td>29,2%</td>
+                            <td><span class="tag green">Regular</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CLT — Pedro H.</strong> (3 funcionários)</td>
+                            <td>3</td>
+                            <td class="value neutral">R$ 5.898,49</td>
+                            <td>9,0%</td>
+                            <td><span class="tag green">Regular</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Encargos patronais estimados</strong> (INSS 20% + FGTS 8% + RAT/Terceiros ~5,8%)</td>
+                            <td>—</td>
+                            <td class="value neutral">R$ 8.478,55</td>
+                            <td>12,9%</td>
+                            <td><span class="tag green">Regular</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Provisão 13º + Férias</strong> (estimado mensal)</td>
+                            <td>—</td>
+                            <td class="value neutral">R$ 6.975,96</td>
+                            <td>10,6%</td>
+                            <td><span class="tag green">Regular</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rogério</strong> (Gestor Adm/Fin — sem vínculo CLT)</td>
+                            <td>1</td>
+                            <td class="value negative">R$ 8.000,00</td>
+                            <td>12,1%</td>
+                            <td><span class="tag red">Informal</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Outros informais</strong> (diaristas, avulsos, etc.)</td>
+                            <td>~5</td>
+                            <td class="value negative">R$ 17.330,00</td>
+                            <td>26,3%</td>
+                            <td><span class="tag red">Informal</span></td>
+                        </tr>
+                        <tr class="row-total">
+                            <td><strong>TOTAL FOLHA MENSAL</strong></td>
+                            <td><strong>~16+</strong></td>
+                            <td class="value highlight">R$ 65.898,66</td>
+                            <td><strong>100%</strong></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== FORNECEDORES ========== -->
+        <section class="section" id="suppliers">
+            <div class="section-header">
+                <div class="section-icon yellow">🏭</div>
+                <div>
+                    <div class="section-title">Top 10 Fornecedores por Volume</div>
+                    <div class="section-subtitle">Concentração de pagamentos no trimestre Jan–Mar/2026</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card full-width">
+                    <div class="chart-title">Ranking de Fornecedores</div>
+                    <div class="chart-description">Os 10 maiores representam mais de 80% do total de despesas</div>
+                    <div class="chart-wrapper h400">
+                        <canvas id="chartSuppliers"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== BLOCO 2: BANCÁRIO ========== -->
+        <section class="section" id="bank">
+            <div class="section-header">
+                <div class="section-icon purple">🏦</div>
+                <div>
+                    <div class="section-title">Posição Bancária — Sicoob COOPREM</div>
+                    <div class="section-subtitle">Evolução de saldo das contas correntes Jan–Mar/2026</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Evolução de Saldo — Conta Pedro H. (Principal)</div>
+                    <div class="chart-description">Conta operacional: de R$ 262k para R$ 1,4k em 3 meses</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartBankPedro"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Evolução de Saldo — Conta Renato</div>
+                    <div class="chart-description">Conta secundária: saldos baixos, pouca movimentação</div>
+                    <div class="chart-wrapper h300">
+                        <canvas id="chartBankRenato"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-table-container" style="margin-top: 24px;">
+                <div class="data-table-header">
+                    <div class="chart-title">Saldos em Conta Corrente — Fechamento Mensal</div>
+                    <div class="chart-description">Dados extraídos dos extratos Sicoob COOPREM (Coop 3350-2)</div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Conta</th>
+                            <th>30/Jan</th>
+                            <th>27/Fev</th>
+                            <th>31/Mar</th>
+                            <th>Variação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pedro H. (5.756-8)</strong></td>
+                            <td class="value positive">R$ 262.329,12</td>
+                            <td class="value positive">R$ 295.568,96</td>
+                            <td class="value negative">R$ 1.418,30</td>
+                            <td class="value negative">-99,5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Renato (5.758-4)</strong></td>
+                            <td class="value positive">R$ 7.427,04</td>
+                            <td class="value positive">R$ 1.452,65</td>
+                            <td class="value neutral">R$ 854,32</td>
+                            <td class="value negative">-88,5%</td>
+                        </tr>
+                        <tr class="row-total">
+                            <td><strong>TOTAL CONSOLIDADO</strong></td>
+                            <td class="value highlight">R$ 269.756,16</td>
+                            <td class="value highlight">R$ 297.021,61</td>
+                            <td class="value negative">R$ 2.272,62</td>
+                            <td class="value negative">-99,2%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 24px; padding: 20px; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 14px;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--accent-red); margin-bottom: 8px;">🚨 Caixa Zerado em Março</div>
+                <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+                    As contas encerraram março com <strong>apenas R$ 2.272,62</strong> somadas. A conta do Pedro Henrique — que é a conta operacional principal — caiu de R$ 295k para R$ 1,4k em um único mês. Isso indica saídas massivas em março sem entrada equivalente de receita. O cheque especial disponível (R$ 8.000 somados) cobra <strong>7,99% ao mês (175,55% a.a.)</strong> — altamente destrutivo se utilizado.
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ========== BLOCO 4: ALERTAS ========== -->
+        <section class="section" id="alerts">
+            <div class="section-header">
+                <div class="section-icon red">⚠️</div>
+                <div>
+                    <div class="section-title">Pontos Críticos Identificados</div>
+                    <div class="section-subtitle">6 alertas que demandam ação imediata ou de curto prazo</div>
+                </div>
+            </div>
+
+            <div class="alerts-grid">
+                <div class="alert-card critical">
+                    <div class="alert-icon">🔴</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 1 — Caixa Zerado em Março</div>
+                        <div class="alert-description">
+                            As contas bancárias somavam <strong>R$ 269.756</strong> em janeiro e caíram para <strong>R$ 2.272</strong> em março — uma redução de 99,2%. A conta do Pedro Henrique (operacional principal) encerrou com apenas R$ 1.418,30. Se não houver entrada imediata em abril, o confinamento opera no vermelho ou no cheque especial a 175% a.a.
+                        </div>
+                        <div class="alert-metric">Saldo: R$ 2.272 | Queda de 99,2% no trimestre</div>
+                    </div>
+                </div>
+
+                <div class="alert-card critical">
+                    <div class="alert-icon">🔴</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 2 — Receitas Subregistradas / Não Rastreáveis</div>
+                        <div class="alert-description">
+                            A planilha analítica registra despesas com razoável detalhe, mas <strong>não há controle equivalente de receitas</strong>. As transferências da Boipore são intragrupo e não refletem receita de mercado. Sem separar receita real (venda ao mercado final) de movimentação interna, é impossível calcular o resultado da operação.
+                        </div>
+                        <div class="alert-metric">Receitas controladas: INSUFICIENTE</div>
+                    </div>
+                </div>
+
+                <div class="alert-card critical">
+                    <div class="alert-icon">🔴</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 3 — Custos Misturados (Gado Próprio × Terceiros)</div>
+                        <div class="alert-description">
+                            O confinamento opera com gado próprio e gado de clientes (produtores), mas <strong>os custos estão misturados na mesma planilha</strong>. Sem segregação, não é possível saber se a operação de terceiros cobre seus próprios custos, nem calcular a margem real do gado próprio. O Rogério (Gestor Adm/Fin) é a pessoa-chave para implementar essa separação.
+                        </div>
+                        <div class="alert-metric">Segregação: INEXISTENTE</div>
+                    </div>
+                </div>
+
+                <div class="alert-card warning">
+                    <div class="alert-icon">🟡</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 4 — Folha Informal Representa 38% do Custo com Pessoal</div>
+                        <div class="alert-description">
+                            Dos R$ 65.900/mês estimados com pessoal, cerca de <strong>R$ 25.330 são pagamentos sem vínculo CLT</strong> (Rogério R$ 8.000, diaristas e avulsos ~R$ 17.330). Isso gera risco trabalhista significativo. A regularização via CLT ou contrato de prestação de serviço é urgente, especialmente para o Rogério que exerce função permanente e com subordinação.
+                        </div>
+                        <div class="alert-metric">Risco trabalhista: ~R$ 25.330/mês sem vínculo</div>
+                    </div>
+                </div>
+
+                <div class="alert-card warning">
+                    <div class="alert-icon">🟡</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 5 — Cheque Especial a 175,55% a.a.</div>
+                        <div class="alert-description">
+                            Ambas as contas possuem cheque especial contratado (R$ 5.000 + R$ 3.000 = R$ 8.000 total) com taxa de <strong>7,99% ao mês</strong>. Até o momento não foi utilizado, mas com o caixa zerado em março, qualquer débito automático pode acionar o cheque especial. É fundamental negociar linha de capital de giro com taxa adequada antes que isso aconteça.
+                        </div>
+                        <div class="alert-metric">CET: 8,69% a.m. | 175,55% a.a.</div>
+                    </div>
+                </div>
+
+                <div class="alert-card warning">
+                    <div class="alert-icon">🟡</div>
+                    <div class="alert-content">
+                        <div class="alert-title">ALERTA 6 — Honorários Contábeis Duplicados</div>
+                        <div class="alert-description">
+                            São pagos <strong>R$ 4.863/mês ao escritório WS Contábil</strong>, provavelmente divididos entre os dois CPFs (Renato e Pedro Henrique). Com a estrutura de sucessão familiar (não é sociedade), vale avaliar se essa separação é necessária ou se poderia ser consolidada em uma única apuração, reduzindo o custo.
+                        </div>
+                        <div class="alert-metric">Custo anual: ~R$ 58.356 com contabilidade</div>
+                    </div>
+                </div>
+
+                <div class="alert-card info">
+                    <div class="alert-icon">💡</div>
+                    <div class="alert-content">
+                        <div class="alert-title">OBSERVAÇÃO — Dados da Boipore São Essenciais</div>
+                        <div class="alert-description">
+                            Este diagnóstico é <strong>parcial por design</strong>. O confinamento é um centro de custo dentro de um grupo verticalmente integrado. O resultado real da operação se completa no frigorífico Boipore. Já foi solicitado acesso aos dados financeiros do frigorífico para a Fase 2 da análise consolidada. Sem eles, qualquer conclusão sobre lucro/prejuízo é incompleta.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-text">
+                Diagnóstico Financeiro Preliminar — Grupo Econômico Família Silva | Elaborado em Abril/2026<br>
+                <strong>Documento confidencial — uso exclusivo para tomada de decisão gerencial</strong>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== CHART.JS SCRIPTS ========== -->
+    <script>
+        // Registrar plugin de datalabels
+        Chart.register(ChartDataLabels);
+
+        // Configuração global
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 12;
+        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+        Chart.defaults.plugins.legend.labels.padding = 16;
+
+        // Cores
+        const colors = {
+            blue: '#3b82f6',
+            cyan: '#06b6d4',
+            green: '#10b981',
+            yellow: '#f59e0b',
+            orange: '#f97316',
+            red: '#ef4444',
+            purple: '#8b5cf6',
+            pink: '#ec4899',
+            slate: '#64748b',
+            blueBg: 'rgba(59, 130, 246, 0.15)',
+            cyanBg: 'rgba(6, 182, 212, 0.15)',
+            greenBg: 'rgba(16, 185, 129, 0.15)',
+            yellowBg: 'rgba(245, 158, 11, 0.15)',
+            redBg: 'rgba(239, 68, 68, 0.15)',
+            purpleBg: 'rgba(139, 92, 246, 0.15)',
+        };
+
+        // ========== 1. Evolução Mensal de Despesas (Bar) ==========
+        new Chart(document.getElementById('chartMonthlyExpenses'), {
+            type: 'bar',
+            data: {
+                labels: ['Janeiro', 'Fevereiro', 'Março'],
+                datasets: [{
+                    label: 'Despesa Total (R$)',
+                    data: [778027, 1154987, 1623440],
+                    backgroundColor: [colors.blue, colors.yellow, colors.red],
+                    borderColor: [colors.blue, colors.yellow, colors.red],
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (v) => 'R$ ' + (v / 1000).toFixed(0) + 'k',
+                        font: { weight: 'bold', size: 13 },
+                        color: '#e2e8f0'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000) + 'k' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // ========== 2. Composição por Categoria (Doughnut) ==========
+        new Chart(document.getElementById('chartCategoryPie'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Compra de Gado', 'Ração/Nutrição', 'Pessoal', 'Frete', 'Arrendamento', 'Combustível', 'Manutenção', 'Outros'],
+                datasets: [{
+                    data: [1972106, 696744, 197700, 157058, 115500, 96005, 103257, 203495],
+                    backgroundColor: [
+                        colors.red, colors.yellow, colors.blue, colors.cyan,
+                        colors.purple, colors.orange, colors.green, colors.slate
+                    ],
+                    borderColor: '#1a2235',
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '55%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 11 }, padding: 10 }
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            let pct = ((value / total) * 100).toFixed(1);
+                            return pct > 4 ? pct + '%' : '';
+                        },
+                        color: '#fff',
+                        font: { weight: 'bold', size: 11 }
+                    }
+                }
+            }
+        });
+
+        // ========== 3. Evolução por Categoria — Stacked Bar ==========
+        new Chart(document.getElementById('chartCategoryStacked'), {
+            type: 'bar',
+            data: {
+                labels: ['Janeiro', 'Fevereiro', 'Março'],
+                datasets: [
+                    {
+                        label: 'Compra de Gado',
+                        data: [299060, 623046, 1050000],
+                        backgroundColor: colors.red,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Ração / Nutrição',
+                        data: [195742, 227858, 273144],
+                        backgroundColor: colors.yellow,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Pessoal',
+                        data: [65900, 65900, 65900],
+                        backgroundColor: colors.blue,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Frete',
+                        data: [47831, 53240, 55987],
+                        backgroundColor: colors.cyan,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Arrendamento',
+                        data: [38500, 38500, 38500],
+                        backgroundColor: colors.purple,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Combustível',
+                        data: [28400, 37190, 30415],
+                        backgroundColor: colors.orange,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Outros',
+                        data: [102594, 109253, 109494],
+                        backgroundColor: colors.slate,
+                        borderRadius: 4,
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 11 }, padding: 12 }
+                    },
+                    datalabels: { display: false }
+                },
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: {
+                        stacked: true,
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000) + 'k' }
+                    }
+                }
+            }
+        });
+
+        // ========== 4. Folha por Tipo (Doughnut) ==========
+        new Chart(document.getElementById('chartPayrollType'), {
+            type: 'doughnut',
+            data: {
+                labels: ['CLT (Renato)', 'CLT (Pedro H.)', 'Encargos Patronais', 'Provisão 13º/Férias', 'Rogério (Informal)', 'Outros Informais'],
+                datasets: [{
+                    data: [19216, 5898, 8479, 6976, 8000, 17330],
+                    backgroundColor: [
+                        colors.blue, colors.cyan, colors.green,
+                        colors.purple, colors.red, colors.orange
+                    ],
+                    borderColor: '#1a2235',
+                    borderWidth: 3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '50%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { size: 10 }, padding: 8 }
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            let pct = ((value / total) * 100).toFixed(0);
+                            return pct > 6 ? pct + '%' : '';
+                        },
+                        color: '#fff',
+                        font: { weight: 'bold', size: 11 }
+                    }
+                }
+            }
+        });
+
+        // ========== 5. Folha por CPF (Bar) ==========
+        new Chart(document.getElementById('chartPayrollCPF'), {
+            type: 'bar',
+            data: {
+                labels: ['Renato (CLT)', 'Pedro H. (CLT)', 'Rogério (Informal)', 'Outros Informais', 'Encargos + Provisões'],
+                datasets: [{
+                    label: 'Custo Mensal (R$)',
+                    data: [19216, 5898, 8000, 17330, 15455],
+                    backgroundColor: [colors.blue, colors.cyan, colors.red, colors.orange, colors.green],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'right',
+                        formatter: (v) => 'R$ ' + v.toLocaleString('pt-BR'),
+                        font: { weight: 'bold', size: 11 },
+                        color: '#e2e8f0'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000) + 'k' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ========== 6. Fornecedores (Horizontal Bar) ==========
+        new Chart(document.getElementById('chartSuppliers'), {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Eldo Assis Carvalho',
+                    'Miguel José Ribeiro',
+                    'São Martinho S/A',
+                    'Cargill',
+                    'Nutri. Cassilândia',
+                    'Faz. Santa Maria',
+                    'Posto Chapadão',
+                    'Maq. Chapadão',
+                    'WS Contábil',
+                    'Eletrotéc. Cassilândia'
+                ],
+                datasets: [{
+                    label: 'Total no Trimestre (R$)',
+                    data: [594332, 379056, 363408, 288000, 195742, 115500, 96005, 73257, 14589, 11724],
+                    backgroundColor: [
+                        colors.red, colors.orange, colors.yellow, colors.blue,
+                        colors.cyan, colors.purple, colors.green, colors.pink,
+                        colors.slate, colors.slate
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'right',
+                        formatter: (v) => 'R$ ' + (v / 1000).toFixed(0) + 'k',
+                        font: { weight: 'bold', size: 11 },
+                        color: '#e2e8f0'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000) + 'k' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // ========== 7. Saldo Bancário Pedro H. (Line) ==========
+        new Chart(document.getElementById('chartBankPedro'), {
+            type: 'line',
+            data: {
+                labels: ['30/Jan', '27/Fev', '31/Mar'],
+                datasets: [{
+                    label: 'Saldo (R$)',
+                    data: [262329, 295569, 1418],
+                    borderColor: colors.cyan,
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: [colors.green, colors.green, colors.red],
+                    pointBorderColor: [colors.green, colors.green, colors.red],
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                    fill: true,
+                    tension: 0.3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (v) => 'R$ ' + v.toLocaleString('pt-BR'),
+                        font: { weight: 'bold', size: 12 },
+                        color: (ctx) => ctx.dataIndex === 2 ? colors.red : colors.green
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000) + 'k' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ========== 8. Saldo Bancário Renato (Line) ==========
+        new Chart(document.getElementById('chartBankRenato'), {
+            type: 'line',
+            data: {
+                labels: ['30/Jan', '27/Fev', '31/Mar'],
+                datasets: [{
+                    label: 'Saldo (R$)',
+                    data: [7427, 1453, 854],
+                    borderColor: colors.blue,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: [colors.blue, colors.yellow, colors.red],
+                    pointBorderColor: [colors.blue, colors.yellow, colors.red],
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                    fill: true,
+                    tension: 0.3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (v) => 'R$ ' + v.toLocaleString('pt-BR'),
+                        font: { weight: 'bold', size: 12 },
+                        color: colors.blue
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(42, 53, 80, 0.5)' },
+                        ticks: { callback: (v) => 'R$ ' + (v / 1000).toFixed(1) + 'k' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ========== SMOOTH SCROLL ==========
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // Active state
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ========== SCROLL SPY ==========
+        const sections = document.querySelectorAll('section[id]');
+        const navItems = document.querySelectorAll('.nav-item[href]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
