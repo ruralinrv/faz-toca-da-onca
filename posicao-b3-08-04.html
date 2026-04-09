@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posição B3 — Fazenda Toca da Onça | 08/04/2026 — Dia 10</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <style>
+        :root{--primary:#1a5c2a;--primary-light:#2d8a44;--primary-dark:#0f3d1a;--accent:#d4a017;--accent-light:#f0c950;--bg-dark:#0b1a0f;--bg-card:#12231a;--bg-card-alt:#162b1f;--text-primary:#e8f0eb;--text-secondary:#a3b8a9;--text-muted:#6b8570;--green:#22c55e;--green-bg:rgba(34,197,94,.12);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#eab308;--yellow-bg:rgba(234,179,8,.12);--blue:#3b82f6;--border:#1e3a28}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.6;min-height:100vh}.container{max-width:1100px;margin:0 auto;padding:20px}
+        .header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);border-radius:16px;padding:40px;margin-bottom:24px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08)}.header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(212,160,23,.15) 0%,transparent 70%);border-radius:50%}.header-content{position:relative;z-index:1}.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.4);color:var(--accent-light);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px}.header h1{font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px}.header h2{font-size:1.1rem;font-weight:400;color:rgba(255,255,255,.7);margin-bottom:20px}.header-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.header-info-item{background:rgba(0,0,0,.2);border-radius:10px;padding:12px 16px;border:1px solid rgba(255,255,255,.06)}.header-info-item .label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:2px}.header-info-item .value{font-size:.95rem;font-weight:600;color:#fff}
+        .section-title{display:flex;align-items:center;gap:12px;margin-bottom:20px;margin-top:8px}.section-title .icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}.section-title .icon.boi{background:linear-gradient(135deg,#1a5c2a,#2d8a44)}.section-title .icon.milho{background:linear-gradient(135deg,#d97706,#f59e0b)}.section-title .icon.collar{background:linear-gradient(135deg,#7c3aed,#a855f7)}.section-title .icon.alert{background:linear-gradient(135deg,#dc2626,#ef4444)}.section-title .icon.vis{background:linear-gradient(135deg,#6366f1,#818cf8)}.section-title .icon.shield{background:linear-gradient(135deg,#0891b2,#22d3ee)}.section-title h3{font-size:1.3rem;font-weight:700}.section-title h3 span{font-weight:400;color:var(--text-secondary);font-size:.9rem}
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+        .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px}.kpi-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}.kpi-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}.kpi-box.green::before{background:var(--green)}.kpi-box.red::before{background:var(--red)}.kpi-box.yellow::before{background:var(--yellow)}.kpi-box.blue::before{background:var(--blue)}.kpi-box.gold::before{background:linear-gradient(135deg,#d4a017,#f0c950)}.kpi-box.purple::before{background:linear-gradient(135deg,#7c3aed,#a855f7)}.kpi-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:6px}.kpi-value{font-size:1.5rem;font-weight:800;letter-spacing:-.5px}.kpi-sub{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+        .table-wrapper{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:.85rem}thead th{background:var(--bg-card-alt);padding:12px 14px;text-align:center;font-weight:600;color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border)}tbody td{padding:11px 14px;border-bottom:1px solid rgba(30,58,40,.5);text-align:center}tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:rgba(45,138,68,.06)}
+        .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:.74rem;font-weight:600}.tag-green{background:var(--green-bg);color:var(--green)}.tag-red{background:var(--red-bg);color:var(--red)}.tag-yellow{background:var(--yellow-bg);color:var(--yellow)}.tag-blue{background:rgba(59,130,246,.12);color:var(--blue)}.tag-purple{background:rgba(168,85,247,.12);color:#a855f7}
+        .chart-container{position:relative;width:100%;margin:16px 0}.chart-container.large{height:400px}.chart-container.medium{height:340px}.chart-container.small{height:260px}
+        .highlight-box{border-radius:14px;padding:20px 24px;margin-bottom:20px;text-align:center;border:1px solid}.highlight-box.red{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(239,68,68,.02));border-color:rgba(239,68,68,.3)}.highlight-box.green{background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.02));border-color:rgba(34,197,94,.2)}.highlight-box.info{background:linear-gradient(135deg,rgba(59,130,246,.06),rgba(59,130,246,.02));border-color:rgba(59,130,246,.2)}.highlight-box .hl-emoji{font-size:2rem;margin-bottom:8px}.highlight-box .hl-title{font-size:1rem;font-weight:700;margin-bottom:6px}.highlight-box .hl-text{font-size:.88rem;color:var(--text-secondary);line-height:1.7}
+        .rec-box{border-radius:12px;padding:20px 24px;margin:14px 0;border-left:4px solid}.rec-box.hold{background:var(--green-bg);border-color:var(--green)}.rec-box.warn{background:var(--yellow-bg);border-color:var(--yellow)}.rec-box.info{background:rgba(59,130,246,.08);border-color:var(--blue)}.rec-box.red{background:var(--red-bg);border-color:var(--red)}.rec-box h4{font-size:.95rem;font-weight:700;margin-bottom:8px}.rec-box.hold h4{color:var(--green)}.rec-box.warn h4{color:var(--yellow)}.rec-box.info h4{color:var(--blue)}.rec-box.red h4{color:var(--red)}.rec-box p{font-size:.88rem;color:var(--text-secondary);line-height:1.7}
+        .alert-bar{background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.04));border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px}.alert-bar .alert-icon{font-size:1.5rem;flex-shrink:0}.alert-bar .alert-text{font-size:.88rem;color:var(--text-secondary);line-height:1.5}.alert-bar .alert-text strong{color:var(--red)}
+        .philosophy-banner{background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:14px;padding:32px;text-align:center;margin:24px 0;border:1px solid rgba(255,255,255,.08)}.philosophy-banner .emoji{font-size:2.2rem;margin-bottom:12px}.philosophy-banner h4{font-size:1.1rem;color:var(--accent-light);margin-bottom:8px}.philosophy-banner p{color:rgba(255,255,255,.7);font-size:.92rem;max-width:700px;margin:0 auto;line-height:1.7}
+        .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:32px 0}
+        .day-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);padding:8px 18px;border-radius:24px;font-size:.82rem;font-weight:700;color:#fca5a5;letter-spacing:1px;margin-bottom:16px}
+        .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}.compare-card{border-radius:14px;padding:20px;border:1px solid;text-align:center}.compare-card.before{background:linear-gradient(135deg,rgba(107,133,112,.06),rgba(107,133,112,.02));border-color:rgba(107,133,112,.3)}.compare-card.after{background:linear-gradient(135deg,rgba(239,68,68,.06),rgba(239,68,68,.02));border-color:rgba(239,68,68,.25)}.compare-card h4{font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}.compare-card .cv{font-size:1.8rem;font-weight:800}
+        .cost-table{margin:16px 0}.cost-table .ct-row{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem}.cost-table .ct-row:last-child{border-bottom:none}.cost-table .ct-row .ct-label{color:var(--text-muted)}.cost-table .ct-row .ct-value{font-weight:600}.ct-total{background:rgba(34,197,94,.08);border-radius:10px;margin-top:8px}.ct-total .ct-label,.ct-total .ct-value{color:var(--green);font-weight:700}
+        .footer{margin-top:32px;padding:32px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px}.footer-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}.footer-info h4{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:2px}.footer-info .ftitle{font-size:.82rem;color:var(--green);font-weight:600;margin-bottom:4px}.footer-info .fsubtitle{font-size:.8rem;color:var(--text-muted);margin-bottom:12px;line-height:1.6;font-style:italic}.footer-contact{display:flex;flex-direction:column;gap:6px}.footer-contact a,.footer-contact span{font-size:.84rem;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:8px}.footer-contact a:hover{color:var(--green)}.footer-logo{text-align:right}.footer-logo .brand{font-size:1.8rem;font-weight:800;color:var(--primary-light);letter-spacing:-1px}.footer-logo .brand span{color:var(--accent)}.footer-logo .tagline{font-size:.72rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}.disclaimer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted);text-align:center;line-height:1.6}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.animate{animation:fadeInUp .5s ease-out forwards}.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+        @media(max-width:768px){.container{padding:12px}.header{padding:24px}.header h1{font-size:1.5rem}.compare-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr;text-align:center}.footer-logo{text-align:center}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header animate">
+        <div class="header-content">
+            <div class="day-badge">⚠️ DIA 10 — ALERTA DE VOLATILIDADE</div>
+            <div class="header-badge">🐂 Posição B3 — Fazenda Toca da Onça</div>
+            <h1>Informe de Mercado — 08/04/2026</h1>
+            <h2>Quarta-feira | Pregão de forte queda — Boi gordo recua em toda a curva</h2>
+            <div class="header-info">
+                <div class="header-info-item"><div class="label">BGIU26 (Set/26)</div><div class="value">R$ 345,80/@ <span style="color:#ef4444;font-size:.82rem">▼ −1,12%</span></div></div>
+                <div class="header-info-item"><div class="label">CCMU26 (Set/26)</div><div class="value">~R$ 70,80/sc <span style="color:#ef4444;font-size:.82rem">▼ ~−0,95%</span></div></div>
+                <div class="header-info-item"><div class="label">Indicador Cepea Boi</div><div class="value">R$ 365,00/@ (+0,21%)</div></div>
+                <div class="header-info-item"><div class="label">Dias até vencimento SET/26</div><div class="value">175 dias</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTA PRINCIPAL -->
+    <div class="alert-bar animate delay-1">
+        <div class="alert-icon">🚨</div>
+        <div class="alert-text">
+            <strong>Segundo dia consecutivo de queda forte no boi gordo.</strong> O BGIU26 recuou −1,12% (−R$ 3,90/@), de R$ 349,70 para <strong>R$ 345,80/@</strong>.
+            Toda a curva caiu: JUL/26 liderou com −2,28%. Movimento ligado a realização pós-pico, pressão de escalas e cenário externo (tarifas Trump).
+            <strong>O Collar está cumprindo seu papel — o resultado ainda é positivo graças à proteção.</strong>
+        </div>
+    </div>
+
+    <!-- ======== SEÇÃO BOI GORDO ======== -->
+    <div class="section-title animate delay-1"><div class="icon boi">🐂</div><h3>Boi Gordo — BGIU26 <span>| Contrato Setembro/2026</span></h3></div>
+
+    <div class="kpi-row animate delay-1">
+        <div class="kpi-box red">
+            <div class="kpi-label">BGIU26 Fechamento</div>
+            <div class="kpi-value" style="color:var(--red)">R$ 345,80</div>
+            <div class="kpi-sub">▼ −R$ 3,90 (−1,12%) vs ontem</div>
+        </div>
+        <div class="kpi-box red">
+            <div class="kpi-label">P&L Futuro Aberto</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 1,20/@</div>
+            <div class="kpi-sub">Entrada: R$ 347,00 | −R$ 396/ctt</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Distância para CALL 355</div>
+            <div class="kpi-value" style="color:var(--green)">R$ 9,20</div>
+            <div class="kpi-sub">+2,66% até o teto | muito folgado</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Distância para PUT 335</div>
+            <div class="kpi-value" style="color:var(--yellow)">R$ 10,80</div>
+            <div class="kpi-sub">−3,12% até o piso | mais próximo</div>
+        </div>
+    </div>
+
+    <!-- Comparativo ontem vs hoje -->
+    <div class="compare-grid animate delay-1">
+        <div class="compare-card before">
+            <h4 style="color:var(--text-muted)">📅 Ontem (07/04)</h4>
+            <div class="cv" style="color:var(--text-secondary)">R$ 349,70</div>
+            <div style="font-size:.82rem;color:var(--text-muted);margin-top:6px">P&L: +R$ 2,70/@ | +R$ 891/ctt</div>
+        </div>
+        <div class="compare-card after">
+            <h4 style="color:var(--red)">📅 Hoje (08/04)</h4>
+            <div class="cv" style="color:var(--red)">R$ 345,80</div>
+            <div style="font-size:.82rem;color:var(--red);margin-top:6px">P&L: −R$ 1,20/@ | −R$ 396/ctt</div>
+        </div>
+    </div>
+
+    <!-- Curva de Futuros -->
+    <div class="card animate delay-1">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📈 Curva de Futuros — Boi Gordo B3 (08/04/2026)</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Contrato</th><th>Fech. 08/04</th><th>Fech. 07/04</th><th>Variação</th><th>Var. R$</th><th>Obs</th></tr></thead>
+                <tbody>
+                    <tr><td>ABR/26</td><td style="color:var(--red)">R$ 361,55</td><td>R$ 368,50</td><td style="color:var(--red)">−1,82%</td><td style="color:var(--red)">−R$ 6,95</td><td></td></tr>
+                    <tr><td>MAI/26</td><td style="color:var(--red)">R$ 356,00</td><td>R$ 364,55</td><td style="color:var(--red)">−2,35%</td><td style="color:var(--red)">−R$ 8,55</td><td><span class="tag tag-red">Maior queda R$</span></td></tr>
+                    <tr><td>JUN/26</td><td style="color:var(--red)">R$ 347,95</td><td>R$ 355,65</td><td style="color:var(--red)">−2,17%</td><td style="color:var(--red)">−R$ 7,70</td><td></td></tr>
+                    <tr><td>JUL/26</td><td style="color:var(--red)">R$ 341,35</td><td>R$ 349,30</td><td style="color:var(--red)">−2,28%</td><td style="color:var(--red)">−R$ 7,95</td><td><span class="tag tag-red">Maior queda %</span></td></tr>
+                    <tr><td>AGO/26</td><td style="color:var(--red)">R$ 343,50</td><td>R$ 347,70</td><td style="color:var(--red)">−1,21%</td><td style="color:var(--red)">−R$ 4,20</td><td></td></tr>
+                    <tr style="background:rgba(168,85,247,.08)"><td><strong>SET/26 🎯</strong></td><td style="color:var(--red)"><strong>R$ 345,80</strong></td><td>R$ 349,70</td><td style="color:var(--red)"><strong>−1,12%</strong></td><td style="color:var(--red)"><strong>−R$ 3,90</strong></td><td><span class="tag tag-purple">NOSSO</span></td></tr>
+                    <tr><td>OUT/26</td><td style="color:var(--red)">R$ 350,35</td><td>R$ 355,50</td><td style="color:var(--red)">−1,45%</td><td style="color:var(--red)">−R$ 5,15</td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="chart-container medium"><canvas id="curvaBoiChart"></canvas></div>
+    </div>
+
+    <!-- Evolução BGIU26 -->
+    <div class="card animate delay-2">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📊 Evolução BGIU26 — 10 Dias de Acompanhamento</h4>
+        <div class="chart-container medium"><canvas id="evolucaoChart"></canvas></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== SEÇÃO COLLAR ======== -->
+    <div class="section-title animate delay-2"><div class="icon collar">🔒</div><h3>Collar BGIU26 <span>| Status da Operação — Dia de Teste!</span></h3></div>
+
+    <div class="highlight-box red animate delay-2">
+        <div class="hl-emoji">🛡️</div>
+        <div class="hl-title" style="color:var(--red)">Hoje é o dia que mostra POR QUE o Collar existe</div>
+        <div class="hl-text">
+            Sem o Collar, a perda seria de <strong>−R$ 1,20/@</strong> (futuro puro) e continuaria ilimitada para baixo.
+            <strong>Com o Collar, a perda máxima possível é −R$ 12,65/@, não importa se o boi for a R$ 300.</strong>
+            Hoje o boi caiu R$ 3,90, mas o produtor pode dormir tranquilo sabendo que o piso está em R$ 335.
+        </div>
+    </div>
+
+    <div class="kpi-row animate delay-2">
+        <div class="kpi-box red">
+            <div class="kpi-label">Resultado Collar se vencesse hoje</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 1,85/@</div>
+            <div class="kpi-sub">−R$ 610,50/contrato</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Resultado SEM Collar (futuro puro)</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 1,20/@</div>
+            <div class="kpi-sub">−R$ 396/ctt — MAS sem proteção!</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Perda máx. possível c/ Collar</div>
+            <div class="kpi-value" style="color:var(--yellow)">−R$ 12,65/@</div>
+            <div class="kpi-sub">PISO em R$ 334,35/@ (fixo)</div>
+        </div>
+        <div class="kpi-box blue">
+            <div class="kpi-label">Perda máx. SEM Collar</div>
+            <div class="kpi-value" style="color:var(--red)">ILIMITADA ⚠️</div>
+            <div class="kpi-sub">Se boi for a R$300 = −R$47/@!</div>
+        </div>
+    </div>
+
+    <div class="card animate delay-2">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📋 Posição Collar — Detalhe das Pernas</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Perna</th><th>Tipo</th><th>Strike</th><th>Status Atual</th><th>Distância</th><th>Obs</th></tr></thead>
+                <tbody>
+                    <tr><td>🟢 Futuro BGIU26</td><td>Comprado</td><td>R$ 347,00 (entrada)</td><td><span class="tag tag-red">Prejuízo −R$ 1,20/@</span></td><td>—</td><td>Abaixo da entrada</td></tr>
+                    <tr><td>🛡️ PUT 335</td><td>Comprada (seguro)</td><td>R$ 335,00</td><td><span class="tag tag-yellow">OTM — mais próxima</span></td><td>−R$ 10,80 (−3,12%)</td><td>⚠️ Monitorar</td></tr>
+                    <tr><td>🔒 CALL 355</td><td>Vendida (teto)</td><td>R$ 355,00</td><td><span class="tag tag-green">OTM — afastou</span></td><td>+R$ 9,20 (+2,66%)</td><td>✅ Sem pressão</td></tr>
+                    <tr style="background:rgba(212,160,23,.06)"><td colspan="2"><strong>Prêmio líquido pago</strong></td><td>—</td><td><span class="tag tag-yellow">−R$ 0,65/@ (já pago)</span></td><td>—</td><td><strong>−R$ 214,50/ctt</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Payoff Collar -->
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📈 Gráfico de Resultado no Vencimento — Posição Atual Marcada</h4>
+        <div class="chart-container large"><canvas id="payoffChart"></canvas></div>
+    </div>
+
+    <div class="rec-box hold animate delay-2">
+        <h4>✅ MANTER COLLAR — A proteção está funcionando exatamente como planejado</h4>
+        <p>
+            Este é o tipo de dia para o qual o Collar foi montado. O boi caiu <strong>R$ 6,15 em 2 dias</strong> (de R$ 351,95 para R$ 345,80) e o produtor sabe que:<br><br>
+            📌 A perda máxima é <strong>−R$ 12,65/@</strong> — mesmo se o boi for a R$ 300<br>
+            📌 O piso efetivo está em <strong>R$ 334,35/@</strong> — a R$ 10,80 de distância<br>
+            📌 Se o boi se recuperar para R$ 355+, o ganho será de <strong>+R$ 7,35/@</strong><br>
+            📌 Custo adicional: <strong>R$ 0,00</strong><br><br>
+            ⚡ <strong>Hoje o BGIU26 fechou ABAIXO da entrada (R$ 345,80 < R$ 347,00).</strong> Sem o Collar, seria um dia de preocupação. Com o Collar, é apenas um dia de oscilação normal dentro dos limites planejados.<br><br>
+            🧠 <strong>Contexto de mercado:</strong> Scot Consultoria publica hoje artigo alertando sobre a importância de proteger margens: <em>"A oportunidade nunca é perdida. Alguém sempre vai aproveitar as que você perdeu"</em> — Shakespeare, citado pela Scot. Exatamente o que fizemos com o Collar.
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== SEÇÃO "POR QUE O COLLAR?" ======== -->
+    <div class="section-title animate delay-3"><div class="icon shield">🛡️</div><h3>Hoje é a Prova do Hedge <span>| O que aconteceria SEM o Collar?</span></h3></div>
+
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">⚖️ Comparativo: Com Collar vs Sem Collar vs Sem Nada</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Cenário</th><th>Posição</th><th>Resultado Hoje</th><th>Se boi for a R$320</th><th>Se boi voltar a R$355</th></tr></thead>
+                <tbody>
+                    <tr style="background:rgba(34,197,94,.06)"><td><strong>COM COLLAR ✅</strong></td><td>Futuro + PUT + CALL</td><td style="color:var(--red)">−R$ 1,85/@</td><td style="color:var(--red)">−R$ 12,65/@ (PISO)</td><td style="color:var(--green)">+R$ 7,35/@ (TETO)</td></tr>
+                    <tr><td>Futuro puro (sem proteção)</td><td>Só futuro comprado</td><td style="color:var(--red)">−R$ 1,20/@</td><td style="color:var(--red)"><strong>−R$ 27,00/@ 😰</strong></td><td style="color:var(--green)">+R$ 8,00/@</td></tr>
+                    <tr><td>Sem nenhum hedge</td><td>Exposto ao físico</td><td>Depende do local</td><td style="color:var(--red)"><strong>Sem proteção 😰</strong></td><td>Depende do local</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="chart-container medium"><canvas id="compareChart"></canvas></div>
+    </div>
+
+    <div class="rec-box info animate delay-3">
+        <h4>📊 Resumo da Queda dos Últimos 2 Dias</h4>
+        <p>
+            <strong>06/04 (segunda):</strong> R$ 351,95/@ (+0,57%) — pico recente<br>
+            <strong>07/04 (terça):</strong> R$ 349,70/@ (−0,64%) — início da correção<br>
+            <strong>08/04 (quarta):</strong> R$ 345,80/@ (−1,12%) — correção acelera<br><br>
+            <strong>Queda acumulada em 2 dias:</strong> −R$ 6,15/@ (−1,75%)<br>
+            <strong>Queda desde o pico (06/04):</strong> −R$ 6,15/@ (−1,75%)<br><br>
+            📌 <strong>O contrato JUL/26 caiu −2,28% hoje</strong> — o mais penalizado. SET/26 mostrou mais resiliência (−1,12%).<br>
+            📌 <strong>Indicador Cepea (físico) subiu +0,21%</strong> para R$ 365/@. Físico e futuro em direções opostas = típico de realização no futuro com demanda firme no físico. Isso tende a ser <strong>temporário</strong>.
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== SEÇÃO MILHO ======== -->
+    <div class="section-title animate delay-3"><div class="icon milho">🌽</div><h3>Milho — CCMU26 <span>| Contrato Setembro/2026</span></h3></div>
+
+    <div class="kpi-row animate delay-3">
+        <div class="kpi-box red">
+            <div class="kpi-label">CCMU26 (estimativa)</div>
+            <div class="kpi-value" style="color:var(--red)">~R$ 70,80/sc</div>
+            <div class="kpi-sub">▼ ~−0,95% vs ontem (R$ 71,48)</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Testando R$ 70/sc</div>
+            <div class="kpi-value" style="color:var(--green)">ZONA DE ATENÇÃO</div>
+            <div class="kpi-sub">Se romper R$ 70 → avaliar hedge compra</div>
+        </div>
+    </div>
+
+    <div class="rec-box warn animate delay-3">
+        <h4>🌽 MILHO — Correção contínua. Se romper R$ 70, pode ser oportunidade</h4>
+        <p>
+            O milho SET/26 acumula queda de <strong>~R$ 2,00/sc em 3 dias</strong> (de R$ 72,50 para ~R$ 70,80). Pressão da safrinha cheia. Se o CCMU26 romper a barreira de <strong>R$ 70,00/sc</strong>, avaliamos hedge de compra de milho para o confinamento. <strong>Monitorando.</strong>
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== RESUMO E RECOMENDAÇÃO ======== -->
+    <div class="section-title animate delay-4"><div class="icon vis">🎯</div><h3>Resumo e Recomendação <span>| Dia 10 — 08/04/2026</span></h3></div>
+
+    <div class="kpi-row animate delay-4">
+        <div class="kpi-box red">
+            <div class="kpi-label">BGIU26</div>
+            <div class="kpi-value" style="color:var(--red)">R$ 345,80</div>
+            <div class="kpi-sub">−R$ 1,20/@ abaixo da entrada</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Collar P&L</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 1,85/@</div>
+            <div class="kpi-sub">−R$ 610/ctt (com prêmio)</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Recomendação</div>
+            <div class="kpi-value" style="color:var(--green)">MANTER 🔒</div>
+            <div class="kpi-sub">Collar protege a fazenda</div>
+        </div>
+        <div class="kpi-box blue">
+            <div class="kpi-label">Custo adicional</div>
+            <div class="kpi-value" style="color:var(--blue)">R$ 0,00</div>
+            <div class="kpi-sub">Nada mais a pagar</div>
+        </div>
+    </div>
+
+    <div class="rec-box hold animate delay-4">
+        <h4>✅ RECOMENDAÇÃO FINAL — MANTER COLLAR SEM ALTERAÇÕES</h4>
+        <p>
+            Pedro Henrique e Rogério:<br><br>
+            📉 <strong>O boi caiu R$ 6,15 em 2 dias. Isso é normal.</strong> O futuro de JUL/26 caiu −2,28% em um único dia.<br>
+            🛡️ <strong>O Collar está funcionando perfeitamente.</strong> A perda máxima é de R$ 12,65/@ — e hoje estamos em apenas −R$ 1,85/@.<br>
+            💰 <strong>Faltam 175 dias para o vencimento.</strong> Muito tempo para recuperação. O físico (Cepea) subiu +0,21% hoje — demanda firme.<br>
+            🚫 <strong>NÃO desmontar a operação.</strong> Não há custo para manter. Desmontar agora significaria realizar prejuízo + perder a proteção.<br><br>
+            <strong>O que o produtor inteligente faz em dias de queda?</strong> Nada. Olha o Collar, vê que está protegido, e volta para a fazenda. 🐂🛡️
+        </p>
+    </div>
+
+    <div class="rec-box info animate delay-4">
+        <h4>📌 Pontos de Atenção para Amanhã (09/04)</h4>
+        <p>
+            1️⃣ <strong>BGIU26 no suporte de R$ 345:</strong> Se segurar, pode marcar fundo da correção<br>
+            2️⃣ <strong>Indicador Cepea vs Futuro:</strong> Cepea a R$ 365 e SET/26 a R$ 345,80 = gap de R$ 19,20 → futuro descontado demais, tende a convergir<br>
+            3️⃣ <strong>Escalas de abate:</strong> Scot reporta escalas curtas e demanda firme — sustentação para o físico<br>
+            4️⃣ <strong>Cenário externo (tarifas):</strong> Impacto nos futuros, mas fundamentos internos seguem firmes<br>
+            5️⃣ <strong>CCMU26 testando R$ 70:</strong> Se romper, avaliar hedge de compra de milho
+        </p>
+    </div>
+
+    <!-- FILOSOFIA -->
+    <div class="philosophy-banner animate delay-4">
+        <div class="emoji">🛡️📉✅</div>
+        <h4>"Proteja sua margem! Garanta seu lucro!" — Scot Consultoria</h4>
+        <p>
+            Hoje, a Scot Consultoria publica artigo lembrando exatamente o que fizemos: <em>"A oportunidade nunca é perdida. Alguém sempre vai aproveitar as que você perdeu."</em><br><br>
+            <strong>Enquanto muitos produtores estão vendo R$ 6,15/@ evaporar sem proteção, a Fazenda Toca da Onça tem piso em R$ 334,35/@.</strong><br><br>
+            O Collar não é para evitar dias de queda — é para <strong style="color:var(--accent-light)">garantir que dias de queda não destruam a margem</strong>.<br><br>
+            <strong style="color:var(--accent-light)">Em dia de tempestade, quem tem telhado não se molha. 🏠🛡️</strong>
+        </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer animate delay-4">
+        <div class="footer-grid">
+            <div class="footer-info">
+                <h4>Dr. Sidney Souza</h4>
+                <div class="ftitle">Economista Agrícola · Estrategista Econômico do Produtor</div>
+                <div class="fsubtitle">Especialista em economia da fazenda e gestão de risco no agro<br>Transformamos dados da fazenda em decisões econômicas</div>
+                <div class="footer-contact">
+                    <a href="mailto:sidneyagro@gmail.com">📧 sidneyagro@gmail.com</a>
+                    <span>📱 (64) 9 9226-6886</span>
+                    <a href="https://instagram.com/ruralin.ai" target="_blank">📸 @ruralin.ai</a>
+                </div>
+            </div>
+            <div class="footer-logo"><div class="brand">rural<span>in</span>.ai</div><div class="tagline">Inteligência para o agro</div></div>
+        </div>
+        <div class="disclaimer">
+            Informe com caráter educativo e estratégico. Valores de prêmios de opções são estimativas. Dados base: B3, Notícias Agrícolas, Scot Consultoria, Cepea — 08/04/2026.
+        </div>
+    </div>
+</div>
+
+<script>
+Chart.defaults.color='#a3b8a9';Chart.defaults.borderColor='rgba(30,58,40,.4)';Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+const ENTRY=347,PUT=335,CALL=355,PREMIUM=0.65,LOT=330;
+function calcResult(p){let f=p-ENTRY,o=0;if(p<=PUT)o=PUT-p;if(p>=CALL)o=-(p-CALL);return f+o-PREMIUM;}
+
+// CURVA BOI
+new Chart(document.getElementById('curvaBoiChart').getContext('2d'),{type:'line',data:{labels:['ABR/26','MAI/26','JUN/26','JUL/26','AGO/26','SET/26','OUT/26'],datasets:[{label:'08/04 (hoje)',data:[361.55,356.00,347.95,341.35,343.50,345.80,350.35],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',borderWidth:3,fill:true,tension:.3,pointRadius:[4,4,4,4,4,8,4],pointBackgroundColor:['#ef4444','#ef4444','#ef4444','#ef4444','#ef4444','#a855f7','#ef4444']},{label:'07/04 (ontem)',data:[368.50,364.55,355.65,349.30,347.70,349.70,355.50],borderColor:'rgba(34,197,94,.35)',backgroundColor:'transparent',borderWidth:2,borderDash:[5,5],fill:false,tension:.3,pointRadius:0},{label:'06/04 (pico)',data:[371.75,367.75,359.10,353.10,350.00,351.95,356.55],borderColor:'rgba(168,85,247,.25)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[3,6],fill:false,tension:.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:12,font:{size:11}}},annotation:{annotations:{put:{type:'line',yMin:335,yMax:335,borderColor:'rgba(239,68,68,.5)',borderWidth:2,borderDash:[6,3],label:{display:true,content:'PUT 335',position:'start',backgroundColor:'rgba(239,68,68,.7)',font:{size:9}}},call:{type:'line',yMin:355,yMax:355,borderColor:'rgba(234,179,8,.5)',borderWidth:2,borderDash:[6,3],label:{display:true,content:'CALL 355',position:'start',backgroundColor:'rgba(234,179,8,.7)',font:{size:9}}},entry:{type:'line',yMin:347,yMax:347,borderColor:'rgba(107,133,112,.5)',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Entrada 347',position:'end',backgroundColor:'rgba(107,133,112,.6)',font:{size:9}}}}}},scales:{y:{min:330,max:380,grid:{color:'rgba(30,58,40,.3)'}},x:{grid:{display:false}}}}});
+
+// EVOLUÇÃO BGIU26
+const evoLabels=['28/03\nDia1','30/03\nDia2','31/03\nDia3','01/04\nDia4','02/04\nDia5','03/04\nDia6','04/04\nDia7','06/04\nDia8','07/04\nDia9','08/04\nDia10'];
+const evoData=[347.00,352.00,350.80,350.50,349.95,349.95,349.95,351.95,349.70,345.80];
+new Chart(document.getElementById('evolucaoChart').getContext('2d'),{type:'line',data:{labels:evoLabels,datasets:[{label:'BGIU26',data:evoData,borderColor:ctx=>{const i=ctx.dataIndex;return i>=8?'#ef4444':'#22c55e';},segment:{borderColor:ctx=>ctx.p1DataIndex>=8?'#ef4444':'#22c55e'},backgroundColor:'rgba(34,197,94,.05)',borderWidth:3,fill:true,tension:.3,pointRadius:6,pointBackgroundColor:evoData.map((v,i)=>{if(i===9)return '#ef4444';return v>=347?'#22c55e':'#eab308';})},{label:'Entrada',data:Array(10).fill(347),borderColor:'rgba(107,133,112,.4)',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false},{label:'CALL 355',data:Array(10).fill(355),borderColor:'rgba(234,179,8,.3)',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false},{label:'PUT 335',data:Array(10).fill(335),borderColor:'rgba(239,68,68,.3)',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false},{label:'Breakeven 347,65',data:Array(10).fill(347.65),borderColor:'rgba(59,130,246,.3)',borderWidth:1,borderDash:[3,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:10,font:{size:10}}}},scales:{y:{min:332,max:358,grid:{color:'rgba(30,58,40,.3)'}},x:{grid:{display:false}}}}});
+
+// PAYOFF
+const ppL=[],ppD=[],ppZ=[];for(let p=310;p<=380;p+=.5){ppL.push(p);ppD.push(calcResult(p));ppZ.push(0);}
+new Chart(document.getElementById('payoffChart').getContext('2d'),{type:'line',data:{labels:ppL,datasets:[{label:'Resultado Collar',data:ppD,borderColor:'#a855f7',backgroundColor:ctx=>ctx.raw>=0?'rgba(34,197,94,.12)':'rgba(239,68,68,.1)',borderWidth:3,fill:true,tension:0,pointRadius:0},{label:'Zero',data:ppZ,borderColor:'rgba(255,255,255,.12)',borderWidth:1,borderDash:[5,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#12231a',borderColor:'#1e3a28',borderWidth:1,callbacks:{title:i=>`Boi: R$ ${Number(i[0].label).toFixed(2)}/@`,label:i=>{if(i.datasetIndex===0){const v=i.raw;return`${v>=0?'+':''}R$ ${v.toFixed(2)}/@ | ${v>=0?'+':''}R$ ${(v*330).toFixed(2)}/ctt`;}}}},annotation:{annotations:{put:{type:'line',xMin:50,xMax:50,borderColor:'#ef4444',borderWidth:2,borderDash:[6,3],label:{display:true,content:'PUT 335',position:'start',backgroundColor:'rgba(239,68,68,.8)',font:{size:10}}},call:{type:'line',xMin:90,xMax:90,borderColor:'#eab308',borderWidth:2.5,borderDash:[6,3],label:{display:true,content:'CALL 355',position:'start',backgroundColor:'rgba(234,179,8,.9)',font:{size:11,weight:'bold'}}},entry:{type:'line',xMin:74,xMax:74,borderColor:'#6b8570',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Entrada 347',position:'end',backgroundColor:'rgba(107,133,112,.7)',font:{size:10}}},today:{type:'line',xMin:71.6,xMax:71.6,borderColor:'#ef4444',borderWidth:3,label:{display:true,content:'📍 HOJE 345,80',position:'end',backgroundColor:'rgba(239,68,68,.9)',font:{size:12,weight:'bold'}}}}}},scales:{x:{title:{display:true,text:'Preço no Vencimento (R$/@)',color:'#6b8570'},ticks:{callback:(v,i)=>(i%10===0)?ppL[i]:'',maxRotation:0},grid:{display:false}},y:{title:{display:true,text:'Resultado (R$/@)',color:'#6b8570'},grid:{color:'rgba(30,58,40,.3)'}}}}});
+
+// COMPARATIVO
+const cL=[],cC=[],cF=[];for(let p=310;p<=380;p+=1){cL.push(p);cC.push(calcResult(p));cF.push(p-ENTRY);}
+new Chart(document.getElementById('compareChart').getContext('2d'),{type:'line',data:{labels:cL,datasets:[{label:'COM Collar',data:cC,borderColor:'#a855f7',borderWidth:3,fill:false,tension:0,pointRadius:0},{label:'SEM Hedge (futuro puro)',data:cF,borderColor:'#ef4444',borderWidth:2,borderDash:[6,4],fill:false,tension:0,pointRadius:0},{label:'Zero',data:cL.map(()=>0),borderColor:'rgba(255,255,255,.12)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:14,font:{size:11}}},tooltip:{callbacks:{label:i=>`${i.dataset.label}: ${i.raw>=0?'+':''}R$ ${i.raw.toFixed(2)}/@`}},annotation:{annotations:{today:{type:'line',xMin:35.8,xMax:35.8,borderColor:'#ef4444',borderWidth:2.5,label:{display:true,content:'📍 HOJE 345,80',position:'end',backgroundColor:'rgba(239,68,68,.85)',font:{size:11,weight:'bold'}}},protZone:{type:'box',xMin:0,xMax:25,backgroundColor:'rgba(239,68,68,.04)',borderColor:'transparent',label:{display:true,content:'Zona protegida pelo Collar',position:'start',color:'rgba(239,68,68,.5)',font:{size:9}}}}}},scales:{x:{title:{display:true,text:'Preço (R$/@)',color:'#6b8570'},ticks:{callback:(v,i)=>(i%5===0)?cL[i]:''},grid:{display:false}},y:{title:{display:true,text:'Resultado (R$/@)',color:'#6b8570'},grid:{color:'rgba(30,58,40,.3)'}}}}});
+</script>
+</body>
+</html>
