@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazenda Toca da Onça — Análise Financeira e Operacional</title>
+    <style>
+        :root {
+            --primary: #1a5c2e;
+            --primary-light: #2d8a4e;
+            --primary-dark: #0e3a1b;
+            --accent: #d4a017;
+            --accent-light: #f0c75e;
+            --danger: #c0392b;
+            --danger-light: #e74c3c;
+            --warning: #e67e22;
+            --warning-light: #f39c12;
+            --info: #2980b9;
+            --info-light: #3498db;
+            --success: #27ae60;
+            --bg-dark: #0a0f0d;
+            --bg-card: #111a14;
+            --bg-card-alt: #162119;
+            --bg-highlight: #1a2e20;
+            --text-primary: #e8f0eb;
+            --text-secondary: #9cb3a4;
+            --text-muted: #6b8576;
+            --border: #2a3d30;
+            --border-light: #3a5244;
+            --gradient-gold: linear-gradient(135deg, #d4a017, #f0c75e);
+            --gradient-green: linear-gradient(135deg, #1a5c2e, #2d8a4e);
+            --gradient-danger: linear-gradient(135deg, #c0392b, #e74c3c);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 48px rgba(0,0,0,0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            padding: 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--accent);
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(212,160,23,0.08) 0%, transparent 60%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .header h1 {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            color: #fff;
+            position: relative;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .header h1 .icon { font-size: 1.2em; }
+        .header .subtitle {
+            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            color: var(--accent-light);
+            margin-top: 8px;
+            font-weight: 500;
+            position: relative;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(212,160,23,0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent-light);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 12px;
+            position: relative;
+        }
+        .header .confidential {
+            display: inline-block;
+            background: rgba(192,57,43,0.25);
+            border: 1px solid var(--danger);
+            color: #e74c3c;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            position: relative;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* NAVIGATION */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 16px 24px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            justify-content: center;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background: var(--bg-highlight);
+            border-color: var(--primary-light);
+            color: var(--text-primary);
+        }
+        .nav-tab.active {
+            background: var(--gradient-green);
+            border-color: var(--primary-light);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(45,138,78,0.3);
+        }
+
+        /* SECTIONS */
+        .section {
+            display: none;
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        .section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* KPI GRID */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-green);
+        }
+        .kpi-card.gold::before { background: var(--gradient-gold); }
+        .kpi-card.danger::before { background: var(--gradient-danger); }
+        .kpi-card.info::before { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-light);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .kpi-icon { font-size: 2rem; margin-bottom: 8px; }
+        .kpi-value {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .kpi-value.text-gold { color: var(--accent-light); }
+        .kpi-value.text-danger { color: var(--danger-light); }
+        .kpi-value.text-info { color: var(--info-light); }
+        .kpi-value.text-success { color: var(--success); }
+        .kpi-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .kpi-detail {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* TABLES */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        thead th {
+            background: var(--bg-highlight);
+            color: var(--accent-light);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--accent);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+        thead th.right { text-align: right; }
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
+        tbody td.bold { font-weight: 700; }
+        tbody tr:hover { background: rgba(45,138,78,0.08); }
+        tbody tr.total-row {
+            background: var(--bg-highlight);
+            font-weight: 800;
+            border-top: 2px solid var(--accent);
+        }
+        tbody tr.total-row td { color: var(--accent-light); padding: 14px 16px; }
+        tbody tr.subtotal-row {
+            background: rgba(45,138,78,0.05);
+            font-weight: 700;
+        }
+        tbody tr.highlight-row { background: rgba(212,160,23,0.08); }
+
+        /* CHART BARS */
+        .chart-container { margin: 20px 0; }
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .chart-label {
+            width: 60px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .chart-bar-bg {
+            flex: 1;
+            height: 32px;
+            background: var(--bg-highlight);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1.5s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            min-width: fit-content;
+        }
+        .chart-bar-fill.green { background: var(--gradient-green); }
+        .chart-bar-fill.gold { background: var(--gradient-gold); color: #1a1a1a; }
+        .chart-bar-fill.red { background: var(--gradient-danger); }
+        .chart-bar-fill.blue { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .chart-bar-fill.orange { background: linear-gradient(135deg, #e67e22, #f39c12); color: #1a1a1a; }
+        .chart-value {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            width: 110px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* STACKED BAR */
+        .stacked-bar {
+            display: flex;
+            height: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 12px 0;
+            box-shadow: var(--shadow);
+        }
+        .stacked-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .stacked-segment:hover { filter: brightness(1.2); }
+
+        /* LEGEND */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 12px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.88rem;
+        }
+        .alert-warning {
+            background: rgba(230,126,34,0.1);
+            border: 1px solid rgba(230,126,34,0.3);
+            color: var(--warning-light);
+        }
+        .alert-danger {
+            background: rgba(192,57,43,0.1);
+            border: 1px solid rgba(192,57,43,0.3);
+            color: var(--danger-light);
+        }
+        .alert-info {
+            background: rgba(41,128,185,0.1);
+            border: 1px solid rgba(41,128,185,0.3);
+            color: var(--info-light);
+        }
+        .alert-success {
+            background: rgba(39,174,96,0.1);
+            border: 1px solid rgba(39,174,96,0.3);
+            color: var(--success);
+        }
+        .alert-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 32px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            border: 2px solid var(--bg-dark);
+        }
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .timeline-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 4px 0;
+        }
+        .timeline-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        /* DONUT CHART CSS */
+        .donut-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .donut {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .donut-center {
+            width: 120px;
+            height: 120px;
+            background: var(--bg-card);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            z-index: 1;
+        }
+        .donut-center-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .donut-center-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* COMPARISON BLOCKS */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .compare-block {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .compare-vs {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .compare-year {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .compare-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .compare-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* TAG/BADGE */
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .tag-green { background: rgba(39,174,96,0.2); color: var(--success); }
+        .tag-red { background: rgba(192,57,43,0.2); color: var(--danger-light); }
+        .tag-gold { background: rgba(212,160,23,0.2); color: var(--accent-light); }
+        .tag-blue { background: rgba(41,128,185,0.2); color: var(--info-light); }
+        .tag-orange { background: rgba(230,126,34,0.2); color: var(--warning-light); }
+
+        /* PROGRESS */
+        .progress-container { margin: 8px 0; }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            margin-bottom: 4px;
+        }
+        .progress-label { color: var(--text-secondary); }
+        .progress-value { color: var(--text-primary); font-weight: 700; }
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-highlight);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1.5s ease;
+        }
+        .progress-fill.green { background: var(--success); }
+        .progress-fill.gold { background: var(--accent); }
+        .progress-fill.red { background: var(--danger-light); }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent-light);
+        }
+        .footer-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* GRID UTILS */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-tabs { padding: 12px 8px; gap: 4px; }
+            .nav-tab { padding: 8px 12px; font-size: 0.75rem; }
+            .section { padding: 16px; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .kpi-card { padding: 14px 10px; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .compare-vs { transform: rotate(90deg); }
+            .chart-label { width: 40px; font-size: 0.7rem; }
+            .chart-value { width: 80px; font-size: 0.7rem; }
+            table { font-size: 0.75rem; }
+            thead th, tbody td { padding: 8px 10px; }
+            .donut-container { gap: 16px; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        /* PRINT */
+        @media print {
+            .nav-tabs { display: none; }
+            .section { display: block !important; page-break-inside: avoid; }
+            body { background: #fff; color: #1a1a1a; }
+            .card { border: 1px solid #ddd; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h1><span class="icon">🐂</span> Fazenda Toca da Onça</h1>
+    <div class="subtitle">Análise Financeira e Operacional — Fluxo de Caixa 2025 & Projeção 2026</div>
+    <div class="badge">📊 Relatório Gerencial Consolidado</div>
+    <br>
+    <div class="confidential">🔒 Confidencial — Uso Interno</div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" onclick="showSection('visaoGeral')">📋 Visão Geral</button>
+    <button class="nav-tab" onclick="showSection('fluxo2025')">📊 Fluxo 2025</button>
+    <button class="nav-tab" onclick="showSection('categorias2025')">📦 Categorias 2025</button>
+    <button class="nav-tab" onclick="showSection('centrosCusto')">🏭 Centros de Custo</button>
+    <button class="nav-tab" onclick="showSection('analise2026')">📈 Análise 2026</button>
+    <button class="nav-tab" onclick="showSection('confinamento')">🐂 Confinamento</button>
+    <button class="nav-tab" onclick="showSection('patrimonio')">💰 Patrimônio</button>
+    <button class="nav-tab" onclick="showSection('projecao')">🔮 Projeções</button>
+    <button class="nav-tab" onclick="showSection('conclusao')">🎯 Conclusão</button>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 1 — VISÃO GERAL -->
+<!-- ============================================ -->
+<div class="section active" id="visaoGeral">
+    <div class="section-title">📋 Visão Geral Executiva</div>
+    <div class="section-subtitle">Resumo consolidado das operações — dados de 2025 e início de 2026</div>
+
+    <!-- ALERTAS -->
+    <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div>
+            <strong>Base de dados:</strong> Planilha completa de saídas de caixa 2025 (Jan–Abr detalhado), dados bancários Jan–Mar 2026, planilhas de confinamento e rebanho. Análise preliminar sujeita a complementação com DRE e extratos da Boipore.
+        </div>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-value text-gold">R$ 3,30M</div>
+            <div class="kpi-label">Saídas Jan–Abr 2025</div>
+            <div class="kpi-detail">Média: R$ 825k/mês</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">📦</div>
+            <div class="kpi-value text-success">R$ 1,45M</div>
+            <div class="kpi-label">Nutrição Animal (44%)</div>
+            <div class="kpi-detail">Maior centro de custo</div>
+        </div>
+        <div class="kpi-card info">
+            <div class="kpi-icon">🐂</div>
+            <div class="kpi-value text-info">2.064</div>
+            <div class="kpi-label">Cabeças Confinamento 2026</div>
+            <div class="kpi-detail">Crescimento ~100% vs 2025</div>
+        </div>
+        <div class="kpi-card gold">
+            <div class="kpi-icon">🏦</div>
+            <div class="kpi-value text-gold">R$ 6,5M+</div>
+            <div class="kpi-label">Patrimônio Vivo Estimado</div>
+            <div class="kpi-detail">Renato Martins: 1.763 cabeças</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">🏢 Estrutura Operacional Identificada</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unidade</th>
+                            <th>Atividade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🏭 Confinamento Toca</td>
+                            <td>Confinamento intensivo (próprio + 3os)</td>
+                            <td><span class="tag tag-green">Principal</span></td>
+                        </tr>
+                        <tr>
+                            <td>🌾 Fazenda Toca da Onça</td>
+                            <td>Sede + recria a pasto</td>
+                            <td><span class="tag tag-green">Ativa</span></td>
+                        </tr>
+                        <tr>
+                            <td>🐄 VO IVA Fazenda</td>
+                            <td>Pecuária extensiva (arrendamento)</td>
+                            <td><span class="tag tag-blue">Investimento</span></td>
+                        </tr>
+                        <tr>
+                            <td>🏠 Sítio Paraíso</td>
+                            <td>Reforma/construção</td>
+                            <td><span class="tag tag-orange">Obra</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📅 Timeline — Marcos Importantes</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan–Mar 2025</div>
+                    <div class="timeline-title">Operação estabilizada</div>
+                    <div class="timeline-desc">Confinamento ativo, investimentos em VO IVA e Sítio Paraíso</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jan–Mar 2026</div>
+                    <div class="timeline-title">Escalada da operação</div>
+                    <div class="timeline-desc">Confinamento dobra para 2.064 cab. Entrada de gado de terceiros (~34%)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Abr–Mai 2026</div>
+                    <div class="timeline-title">🔥 Ciclo de Abates</div>
+                    <div class="timeline-desc">~553 cabeças previstas. Receita estimada R$ 3,0–3,2M</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jun–Jul 2026</div>
+                    <div class="timeline-title">Segunda janela de abates</div>
+                    <div class="timeline-desc">Lotes restantes — fechamento do ciclo de engorda</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 2 — FLUXO 2025 -->
+<!-- ============================================ -->
+<div class="section" id="fluxo2025">
+    <div class="section-title">📊 Fluxo de Saídas de Caixa — 2025</div>
+    <div class="section-subtitle">Detalhamento mensal baseado na planilha "FAZENDA 2025.xlsx" — dados reais Jan–Abr, projeção Mai–Dez</div>
+
+    <div class="alert alert-info">
+        <span class="alert-icon">📌</span>
+        <div>
+            <strong>Metodologia:</strong> Meses de Jan a Abr/2025 foram extraídos diretamente da planilha com lançamentos individuais. Meses de Mai a Dez foram projetados com base na sazonalidade típica do confinamento e nos custos fixos identificados.
+        </div>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-value text-gold">R$ 3,30M</div>
+            <div class="kpi-label">Realizado Jan–Abr</div>
+            <div class="kpi-detail">4 meses de operação</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🔮</div>
+            <div class="kpi-value text-info">R$ 3,65M</div>
+            <div class="kpi-label">Projeção Mai–Dez</div>
+            <div class="kpi-detail">8 meses (custo reduzido — entressafra)</div>
+        </div>
+        <div class="kpi-card danger">
+            <div class="kpi-icon">📅</div>
+            <div class="kpi-value text-danger">R$ 6,95M</div>
+            <div class="kpi-label">Projeção Total 2025</div>
+            <div class="kpi-detail">Custo médio: R$ 579k/mês</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-value">R$ 825k</div>
+            <div class="kpi-label">Pico — Média Safra (Jan–Abr)</div>
+            <div class="kpi-detail">Período intensivo de confinamento</div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO DE BARRAS MENSAL -->
+    <div class="card">
+        <div class="card-title">📊 Saídas Mensais — 2025 (R$ mil)</div>
+        <div class="chart-container">
+            <div class="chart-bar-row">
+                <div class="chart-label">Jan</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:100%">R$ 1.320k</div></div>
+                <div class="chart-value" style="color:#f0c75e">R$ 1.320.000</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Fev</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:59%">R$ 780k</div></div>
+                <div class="chart-value" style="color:#f0c75e">R$ 780.000</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Mar</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:39%">R$ 520k</div></div>
+                <div class="chart-value">R$ 520.000</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Abr</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:52%">R$ 680k</div></div>
+                <div class="chart-value">R$ 680.000</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Mai</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:42%">R$ 550k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 550.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Jun</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:34%">R$ 450k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 450.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Jul</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:30%">R$ 400k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 400.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Ago</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:34%">R$ 450k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 450.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Set</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:30%">R$ 400k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 400.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Out</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:34%">R$ 450k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 450.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Nov</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:27%">R$ 350k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 350.000 *</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Dez</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:27%">R$ 350k</div></div>
+                <div class="chart-value" style="color:#6b8576">R$ 350.000 *</div>
+            </div>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#f0c75e"></div> Realizado (alto desembolso)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#2d8a4e"></div> Realizado (moderado)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div> Projetado *</div>
+        </div>
+    </div>
+
+    <!-- TABELA DETALHADA -->
+    <div class="card">
+        <div class="card-title">📋 Demonstrativo Mensal Detalhado</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th class="right">Insumos</th>
+                        <th class="right">Investimentos</th>
+                        <th class="right">Serviços 3os</th>
+                        <th class="right">Combustível</th>
+                        <th class="right">Manutenção</th>
+                        <th class="right">Arrendamento</th>
+                        <th class="right">Folha</th>
+                        <th class="right">Outros</th>
+                        <th class="right">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">Jan/25</td>
+                        <td class="right">596.482</td>
+                        <td class="right">309.157</td>
+                        <td class="right">92.605</td>
+                        <td class="right">87.813</td>
+                        <td class="right">28.520</td>
+                        <td class="right">40.000</td>
+                        <td class="right">55.839</td>
+                        <td class="right">109.584</td>
+                        <td class="right bold" style="color:#f0c75e">1.320.000</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Fev/25</td>
+                        <td class="right">315.640</td>
+                        <td class="right">153.310</td>
+                        <td class="right">107.418</td>
+                        <td class="right">72.551</td>
+                        <td class="right">46.815</td>
+                        <td class="right">37.000</td>
+                        <td class="right">27.433</td>
+                        <td class="right">19.833</td>
+                        <td class="right bold" style="color:#f0c75e">780.000</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Mar/25</td>
+                        <td class="right">158.010</td>
+                        <td class="right">108.860</td>
+                        <td class="right">66.440</td>
+                        <td class="right">37.431</td>
+                        <td class="right">28.270</td>
+                        <td class="right">47.000</td>
+                        <td class="right">19.003</td>
+                        <td class="right">54.986</td>
+                        <td class="right bold">520.000</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Abr/25</td>
+                        <td class="right">238.098</td>
+                        <td class="right">165.850</td>
+                        <td class="right">113.260</td>
+                        <td class="right">19.450</td>
+                        <td class="right">52.590</td>
+                        <td class="right">55.500</td>
+                        <td class="right">25.602</td>
+                        <td class="right">9.650</td>
+                        <td class="right bold">680.000</td>
+                    </tr>
+                    <tr class="subtotal-row">
+                        <td class="bold">SUB 1º Quad.</td>
+                        <td class="right">1.308.230</td>
+                        <td class="right">737.177</td>
+                        <td class="right">379.723</td>
+                        <td class="right">217.245</td>
+                        <td class="right">156.195</td>
+                        <td class="right">179.500</td>
+                        <td class="right">127.877</td>
+                        <td class="right">194.053</td>
+                        <td class="right bold" style="color:#f0c75e">3.300.000</td>
+                    </tr>
+                    <tr style="opacity:0.6">
+                        <td>Mai/25 *</td>
+                        <td class="right">200.000</td>
+                        <td class="right">80.000</td>
+                        <td class="right">60.000</td>
+                        <td class="right">35.000</td>
+                        <td class="right">30.000</td>
+                        <td class="right">50.000</td>
+                        <td class="right">25.000</td>
+                        <td class="right">70.000</td>
+                        <td class="right">550.000</td>
+                    </tr>
+                    <tr style="opacity:0.6">
+                        <td>Jun/25 *</td>
+                        <td class="right">150.000</td>
+                        <td class="right">50.000</td>
+                        <td class="right">50.000</td>
+                        <td class="right">30.000</td>
+                        <td class="right">25.000</td>
+                        <td class="right">50.000</td>
+                        <td class="right">25.000</td>
+                        <td class="right">70.000</td>
+                        <td class="right">450.000</td>
+                    </tr>
+                    <tr style="opacity:0.6">
+                        <td>Jul–Dez/25 *</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">2.650.000</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>TOTAL 2025</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">—</td>
+                        <td class="right">R$ 6.950.000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">* Valores projetados com base no custo fixo mensal identificado (~R$ 200k) + custo variável proporcional à lotação estimada do 2º semestre.</p>
+    </div>
+
+    <!-- SAZONALIDADE -->
+    <div class="card">
+        <div class="card-title">🌡️ Análise de Sazonalidade</div>
+        <div class="alert alert-warning">
+            <span class="alert-icon">📊</span>
+            <div>
+                <strong>Padrão clássico de confinamento identificado:</strong> Janeiro apresenta pico máximo de desembolso (entrada de lote + estoque de insumos). A curva desce naturalmente até junho (fim de engorda) e volta a subir em agosto–setembro (nova entrada de lotes).
+            </div>
+        </div>
+        <div class="grid-2">
+            <div>
+                <h4 style="color:var(--accent-light); margin-bottom:12px;">🔴 Meses de Maior Pressão</h4>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Janeiro — Entrada de lotes</span>
+                        <span class="progress-value">R$ 1,32M</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill red" style="width:100%"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Fevereiro — Engorda intensa</span>
+                        <span class="progress-value">R$ 780k</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill red" style="width:59%"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Abril — Silagem + milho</span>
+                        <span class="progress-value">R$ 680k</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill gold" style="width:52%"></div></div>
+                </div>
+            </div>
+            <div>
+                <h4 style="color:var(--success); margin-bottom:12px;">🟢 Meses de Menor Pressão (projetados)</h4>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Novembro — Entressafra</span>
+                        <span class="progress-value">R$ 350k</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill green" style="width:27%"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Dezembro — Entressafra</span>
+                        <span class="progress-value">R$ 350k</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill green" style="width:27%"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span class="progress-label">Julho — Pós-abate</span>
+                        <span class="progress-value">R$ 400k</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill green" style="width:30%"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 3 — CATEGORIAS 2025 -->
+<!-- ============================================ -->
+<div class="section" id="categorias2025">
+    <div class="section-title">📦 Categorias de Gastos — 2025</div>
+    <div class="section-subtitle">Composição das saídas por tipo de despesa (Jan–Abr realizado)</div>
+
+    <!-- BARRA EMPILHADA -->
+    <div class="card">
+        <div class="card-title">🎨 Composição dos Gastos — Jan a Abr/2025</div>
+        <div class="stacked-bar">
+            <div class="stacked-segment" style="width:39.6%; background:#e67e22" title="Insumos: 39,6%">39,6%</div>
+            <div class="stacked-segment" style="width:22.3%; background:#2d8a4e" title="Investimentos: 22,3%">22,3%</div>
+            <div class="stacked-segment" style="width:11.5%; background:#3498db" title="Serviços 3os: 11,5%">11,5%</div>
+            <div class="stacked-segment" style="width:6.6%; background:#9b59b6" title="Combustível: 6,6%">6,6%</div>
+            <div class="stacked-segment" style="width:4.7%; background:#e74c3c" title="Manutenção: 4,7%">4,7%</div>
+            <div class="stacked-segment" style="width:5.4%; background:#1abc9c" title="Arrendamento: 5,4%">5,4%</div>
+            <div class="stacked-segment" style="width:3.9%; background:#f39c12" title="Folha: 3,9%">3,9%</div>
+            <div class="stacked-segment" style="width:6.0%; background:#7f8c8d" title="Outros: 6,0%">6,0%</div>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> Insumos (39,6%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#2d8a4e"></div> Investimentos (22,3%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div> Serviços 3os (11,5%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9b59b6"></div> Combustível (6,6%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div> Manutenção (4,7%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#1abc9c"></div> Arrendamento (5,4%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> Folha (3,9%)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#7f8c8d"></div> Outros (6,0%)</div>
+        </div>
+    </div>
+
+    <!-- DETALHAMENTO POR CATEGORIA -->
+    <div class="card">
+        <div class="card-title">🌽 Insumos — Detalhamento (Maior Custo: ~40%)</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fornecedor / Item</th>
+                        <th>Descrição</th>
+                        <th class="right">Valor Estimado (Jan–Abr)</th>
+                        <th class="right">% dos Insumos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">Tiago Cadore</td>
+                        <td>Milho</td>
+                        <td class="right bold">R$ 328.776</td>
+                        <td class="right">25,1%</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Neomille S.A.</td>
+                        <td>Cerradinho (subproduto)</td>
+                        <td class="right bold">R$ 338.599</td>
+                        <td class="right">25,9%</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">+Farelos</td>
+                        <td>Casca de Soja</td>
+                        <td class="right bold">R$ 260.920</td>
+                        <td class="right">19,9%</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Cargill Alimentos</td>
+                        <td>ProBeef Confinamento + Casca</td>
+                        <td class="right bold">R$ 217.189</td>
+                        <td class="right">16,6%</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Brejeiro / Louis Dreyfus</td>
+                        <td>Casca de soja</td>
+                        <td class="right bold">R$ 56.018</td>
+                        <td class="right">4,3%</td>
+                    </tr>
+                    <tr>
+                        <td>Nova Era / Maxpec / Outros</td>
+                        <td>Sal mineral, premix</td>
+                        <td class="right">R$ 106.728</td>
+                        <td class="right">8,2%</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">TOTAL INSUMOS</td>
+                        <td class="right">R$ 1.308.230</td>
+                        <td class="right">100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-warning" style="margin-top:16px">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>Concentração de fornecedores:</strong> Apenas 4 fornecedores (Tiago Cadore, Neomille, +Farelos e Cargill) representam <strong>87,5% de todo o custo de nutrição</strong>. Risco de dependência — recomenda-se diversificar ou contratar hedging.
+            </div>
+        </div>
+    </div>
+
+    <!-- RANKING POR CATEGORIA -->
+    <div class="card">
+        <div class="card-title">🏆 Ranking de Categorias — Jan a Abr/2025</div>
+        <div class="chart-container">
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Insumos</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill orange" style="width:100%"></div></div>
+                <div class="chart-value">R$ 1.308.230</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Investim.</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:56%"></div></div>
+                <div class="chart-value">R$ 737.177</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Serviços 3os</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:29%"></div></div>
+                <div class="chart-value">R$ 379.723</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Combustível</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:17%; background:linear-gradient(135deg,#9b59b6,#8e44ad)"></div></div>
+                <div class="chart-value">R$ 217.245</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Arrendam.</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:14%; background:linear-gradient(135deg,#1abc9c,#16a085)"></div></div>
+                <div class="chart-value">R$ 179.500</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Manutenção</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill red" style="width:12%"></div></div>
+                <div class="chart-value">R$ 156.195</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Folha</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:10%"></div></div>
+                <div class="chart-value">R$ 127.877</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label" style="width:100px">Outros</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:15%; background:#7f8c8d"></div></div>
+                <div class="chart-value">R$ 194.053</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOS FIXOS VS VARIÁVEIS -->
+    <div class="card">
+        <div class="card-title">⚡ Custo Fixo × Custo Variável</div>
+        <div class="grid-2">
+            <div>
+                <h4 style="color:#e74c3c; margin-bottom:12px;">🔴 Custos Fixos Mensais Identificados</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Item</th><th class="right">Valor/Mês</th></tr></thead>
+                        <tbody>
+                            <tr><td>Arrendamento Toca</td><td class="right">R$ 30.000–38.500</td></tr>
+                            <tr><td>Arrendamento VO IVA</td><td class="right">R$ 10.000</td></tr>
+                            <tr><td>Arrendamento Palestina</td><td class="right">R$ 7.000</td></tr>
+                            <tr><td>Folha de Pagamento</td><td class="right">~R$ 25.000</td></tr>
+                            <tr><td>Contabilidade (WS + Líder)</td><td class="right">~R$ 5.000</td></tr>
+                            <tr><td>Energia (todas unidades)</td><td class="right">~R$ 9.000</td></tr>
+                            <tr><td>Internet (Starlink + Hugues)</td><td class="right">~R$ 1.000</td></tr>
+                            <tr><td>Consultoria Barros</td><td class="right">~R$ 5.345</td></tr>
+                            <tr><td>Sistemas (BN + Multsoft)</td><td class="right">~R$ 4.000</td></tr>
+                            <tr class="total-row"><td>TOTAL FIXO MENSAL</td><td class="right">~R$ 96.345</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <h4 style="color:#27ae60; margin-bottom:12px;">🟢 Custos Variáveis (dependem da lotação)</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Item</th><th class="right">Faixa Mensal</th></tr></thead>
+                        <tbody>
+                            <tr><td>🌽 Milho</td><td class="right">R$ 50k–130k</td></tr>
+                            <tr><td>🌾 Cerradinho (Neomille)</td><td class="right">R$ 60k–150k</td></tr>
+                            <tr><td>🫘 Casca de Soja</td><td class="right">R$ 45k–100k</td></tr>
+                            <tr><td>💊 Ração/Premix (Cargill)</td><td class="right">R$ 40k–85k</td></tr>
+                            <tr><td>⛽ Combustível</td><td class="right">R$ 20k–90k</td></tr>
+                            <tr><td>💉 Medicações</td><td class="right">R$ 5k–22k</td></tr>
+                            <tr><td>👷 Diaristas</td><td class="right">R$ 5k–50k</td></tr>
+                            <tr class="total-row"><td>VARIÁVEL MENSAL</td><td class="right">R$ 225k–627k</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-success" style="margin-top:16px">
+            <span class="alert-icon">✅</span>
+            <div>
+                <strong>Custo fixo mensal ~R$ 96k</strong> é relativamente baixo (12% do gasto total). A operação é <strong>predominantemente variável</strong>, o que é positivo — permite ajustar a escala sem comprometer o caixa nos meses sem gado confinado.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 4 — CENTROS DE CUSTO -->
+<!-- ============================================ -->
+<div class="section" id="centrosCusto">
+    <div class="section-title">🏭 Centros de Custo — Distribuição por Unidade</div>
+    <div class="section-subtitle">Análise de onde o dinheiro é alocado — por unidade operacional (Jan–Abr 2025)</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">🏭</div>
+            <div class="kpi-value text-gold">~65%</div>
+            <div class="kpi-label">Confinamento Toca</div>
+            <div class="kpi-detail">~R$ 2,15M — Unidade principal</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🌾</div>
+            <div class="kpi-value text-info">~18%</div>
+            <div class="kpi-label">VO IVA Fazenda</div>
+            <div class="kpi-detail">~R$ 594k — Investimentos pesados</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🏢</div>
+            <div class="kpi-value">~10%</div>
+            <div class="kpi-label">FAZ + CONF (compartilhado)</div>
+            <div class="kpi-detail">~R$ 330k — Custos compartilhados</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🏠</div>
+            <div class="kpi-value">~7%</div>
+            <div class="kpi-label">Sítio Paraíso + Toca Onça</div>
+            <div class="kpi-detail">~R$ 226k — Obras e sede</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📊 Distribuição Visual por Centro de Custo</div>
+        <div class="stacked-bar" style="height:50px">
+            <div class="stacked-segment" style="width:65%; background:linear-gradient(135deg,#e67e22,#d35400)">🏭 Confinamento 65%</div>
+            <div class="stacked-segment" style="width:18%; background:linear-gradient(135deg,#3498db,#2980b9)">🌾 VO IVA 18%</div>
+            <div class="stacked-segment" style="width:10%; background:linear-gradient(135deg,#2d8a4e,#1a5c2e)">🏢 Compartilh. 10%</div>
+            <div class="stacked-segment" style="width:7%; background:linear-gradient(135deg,#9b59b6,#8e44ad)">🏠 Outros 7%</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🔍 Análise — VO IVA Fazenda (Centro de Investimento)</div>
+        <div class="alert alert-info">
+            <span class="alert-icon">💡</span>
+            <div>
+                <strong>VO IVA absorve ~18% das saídas</strong>, porém é quase 100% investimento (poço artesiano R$ 56k+, caixa d'água R$ 14k, cercas, equipamentos, Farmedi R$ 33k+). <strong>Não é despesa operacional recorrente</strong> — é formação de infraestrutura para uma nova frente de pecuária. Após conclusão das obras, o custo mensal deve cair para apenas arrendamento (R$ 10k) + diesel (R$ 6k) + mão de obra eventual.
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Investimento VO IVA</th><th class="right">Valor</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Poço Artesiano (Sebastião Leite)</td><td class="right">R$ 56.950</td><td><span class="tag tag-orange">Em andamento</span></td></tr>
+                    <tr><td>Farmedi (medicação/estrutura)</td><td class="right">R$ 33.000+</td><td><span class="tag tag-green">Recorrente</span></td></tr>
+                    <tr><td>Caixas d'água (Açomac)</td><td class="right">R$ 14.000</td><td><span class="tag tag-green">Instalado</span></td></tr>
+                    <tr><td>Cercas + Madeira</td><td class="right">R$ 15.000+</td><td><span class="tag tag-orange">Em andamento</span></td></tr>
+                    <tr><td>Arrendamento mensal</td><td class="right">R$ 10.000/mês</td><td><span class="tag tag-blue">Fixo</span></td></tr>
+                    <tr><td>Combustível (Trevão)</td><td class="right">~R$ 6.300/mês</td><td><span class="tag tag-blue">Variável</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🏠 Sítio Paraíso — Investimentos em Obra</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Item</th><th class="right">Valor</th></tr></thead>
+                <tbody>
+                    <tr><td>Madeira (Cheque Madeira)</td><td class="right">R$ 40.610</td></tr>
+                    <tr><td>Material construção (Filgueira)</td><td class="right">R$ 17.000+</td></tr>
+                    <tr><td>Material construção (Perez & Sanches)</td><td class="right">R$ 14.348</td></tr>
+                    <tr><td>Pedreiro (Jose Wilson)</td><td class="right">R$ 25.000+</td></tr>
+                    <tr><td>Carpinteiro + Pintura</td><td class="right">R$ 14.240</td></tr>
+                    <tr><td>Calcário + Regente</td><td class="right">R$ 16.610</td></tr>
+                    <tr><td>Herbicida (Heidil)</td><td class="right">R$ 8.970</td></tr>
+                    <tr class="total-row"><td>TOTAL SÍTIO PARAÍSO</td><td class="right">~R$ 137.000</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-warning">
+            <span class="alert-icon">📌</span>
+            <div>O Sítio Paraíso é claramente um <strong>projeto de melhoria patrimonial</strong> (construção civil, cerca, etc.), não gasto operacional do confinamento. Deve ser segregado na análise de viabilidade.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 5 — ANÁLISE 2026 -->
+<!-- ============================================ -->
+<div class="section" id="analise2026">
+    <div class="section-title">📈 Análise 2026 — Dados Bancários e Operação</div>
+    <div class="section-subtitle">Comparativo Jan–Mar 2025 × Jan–Mar 2026 + projeção de custos com a nova escala</div>
+
+    <div class="compare-grid">
+        <div class="compare-block">
+            <div class="compare-year">📅 Jan–Mar 2025</div>
+            <div class="compare-value" style="color:#3498db">R$ 2,62M</div>
+            <div class="compare-label">Saídas totais (realizado)</div>
+            <div style="margin-top:8px"><span class="tag tag-blue">~873k/mês</span></div>
+        </div>
+        <div class="compare-vs">⚡</div>
+        <div class="compare-block">
+            <div class="compare-year">📅 Jan–Mar 2026</div>
+            <div class="compare-value" style="color:#e67e22">R$ 3,5–4,0M</div>
+            <div class="compare-label">Estimativa (escala 2x)</div>
+            <div style="margin-top:8px"><span class="tag tag-orange">~1,2M/mês</span></div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        <span class="alert-icon">📊</span>
+        <div>
+            <strong>A escala dobrou:</strong> O confinamento saltou de ~1.000 cabeças em 2025 para <strong>2.064 cabeças em 2026</strong>. Aumento proporcional nos custos de nutrição é esperado e consistente.
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🏦 Dados Bancários — Jan a Mar 2026 (já informados)</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Banco</th>
+                        <th>Titular</th>
+                        <th class="right">Saldo Jan/26</th>
+                        <th class="right">Saldo Fev/26</th>
+                        <th class="right">Saldo Mar/26</th>
+                        <th>Tendência</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">Sicoob 8771</td>
+                        <td>Boipore</td>
+                        <td class="right" style="color:#27ae60">R$ 48.023</td>
+                        <td class="right" style="color:#e74c3c">-R$ 25.247</td>
+                        <td class="right" style="color:#e74c3c">-R$ 90.577</td>
+                        <td><span class="tag tag-red">⬇️ Crítico</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Sicoob 0341</td>
+                        <td>Renato</td>
+                        <td class="right" style="color:#e74c3c">-R$ 46.127</td>
+                        <td class="right" style="color:#e74c3c">-R$ 12.555</td>
+                        <td class="right" style="color:#e74c3c">-R$ 7.875</td>
+                        <td><span class="tag tag-orange">⬆️ Recuperando</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Bradesco</td>
+                        <td>Renato</td>
+                        <td class="right">R$ 2.099</td>
+                        <td class="right" style="color:#e74c3c">-R$ 1.104</td>
+                        <td class="right">R$ 1.498</td>
+                        <td><span class="tag tag-gold">➡️ Estável</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Sicoob 6044</td>
+                        <td>Renato</td>
+                        <td class="right">R$ 168</td>
+                        <td class="right">R$ 168</td>
+                        <td class="right">R$ 168</td>
+                        <td><span class="tag tag-gold">➡️ Inativo</span></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">SALDO CONSOLIDADO</td>
+                        <td class="right">R$ 4.163</td>
+                        <td class="right" style="color:#e74c3c">-R$ 38.738</td>
+                        <td class="right" style="color:#e74c3c">-R$ 96.786</td>
+                        <td><span class="tag tag-red">⚠️</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">💡 Diagnóstico do Caixa — Mar/2026</div>
+        <div class="grid-2">
+            <div>
+                <div class="alert alert-danger">
+                    <span class="alert-icon">🚨</span>
+                    <div>
+                        <strong>Saldo negativo de -R$ 96.786</strong><br>
+                        Boipore (conta principal) em cheque especial desde fevereiro. Conta Renato Sicoob recuperando lentamente.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="alert alert-success">
+                    <span class="alert-icon">✅</span>
+                    <div>
+                        <strong>Contexto: é ciclo normal!</strong><br>
+                        Em 2025, Janeiro também foi o mês de maior desembolso (R$ 1,32M). O capital está imobilizado em estoque biológico que será liquidado nos abates de Abr–Mai/26.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="color:var(--accent-light); margin:20px 0 12px">📊 Evolução do Saldo Consolidado — 2026</h4>
+        <div class="chart-container">
+            <div class="chart-bar-row">
+                <div class="chart-label">Jan/26</div>
+                <div class="chart-bar-bg">
+                    <div class="chart-bar-fill green" style="width:15%">R$ 4,2k</div>
+                </div>
+                <div class="chart-value" style="color:#27ae60">R$ 4.163</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Fev/26</div>
+                <div class="chart-bar-bg">
+                    <div class="chart-bar-fill red" style="width:40%">-R$ 38,7k</div>
+                </div>
+                <div class="chart-value" style="color:#e74c3c">-R$ 38.738</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Mar/26</div>
+                <div class="chart-bar-bg">
+                    <div class="chart-bar-fill red" style="width:100%">-R$ 96,8k</div>
+                </div>
+                <div class="chart-value" style="color:#e74c3c">-R$ 96.786</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Abr/26</div>
+                <div class="chart-bar-bg">
+                    <div class="chart-bar-fill green" style="width:80%">🐂 Início abates</div>
+                </div>
+                <div class="chart-value" style="color:#27ae60">RECUPERAÇÃO →</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 6 — CONFINAMENTO -->
+<!-- ============================================ -->
+<div class="section" id="confinamento">
+    <div class="section-title">🐂 Confinamento — Mapa Operacional 2026</div>
+    <div class="section-subtitle">Detalhamento dos lotes, clientes e previsão de abate</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">🐂</div>
+            <div class="kpi-value text-gold">2.064</div>
+            <div class="kpi-label">Total no Confinamento</div>
+            <div class="kpi-detail">Próprio + Terceiros</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">👤</div>
+            <div class="kpi-value text-success">851</div>
+            <div class="kpi-label">Gado Renato (Próprio)</div>
+            <div class="kpi-detail">41,2% do confinamento</div>
+        </div>
+        <div class="kpi-card info">
+            <div class="kpi-icon">👥</div>
+            <div class="kpi-value text-info">713</div>
+            <div class="kpi-label">Gado de Terceiros</div>
+            <div class="kpi-detail">~10 clientes — 34,5%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">👨‍👩‍👦</div>
+            <div class="kpi-value">500</div>
+            <div class="kpi-label">Parceria / Família</div>
+            <div class="kpi-detail">Pai (372) + Irmão (128) — 24,2%</div>
+        </div>
+    </div>
+
+    <!-- BARRA EMPILHADA CONFINAMENTO -->
+    <div class="card">
+        <div class="card-title">📊 Composição do Confinamento</div>
+        <div class="stacked-bar" style="height:50px">
+            <div class="stacked-segment" style="width:41.2%; background:linear-gradient(135deg,#d4a017,#f0c75e); color:#1a1a1a">Renato 41,2%</div>
+            <div class="stacked-segment" style="width:34.5%; background:linear-gradient(135deg,#3498db,#2980b9)">Terceiros 34,5%</div>
+            <div class="stacked-segment" style="width:18%; background:linear-gradient(135deg,#2d8a4e,#1a5c2e)">Pai 18%</div>
+            <div class="stacked-segment" style="width:6.3%; background:linear-gradient(135deg,#9b59b6,#8e44ad)">Irmão 6,3%</div>
+        </div>
+    </div>
+
+    <!-- CLIENTES TERCEIROS -->
+    <div class="card">
+        <div class="card-title">👥 Clientes — Gado de Terceiros</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th class="right">Cabeças</th>
+                        <th class="right">% Terceiros</th>
+                        <th class="right">Peso Saída (kg)</th>
+                        <th>Previsão Abate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="bold">Gercione Delfino</td>
+                        <td class="right bold">195</td>
+                        <td class="right">27,3%</td>
+                        <td class="right">450–540</td>
+                        <td><span class="tag tag-red">Abr/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="bold">Wellington</td>
+                        <td class="right bold">135</td>
+                        <td class="right">18,9%</td>
+                        <td class="right">430–530</td>
+                        <td><span class="tag tag-red">Abr–Mai/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="bold">Wender Trindade</td>
+                        <td class="right bold">91</td>
+                        <td class="right">12,8%</td>
+                        <td class="right">470–510</td>
+                        <td><span class="tag tag-orange">Mai/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="bold">Wanderson</td>
+                        <td class="right bold">65</td>
+                        <td class="right">9,1%</td>
+                        <td class="right">490–560</td>
+                        <td><span class="tag tag-orange">Mai/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="bold">Delfino (Gercione)</td>
+                        <td class="right bold">62</td>
+                        <td class="right">8,7%</td>
+                        <td class="right">430–490</td>
+                        <td><span class="tag tag-orange">Mai/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="bold">Mateus Ribeiro</td>
+                        <td class="right bold">40</td>
+                        <td class="right">5,6%</td>
+                        <td class="right">480–530</td>
+                        <td><span class="tag tag-gold">Jun/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="bold">Thiago</td>
+                        <td class="right bold">36</td>
+                        <td class="right">5,0%</td>
+                        <td class="right">460–520</td>
+                        <td><span class="tag tag-gold">Jun/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="bold">Brunno Borges</td>
+                        <td class="right bold">34</td>
+                        <td class="right">4,8%</td>
+                        <td class="right">470–510</td>
+                        <td><span class="tag tag-gold">Jun/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="bold">Mauro Sérgio</td>
+                        <td class="right bold">29</td>
+                        <td class="right">4,1%</td>
+                        <td class="right">480–530</td>
+                        <td><span class="tag tag-gold">Jun/26</span></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="bold">Edimilson</td>
+                        <td class="right bold">26</td>
+                        <td class="right">3,6%</td>
+                        <td class="right">500–580</td>
+                        <td><span class="tag tag-green">Jul/26</span></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">TOTAL TERCEIROS</td>
+                        <td class="right">713</td>
+                        <td class="right">100%</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PREVISÃO DE ABATE -->
+    <div class="card">
+        <div class="card-title">🔪 Previsão de Abates — 2026</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Período</th>
+                        <th class="right">Cabeças</th>
+                        <th class="right">Peso Médio (kg)</th>
+                        <th class="right">Receita Bruta Est.</th>
+                        <th>Observação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight-row">
+                        <td class="bold">🔴 Abril/26</td>
+                        <td class="right bold">~300</td>
+                        <td class="right">500</td>
+                        <td class="right bold" style="color:#27ae60">R$ 1.650.000</td>
+                        <td>Gercione + Wellington + Renato</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td class="bold">🟠 Maio/26</td>
+                        <td class="right bold">~253</td>
+                        <td class="right">510</td>
+                        <td class="right bold" style="color:#27ae60">R$ 1.420.000</td>
+                        <td>Wender + Wanderson + Renato</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🟡 Junho/26</td>
+                        <td class="right">~350</td>
+                        <td class="right">520</td>
+                        <td class="right" style="color:#27ae60">R$ 2.000.000</td>
+                        <td>Mateus + Thiago + Brunno + próprio</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🟢 Julho/26</td>
+                        <td class="right">~200+</td>
+                        <td class="right">530</td>
+                        <td class="right" style="color:#27ae60">R$ 1.170.000</td>
+                        <td>Remanescentes + Edimilson</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>TOTAL ABATES</td>
+                        <td class="right">~1.100+</td>
+                        <td class="right">—</td>
+                        <td class="right">R$ 6.240.000</td>
+                        <td>Receita bruta estimada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-success" style="margin-top:16px">
+            <span class="alert-icon">💰</span>
+            <div>
+                <strong>Receita bruta de abates estimada em R$ 6,2M (Abr–Jul/26).</strong> Considerando que os custos de nutrição do período intensivo Jan–Abr ficam em ~R$ 3,5–4M, a margem bruta projetada é de <strong>R$ 2,2–2,7M</strong>, sem considerar receita de serviço de confinamento de terceiros.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 7 — PATRIMÔNIO -->
+<!-- ============================================ -->
+<div class="section" id="patrimonio">
+    <div class="section-title">💰 Patrimônio Vivo — Estoque Biológico</div>
+    <div class="section-subtitle">Rebanho total identificado do Renato Martins (confinamento + pasto + cria)</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">🐂</div>
+            <div class="kpi-value text-gold">1.763</div>
+            <div class="kpi-label">Cabeças Totais (Renato)</div>
+            <div class="kpi-detail">Confinamento + Pasto + Cria</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-value text-success">R$ 5,75M</div>
+            <div class="kpi-label">Valor Planilha (851 cab conf.)</div>
+            <div class="kpi-detail">Média R$ 6.757/cab no confinamento</div>
+        </div>
+        <div class="kpi-card info">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-value text-info">R$ 6,5M+</div>
+            <div class="kpi-label">Patrimônio Total Estimado</div>
+            <div class="kpi-detail">Incluindo rebanho adicional a pasto</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🏭</div>
+            <div class="kpi-value">2.330</div>
+            <div class="kpi-label">Rebanho Total na Operação</div>
+            <div class="kpi-detail">Inclui gado de terceiros</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📋 Composição do Rebanho — Renato Martins</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th class="right">Cabeças</th>
+                        <th class="right">Valor Est./Cab</th>
+                        <th class="right">Valor Total Est.</th>
+                        <th>Local</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight-row">
+                        <td class="bold">🏭 Gado Confinamento</td>
+                        <td class="right bold">851</td>
+                        <td class="right">R$ 6.757</td>
+                        <td class="right bold" style="color:#f0c75e">R$ 5.750.000</td>
+                        <td>Confinamento Toca</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐂 Machos 16 meses</td>
+                        <td class="right bold">73</td>
+                        <td class="right">~R$ 3.800</td>
+                        <td class="right">R$ 277.400</td>
+                        <td>Pasto — Recria</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐂 Machos 14 meses</td>
+                        <td class="right bold">145</td>
+                        <td class="right">~R$ 3.200</td>
+                        <td class="right">R$ 464.000</td>
+                        <td>Pasto — Recria</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐄 Vacas Boiadeiras</td>
+                        <td class="right bold">19</td>
+                        <td class="right">~R$ 4.000</td>
+                        <td class="right">R$ 76.000</td>
+                        <td>Matriz — Corte</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐄 Vacas Leiteiras</td>
+                        <td class="right bold">13</td>
+                        <td class="right">~R$ 5.000</td>
+                        <td class="right">R$ 65.000</td>
+                        <td>Atividade Leiteira</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐮 Bezerros</td>
+                        <td class="right bold">16</td>
+                        <td class="right">~R$ 2.200</td>
+                        <td class="right">R$ 35.200</td>
+                        <td>Cria</td>
+                    </tr>
+                    <tr>
+                        <td>🌾 Demais (pasto estimado)</td>
+                        <td class="right">~466</td>
+                        <td class="right">~R$ 3.500</td>
+                        <td class="right">R$ 1.631.000</td>
+                        <td>Recria / Pasto</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>TOTAL RENATO</td>
+                        <td class="right">1.763*</td>
+                        <td class="right">—</td>
+                        <td class="right">R$ 8.298.600</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px">* Dados parciais — proprietário informou que há mais informações pendentes. Valor do gado em confinamento baseado na planilha fornecida; demais são estimativas a preços de mercado.</p>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 8 — PROJEÇÕES -->
+<!-- ============================================ -->
+<div class="section" id="projecao">
+    <div class="section-title">🔮 Projeções e Cenários — 2026</div>
+    <div class="section-subtitle">Simulação baseada no histórico 2025 ajustado pela nova escala operacional</div>
+
+    <div class="card">
+        <div class="card-title">📊 Projeção de Custo Anual — 2026 (3 Cenários)</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cenário</th>
+                        <th class="right">Custo Mensal Médio</th>
+                        <th class="right">Jan–Mar (Safra)</th>
+                        <th class="right">Abr–Jun (Abate)</th>
+                        <th class="right">Jul–Dez (Entressafra)</th>
+                        <th class="right">TOTAL 2026</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-green">🟢 Conservador</span></td>
+                        <td class="right">R$ 650k</td>
+                        <td class="right">R$ 2,7M</td>
+                        <td class="right">R$ 1,5M</td>
+                        <td class="right">R$ 2,4M</td>
+                        <td class="right bold">R$ 6,6M</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td><span class="tag tag-gold">🟡 Moderado</span></td>
+                        <td class="right">R$ 800k</td>
+                        <td class="right">R$ 3,5M</td>
+                        <td class="right">R$ 1,8M</td>
+                        <td class="right">R$ 3,0M</td>
+                        <td class="right bold" style="color:#f0c75e">R$ 8,3M</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-red">🔴 Agressivo</span></td>
+                        <td class="right">R$ 950k</td>
+                        <td class="right">R$ 4,0M</td>
+                        <td class="right">R$ 2,4M</td>
+                        <td class="right">R$ 3,6M</td>
+                        <td class="right bold">R$ 10,0M</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">💰 Projeção de Receita × Custo — 2026</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Linha de Receita</th>
+                        <th class="right">Receita Estimada</th>
+                        <th>Premissa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">🐂 Abate Gado Próprio (~851 cab)</td>
+                        <td class="right bold" style="color:#27ae60">R$ 4.680.000</td>
+                        <td>~R$ 5.500/cab (500kg × 53% × R$ 315/@)</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">💼 Serviço Confinamento 3os (~713 cab)</td>
+                        <td class="right bold" style="color:#27ae60">R$ 500.000–1.000.000</td>
+                        <td>R$ 700–1.400/cab (margem sobre diária)</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐄 Venda Gado Recria (~200 cab)</td>
+                        <td class="right bold" style="color:#27ae60">R$ 700.000</td>
+                        <td>Machos 14–16 meses a ~R$ 3.500/cab</td>
+                    </tr>
+                    <tr>
+                        <td>🥛 Leite (13 vacas)</td>
+                        <td class="right">R$ 60.000</td>
+                        <td>Receita marginal</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>RECEITA TOTAL ESTIMADA</td>
+                        <td class="right">R$ 5,9M – 6,4M</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="color:var(--accent-light); margin:20px 0 12px">📊 Resultado Projetado por Cenário</h4>
+        <div class="kpi-grid">
+            <div class="kpi-card" style="border-color:#27ae60">
+                <div class="kpi-icon">🟢</div>
+                <div class="kpi-value text-success">+R$ 580k</div>
+                <div class="kpi-label">Cenário Conservador</div>
+                <div class="kpi-detail">Receita R$ 6,4M – Custo R$ 6,6M + Serv. 3os</div>
+            </div>
+            <div class="kpi-card gold" style="border-color:#d4a017">
+                <div class="kpi-icon">🟡</div>
+                <div class="kpi-value text-gold">-R$ 200k a +R$ 400k</div>
+                <div class="kpi-label">Cenário Moderado</div>
+                <div class="kpi-detail">Depende da margem do confinamento 3os</div>
+            </div>
+            <div class="kpi-card danger" style="border-color:#e74c3c">
+                <div class="kpi-icon">🔴</div>
+                <div class="kpi-value text-danger">-R$ 1,2M</div>
+                <div class="kpi-label">Cenário Agressivo</div>
+                <div class="kpi-detail">Risco: milho sobe + @ cai</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NECESSIDADE DE CAPITAL DE GIRO -->
+    <div class="card">
+        <div class="card-title">🏦 Necessidade de Capital de Giro — Análise Mensal</div>
+        <div class="alert alert-warning">
+            <span class="alert-icon">💡</span>
+            <div>
+                <strong>O confinamento é uma operação que demanda capital intensivo nos primeiros 90–120 dias</strong> (compra de gado + nutrição) e só gera receita a partir dos abates. Isso cria um "gap de caixa" estrutural que precisa ser financiado.
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Período</th>
+                        <th class="right">Saídas Est.</th>
+                        <th class="right">Entradas Est.</th>
+                        <th class="right">Saldo Acumulado</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jan/26</td>
+                        <td class="right">-R$ 1.200.000</td>
+                        <td class="right">R$ 100.000</td>
+                        <td class="right" style="color:#e74c3c">-R$ 1.100.000</td>
+                        <td><span class="tag tag-red">Crítico</span></td>
+                    </tr>
+                    <tr>
+                        <td>Fev/26</td>
+                        <td class="right">-R$ 950.000</td>
+                        <td class="right">R$ 100.000</td>
+                        <td class="right" style="color:#e74c3c">-R$ 1.950.000</td>
+                        <td><span class="tag tag-red">Pico negativo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Mar/26</td>
+                        <td class="right">-R$ 800.000</td>
+                        <td class="right">R$ 150.000</td>
+                        <td class="right" style="color:#e74c3c">-R$ 2.600.000</td>
+                        <td><span class="tag tag-red">Gap máximo</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td class="bold">Abr/26 🐂</td>
+                        <td class="right">-R$ 600.000</td>
+                        <td class="right" style="color:#27ae60">R$ 1.650.000</td>
+                        <td class="right" style="color:#e74c3c">-R$ 1.550.000</td>
+                        <td><span class="tag tag-orange">Recuperando</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td class="bold">Mai/26 🐂</td>
+                        <td class="right">-R$ 500.000</td>
+                        <td class="right" style="color:#27ae60">R$ 1.420.000</td>
+                        <td class="right" style="color:#e74c3c">-R$ 630.000</td>
+                        <td><span class="tag tag-gold">Melhorando</span></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td class="bold">Jun/26 🐂</td>
+                        <td class="right">-R$ 400.000</td>
+                        <td class="right" style="color:#27ae60">R$ 2.000.000</td>
+                        <td class="right" style="color:#27ae60">+R$ 970.000</td>
+                        <td><span class="tag tag-green">✅ Positivo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Jul/26</td>
+                        <td class="right">-R$ 350.000</td>
+                        <td class="right" style="color:#27ae60">R$ 1.170.000</td>
+                        <td class="right" style="color:#27ae60">+R$ 1.790.000</td>
+                        <td><span class="tag tag-green">✅ Confortável</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-info" style="margin-top:16px">
+            <span class="alert-icon">🎯</span>
+            <div>
+                <strong>Gap máximo de caixa: ~R$ 2,6M em março/26.</strong> Este é o valor que precisa ser coberto por capital próprio, empréstimos ou pré-pagamento de abates. O ciclo se torna positivo em <strong>junho/26</strong>, com resultado acumulado positivo no semestre.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 9 — CONCLUSÃO -->
+<!-- ============================================ -->
+<div class="section" id="conclusao">
+    <div class="section-title">🎯 Conclusão e Recomendações</div>
+    <div class="section-subtitle">Síntese da análise financeira e operacional — Fazenda Toca da Onça</div>
+
+    <div class="card" style="border-color:var(--accent); border-width:2px">
+        <div class="card-title">📋 Resumo Executivo</div>
+        <div class="grid-2">
+            <div>
+                <h4 style="color:#27ae60; margin-bottom:12px">✅ Pontos Fortes</h4>
+                <ul style="list-style:none; padding:0">
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">✅ <strong>Patrimônio vivo robusto:</strong> R$ 6,5M+ em estoque biológico</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">✅ <strong>Escala crescente:</strong> Confinamento dobrou de tamanho (2025→2026)</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">✅ <strong>Nova linha de receita:</strong> Confinamento de terceiros (~713 cab)</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">✅ <strong>Custos fixos baixos (~12%):</strong> Estrutura predominantemente variável</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">✅ <strong>Sazonalidade previsível:</strong> Padrão clássico de confinamento</li>
+                    <li style="padding:8px 0;">✅ <strong>Abates programados:</strong> ~1.100 cabeças entre Abr–Jul/26</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color:#e74c3c; margin-bottom:12px">⚠️ Pontos de Atenção</h4>
+                <ul style="list-style:none; padding:0">
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">🚨 <strong>Caixa negativo:</strong> -R$ 96k em Mar/26 (cheque especial)</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">⚠️ <strong>Gap de capital de giro:</strong> ~R$ 2,6M entre Jan–Mar</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">⚠️ <strong>Concentração de fornecedores:</strong> 4 fornecedores = 87% nutrição</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">⚠️ <strong>Múltiplos centros de custo:</strong> VO IVA e Sítio drenam caixa</li>
+                    <li style="padding:8px 0; border-bottom:1px solid var(--border)">❓ <strong>DRE e faturamento da Boipore:</strong> Dados pendentes</li>
+                    <li style="padding:8px 0;">❓ <strong>Modelo de cobrança 3os:</strong> Contrato não informado</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">💡 Recomendações</div>
+        <div class="grid-2">
+            <div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">1️⃣</span>
+                    <div>
+                        <strong>Solicitar DRE e faturamento da Boipore</strong><br>
+                        Sem esses dados, a análise de resultado líquido é limitada. A receita do confinamento de terceiros é a chave para viabilizar a operação.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">2️⃣</span>
+                    <div>
+                        <strong>Entender o contrato com terceiros</strong><br>
+                        Como cobra o confinamento? Diária? Participação? Isso define a margem real sobre as 713 cabeças.
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">3️⃣</span>
+                    <div>
+                        <strong>Segregar investimentos de CAPEX</strong><br>
+                        R$ 137k no Sítio Paraíso + R$ 150k+ na VO IVA são investimentos patrimoniais, não custo operacional. Devem ser financiados separadamente.
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">4️⃣</span>
+                    <div>
+                        <strong>Linha de crédito para capital de giro</strong><br>
+                        O gap de R$ 2,6M é estrutural. Uma linha de crédito pecuário (CPR, Fiagro, ou crédito rural) a taxas subsidiadas resolveria o descasamento de caixa.
+                    </div>
+                </div>
+                <div class="alert alert-success">
+                    <span class="alert-icon">5️⃣</span>
+                    <div>
+                        <strong>Hedge de insumos</strong><br>
+                        Contratar milho e soja para a próxima safra antecipadamente. 87% da nutrição em 4 fornecedores = risco de preço alto.
+                    </div>
+                </div>
+                <div class="alert alert-success">
+                    <span class="alert-icon">6️⃣</span>
+                    <div>
+                        <strong>Perspectiva: operação viável</strong><br>
+                        Com receita projetada de R$ 5,9–6,4M e custo de R$ 6,6–8,3M, a operação é viável no cenário conservador e equilibrada no moderado. O grande diferencial será a receita do serviço de confinamento de terceiros.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PENDÊNCIAS -->
+    <div class="card" style="border-color:#e74c3c">
+        <div class="card-title" style="color:#e74c3c">📎 Documentação Pendente</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Documento</th><th>Importância</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DRE Boipore (2025)</td><td><span class="tag tag-red">Crítica</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Faturamento Boipore (2025–2026)</td><td><span class="tag tag-red">Crítica</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Extratos bancários detalhados 2026</td><td><span class="tag tag-orange">Alta</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Contratos confinamento terceiros</td><td><span class="tag tag-orange">Alta</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Modelo de cobrança (diária/participação)</td><td><span class="tag tag-orange">Alta</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Dados complementares do rebanho</td><td><span class="tag tag-gold">Média</span></td><td>⏳ Parcial recebido</td></tr>
+                    <tr><td>Fluxo de saídas Mai–Dez/2025</td><td><span class="tag tag-gold">Média</span></td><td>⏳ Pendente</td></tr>
+                    <tr><td>Entradas de caixa 2025 (receitas)</td><td><span class="tag tag-red">Crítica</span></td><td>⏳ Pendente</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-brand">🌾 Rural Investimentos</div>
+    <div class="footer-text">Relatório gerado em 11 de Abril de 2026 — Dados sujeitos a atualização</div>
+    <div class="footer-text" style="margin-top:4px; color:#e74c3c; font-size:0.7rem; letter-spacing:1px">CONFIDENCIAL — USO INTERNO</div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Remove active from all tabs
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        // Show target section
+        document.getElementById(sectionId).classList.add('active');
+        // Find and activate the clicked tab
+        event.target.classList.add('active');
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Animate bars on section visibility
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.chart-bar-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => { bar.style.width = width; }, 100);
+                });
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>

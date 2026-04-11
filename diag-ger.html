@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Gerencial — Fazenda Toca da Onça</title>
+    <style>
+        :root {
+            --primary: #1a5c2e;
+            --primary-light: #2d8a4e;
+            --primary-dark: #0e3a1b;
+            --accent: #d4a017;
+            --accent-light: #f0c75e;
+            --danger: #c0392b;
+            --danger-light: #e74c3c;
+            --warning: #e67e22;
+            --warning-light: #f39c12;
+            --info: #2980b9;
+            --info-light: #3498db;
+            --success: #27ae60;
+            --bg-dark: #0a0f0d;
+            --bg-card: #111a14;
+            --bg-card-alt: #162119;
+            --bg-highlight: #1a2e20;
+            --text-primary: #e8f0eb;
+            --text-secondary: #9cb3a4;
+            --text-muted: #6b8576;
+            --border: #2a3d30;
+            --border-light: #3a5244;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a0a0a 0%, #3d1010 50%, #5a1a1a 100%);
+            padding: 40px 24px;
+            text-align: center;
+            border-bottom: 3px solid var(--danger);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(ellipse at center, rgba(231,76,60,0.06) 0%, transparent 60%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 800;
+            color: #fff;
+            position: relative;
+        }
+        .header .subtitle {
+            color: #e74c3c;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            margin-top: 8px;
+            font-weight: 600;
+            position: relative;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(231,76,60,0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger-light);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            margin-top: 12px;
+            position: relative;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* NAV */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 14px 24px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            justify-content: center;
+        }
+        .nav-tab {
+            padding: 10px 18px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background: var(--bg-highlight);
+            border-color: var(--primary-light);
+            color: var(--text-primary);
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-color: var(--primary-light);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(45,138,78,0.3);
+        }
+        .nav-tab.tab-danger.active {
+            background: linear-gradient(135deg, var(--danger), var(--danger-light));
+            border-color: var(--danger-light);
+        }
+        .nav-tab.tab-gold.active {
+            background: linear-gradient(135deg, #d4a017, #f0c75e);
+            color: #1a1a1a;
+        }
+
+        /* SECTIONS */
+        .section { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 24px;
+        }
+
+        /* CARD */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-danger { border-color: rgba(231,76,60,0.3); }
+        .card-danger .card-title { color: var(--danger-light); }
+        .card-success { border-color: rgba(39,174,96,0.3); }
+        .card-success .card-title { color: var(--success); }
+        .card-gold { border-color: rgba(212,160,23,0.3); }
+        .card-accent { border-left: 4px solid var(--accent); }
+
+        /* KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        .kpi-card.gold::before { background: linear-gradient(135deg, #d4a017, #f0c75e); }
+        .kpi-card.danger::before { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+        .kpi-card.info::before { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .kpi-icon { font-size: 1.8rem; margin-bottom: 6px; }
+        .kpi-value { font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 800; color: #fff; }
+        .kpi-value.gold { color: var(--accent-light); }
+        .kpi-value.red { color: var(--danger-light); }
+        .kpi-value.green { color: var(--success); }
+        .kpi-value.blue { color: var(--info-light); }
+        .kpi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; font-weight: 600; }
+        .kpi-detail { font-size: 0.78rem; color: var(--text-secondary); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+
+        /* TABLE */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+        thead th {
+            background: var(--bg-highlight);
+            color: var(--accent-light);
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--accent);
+            white-space: nowrap;
+        }
+        thead th.center { text-align: center; }
+        thead th.right { text-align: right; }
+        tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        tbody td.center { text-align: center; }
+        tbody td.right { text-align: right; }
+        tbody td.bold { font-weight: 700; }
+        tbody tr:hover { background: rgba(45,138,78,0.06); }
+        tbody tr.total-row { background: var(--bg-highlight); font-weight: 800; border-top: 2px solid var(--accent); }
+        tbody tr.total-row td { color: var(--accent-light); padding: 14px; }
+
+        /* ALERTS */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+        .alert-danger { background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.3); color: var(--danger-light); }
+        .alert-warning { background: rgba(230,126,34,0.1); border: 1px solid rgba(230,126,34,0.3); color: var(--warning-light); }
+        .alert-info { background: rgba(41,128,185,0.1); border: 1px solid rgba(41,128,185,0.3); color: var(--info-light); }
+        .alert-success { background: rgba(39,174,96,0.1); border: 1px solid rgba(39,174,96,0.3); color: var(--success); }
+        .alert-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+
+        /* TAGS */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .tag-green { background: rgba(39,174,96,0.2); color: var(--success); }
+        .tag-red { background: rgba(192,57,43,0.2); color: var(--danger-light); }
+        .tag-gold { background: rgba(212,160,23,0.2); color: var(--accent-light); }
+        .tag-blue { background: rgba(41,128,185,0.2); color: var(--info-light); }
+        .tag-orange { background: rgba(230,126,34,0.2); color: var(--warning-light); }
+        .tag-gray { background: rgba(127,140,141,0.2); color: #bdc3c7; }
+
+        /* GRID */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+
+        /* CHART BARS */
+        .chart-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .chart-label { width: 120px; font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); text-align: right; flex-shrink: 0; }
+        .chart-bar-bg { flex: 1; height: 32px; background: var(--bg-highlight); border-radius: 8px; overflow: hidden; }
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: #fff;
+            transition: width 1.2s ease;
+        }
+        .chart-value { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); width: 80px; text-align: right; flex-shrink: 0; }
+
+        /* DIAGNOSTIC BLOCKS */
+        .diag-block {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--border);
+        }
+        .diag-block.diag-red { border-left-color: var(--danger-light); }
+        .diag-block.diag-orange { border-left-color: var(--warning-light); }
+        .diag-block.diag-yellow { border-left-color: var(--accent); }
+        .diag-block.diag-green { border-left-color: var(--success); }
+        .diag-block.diag-blue { border-left-color: var(--info-light); }
+        .diag-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .diag-number {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .diag-number.red { background: var(--danger); }
+        .diag-number.orange { background: var(--warning); }
+        .diag-number.yellow { background: var(--accent); }
+        .diag-number.green { background: var(--success); }
+        .diag-number.blue { background: var(--info); }
+        .diag-title { font-weight: 700; font-size: 0.95rem; color: var(--text-primary); }
+        .diag-desc { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; }
+        .diag-impact { font-size: 0.78rem; margin-top: 8px; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 8px; color: var(--text-muted); }
+        .diag-impact strong { color: var(--text-primary); }
+
+        /* SCORE METER */
+        .score-container { text-align: center; margin: 24px 0; }
+        .score-meter {
+            width: 100%; max-width: 500px;
+            height: 24px;
+            background: linear-gradient(90deg, #c0392b 0%, #e74c3c 20%, #e67e22 35%, #f39c12 50%, #d4a017 65%, #27ae60 80%, #1a5c2e 100%);
+            border-radius: 12px;
+            position: relative;
+            margin: 16px auto;
+            box-shadow: var(--shadow);
+        }
+        .score-needle {
+            position: absolute;
+            top: -8px;
+            width: 4px;
+            height: 40px;
+            background: #fff;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+            transition: left 1.5s ease;
+        }
+        .score-labels {
+            display: flex;
+            justify-content: space-between;
+            max-width: 500px;
+            margin: 8px auto 0;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .score-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .score-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* STATUS INDICATORS */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .status-item {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .status-icon { font-size: 2rem; margin-bottom: 4px; }
+        .status-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+        .status-value { font-size: 0.85rem; font-weight: 700; }
+        .status-value.ok { color: var(--success); }
+        .status-value.warn { color: var(--warning-light); }
+        .status-value.critical { color: var(--danger-light); }
+        .status-value.missing { color: #7f8c8d; }
+
+        /* QUOTE */
+        .quote-box {
+            background: linear-gradient(135deg, rgba(212,160,23,0.08), rgba(212,160,23,0.02));
+            border: 1px solid rgba(212,160,23,0.25);
+            border-left: 4px solid var(--accent);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--accent-light);
+            line-height: 1.7;
+        }
+        .quote-author {
+            font-style: normal;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            text-align: right;
+        }
+
+        /* CHECKLIST */
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.88rem;
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .check-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+        .checklist .title { font-weight: 700; color: var(--text-primary); }
+        .checklist .desc { color: var(--text-secondary); font-size: 0.82rem; margin-top: 2px; }
+
+        /* PROGRESS */
+        .progress-bar-container { margin: 8px 0; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 4px; }
+        .progress-label { color: var(--text-secondary); }
+        .progress-val { color: var(--text-primary); font-weight: 700; }
+        .progress-track { height: 10px; background: var(--bg-highlight); border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 5px; transition: width 1.5s ease; }
+
+        /* COMPARISON BOX */
+        .vs-container {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .vs-box {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .vs-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+        .vs-value { font-size: 1.3rem; font-weight: 800; }
+        .vs-detail { font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px; }
+        .vs-icon { text-align: center; font-size: 1.8rem; color: var(--accent); font-weight: 800; }
+
+        /* ACTION CARD */
+        .action-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .action-card:hover { border-color: var(--primary-light); background: var(--bg-highlight); }
+        .action-priority {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .action-priority.p1 { background: var(--danger); }
+        .action-priority.p2 { background: var(--warning); }
+        .action-priority.p3 { background: var(--info); }
+        .action-priority.p4 { background: var(--success); }
+        .action-title { font-weight: 700; font-size: 0.92rem; color: var(--text-primary); margin-bottom: 4px; }
+        .action-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+        .action-meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        .footer-brand { font-size: 1.1rem; font-weight: 800; color: var(--accent-light); }
+        .footer-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+        @media (max-width: 768px) {
+            .nav-tabs { padding: 10px 8px; }
+            .nav-tab { padding: 8px 12px; font-size: 0.73rem; }
+            .section { padding: 16px; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .chart-label { width: 80px; font-size: 0.7rem; }
+            .vs-container { grid-template-columns: 1fr; }
+            .vs-icon { transform: rotate(90deg); }
+            table { font-size: 0.75rem; }
+            thead th, tbody td { padding: 8px 10px; }
+        }
+
+        @media print {
+            .nav-tabs { display: none; }
+            .section { display: block !important; page-break-inside: avoid; }
+            body { background: #fff; color: #111; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h1>🔍 Diagnóstico Gerencial</h1>
+    <div class="subtitle">Fazenda Toca da Onça — Análise de Maturidade da Gestão Financeira</div>
+    <div class="badge">🔒 Confidencial — Reunião Rogério 14/04/2026</div>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" onclick="showSection('raioX')">🔍 Raio-X</button>
+    <button class="nav-tab tab-danger" onclick="showSection('oQueSabemos')">✅ O Que Sabemos</button>
+    <button class="nav-tab tab-danger" onclick="showSection('oQueFalta')">❌ O Que Falta</button>
+    <button class="nav-tab" onclick="showSection('indicadores')">📐 Indicadores</button>
+    <button class="nav-tab" onclick="showSection('gargalos')">🚨 Gargalos</button>
+    <button class="nav-tab tab-gold" onclick="showSection('planoAcao')">🎯 Plano de Ação</button>
+    <button class="nav-tab" onclick="showSection('mensagem')">💬 Mensagem Final</button>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 1 — RAIO-X -->
+<!-- ============================================ -->
+<div class="section active" id="raioX">
+    <div class="section-title">🔍 Raio-X da Gestão Atual</div>
+    <div class="section-subtitle">Avaliação do nível de maturidade gerencial da operação Fazenda Toca da Onça</div>
+
+    <!-- SCORE -->
+    <div class="card card-gold">
+        <div class="card-title">📊 Índice de Maturidade Gerencial</div>
+        <div class="score-container">
+            <div class="score-title" style="color:var(--warning-light)">3,2 / 10</div>
+            <div class="score-subtitle">Nível: <strong style="color:var(--warning-light)">OPERACIONAL BÁSICO</strong> — Gestão predominantemente reativa</div>
+            <div class="score-meter">
+                <div class="score-needle" style="left:32%"></div>
+            </div>
+            <div class="score-labels">
+                <span>1 — Crítico</span>
+                <span>3 — Básico</span>
+                <span>5 — Mediano</span>
+                <span>7 — Bom</span>
+                <span>10 — Excelente</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATUS DASHBOARD -->
+    <div class="card">
+        <div class="card-title">🏥 Painel de Saúde — Áreas de Gestão</div>
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-icon">📊</div>
+                <div class="status-label">Controle de Saídas</div>
+                <div class="status-value ok">✅ BOM</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">💰</div>
+                <div class="status-label">Controle de Entradas</div>
+                <div class="status-value critical">❌ INEXISTENTE</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">📋</div>
+                <div class="status-label">DRE / Resultado</div>
+                <div class="status-value critical">❌ INEXISTENTE</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🐂</div>
+                <div class="status-label">Controle Rebanho</div>
+                <div class="status-value warn">⚠️ PARCIAL</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">📦</div>
+                <div class="status-label">Custo por Cabeça</div>
+                <div class="status-value critical">❌ NÃO APURADO</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🔮</div>
+                <div class="status-label">Planejamento Caixa</div>
+                <div class="status-value critical">❌ INEXISTENTE</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">⚖️</div>
+                <div class="status-label">Separação CAPEX/OPEX</div>
+                <div class="status-value critical">❌ MISTURADO</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">📈</div>
+                <div class="status-label">Indicadores Zootéc.</div>
+                <div class="status-value missing">❓ SEM DADOS</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🏷️</div>
+                <div class="status-label">Centro de Custo</div>
+                <div class="status-value warn">⚠️ PARCIAL</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">📄</div>
+                <div class="status-label">Contratos 3os</div>
+                <div class="status-value missing">❓ NÃO INFORM.</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🛡️</div>
+                <div class="status-label">Seguro Rebanho</div>
+                <div class="status-value missing">❓ NÃO INFORM.</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🏦</div>
+                <div class="status-label">Endividamento</div>
+                <div class="status-value missing">❓ NÃO INFORM.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIAGNÓSTICO RÁPIDO -->
+    <div class="card">
+        <div class="card-title">⚡ Diagnóstico Rápido</div>
+        <div class="quote-box">
+            "A Fazenda Toca da Onça opera uma estrutura de <strong>R$ 8 a 10 milhões por ano</strong>, com patrimônio vivo de <strong>R$ 6,5M+</strong>, confinamento de <strong>2.064 cabeças</strong>, 4 unidades operacionais e 10 clientes de confinamento terceirizado — porém com o nível de controle financeiro de uma operação 10 vezes menor. Existe controle de saídas razoável, mas <strong>não há nenhum registro de entradas, não há DRE, não há custo por cabeça, não há planejamento de caixa</strong>. O proprietário toma decisões de milhões baseando-se na intuição e no saldo bancário do dia."
+            <div class="quote-author">— Análise Rural Investimentos, Abril 2026</div>
+        </div>
+    </div>
+
+    <!-- DIMENSÃO VS GESTÃO -->
+    <div class="card">
+        <div class="card-title">📏 Dimensão da Operação × Nível de Gestão</div>
+        <div class="vs-container">
+            <div class="vs-box" style="border-color:var(--success)">
+                <div class="vs-label">Tamanho da Operação</div>
+                <div class="vs-value" style="color:var(--success)">PROFISSIONAL</div>
+                <div class="vs-detail">2.064 cabeças • 4 unidades • R$ 8–10M/ano</div>
+                <div class="vs-detail">10 clientes terceiros • 15+ funcionários</div>
+            </div>
+            <div class="vs-icon">⚡</div>
+            <div class="vs-box" style="border-color:var(--danger)">
+                <div class="vs-label">Nível de Controle</div>
+                <div class="vs-value" style="color:var(--danger-light)">ARTESANAL</div>
+                <div class="vs-detail">1 planilha de saídas • Sem DRE • Sem custo/cab</div>
+                <div class="vs-detail">Sem planejamento • Sem indicadores</div>
+            </div>
+        </div>
+        <div class="alert alert-danger">
+            <span class="alert-icon">⚠️</span>
+            <div><strong>Esse descompasso é o maior risco do negócio.</strong> Não é o caixa negativo, não é o preço do milho — é tomar decisões de milhões sem informação estruturada. O caixa negativo de março/26 é consequência, não causa.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 2 — O QUE SABEMOS -->
+<!-- ============================================ -->
+<div class="section" id="oQueSabemos">
+    <div class="section-title">✅ O Que os Números Mostram com Clareza</div>
+    <div class="section-subtitle">Informações sólidas extraídas dos dados fornecidos</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card gold">
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-value gold">R$ 3,30M</div>
+            <div class="kpi-label">Saídas Jan–Abr/2025</div>
+            <div class="kpi-detail">Valor real, categorizado</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🐂</div>
+            <div class="kpi-value green">2.064</div>
+            <div class="kpi-label">Cabeças Conf. 2026</div>
+            <div class="kpi-detail">Mapeamento completo por lote</div>
+        </div>
+        <div class="kpi-card info">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-value blue">R$ 6,5M+</div>
+            <div class="kpi-label">Patrimônio Vivo</div>
+            <div class="kpi-detail">1.763 cabeças do Renato</div>
+        </div>
+        <div class="kpi-card danger">
+            <div class="kpi-icon">🏦</div>
+            <div class="kpi-value red">-R$ 96,8k</div>
+            <div class="kpi-label">Saldo Bancário Mar/26</div>
+            <div class="kpi-detail">Cheque especial ativo</div>
+        </div>
+    </div>
+
+    <!-- DETALHAMENTO -->
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">1</div>
+            <div class="diag-title">A operação é GRANDE e tem ESCALA</div>
+        </div>
+        <div class="diag-desc">
+            Confinamento de 2.064 cabeças, 4 unidades operacionais, 15+ colaboradores, mais de 10 clientes terceiros. O faturamento anual estimado está na faixa de <strong>R$ 8 a 10 milhões</strong>. É uma operação de porte relevante para a região.
+        </div>
+    </div>
+
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">2</div>
+            <div class="diag-title">O padrão de saídas é PREVISÍVEL</div>
+        </div>
+        <div class="diag-desc">
+            O maior desembolso é sempre nos meses de entrada dos lotes (Jan–Fev) com nutrição representando 40% do total. O custo cai progressivamente até a entressafra (Jul–Dez). Isso é <strong>padrão clássico de confinamento</strong> — não é descontrole, é ciclo natural.
+        </div>
+        <div class="diag-impact">
+            <strong>Conclusão:</strong> O caixa negativo de março/2026 é cíclico e previsível. Deveria ter sido planejado.
+        </div>
+    </div>
+
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">3</div>
+            <div class="diag-title">Custo fixo é BAIXO (12% do total)</div>
+        </div>
+        <div class="diag-desc">
+            Arrendamentos (~R$ 50k/mês) + Folha (~R$ 25k/mês) + Energia/Internet (~R$ 10k/mês) + Sistemas/Contabilidade (~R$ 10k/mês) = <strong>~R$ 96k/mês de custo fixo</strong>. Significa que a operação é predominantemente variável — se reduzir a lotação, o custo cai junto.
+        </div>
+        <div class="diag-impact">
+            <strong>Ponto positivo:</strong> Alavancagem operacional favorável. A escala compensa.
+        </div>
+    </div>
+
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">4</div>
+            <div class="diag-title">Patrimônio vivo cobre o passivo</div>
+        </div>
+        <div class="diag-desc">
+            Patrimônio biológico estimado de <strong>R$ 6,5M a R$ 8,3M</strong> contra um saldo bancário negativo de R$ 96k. A relação ativo/passivo visível é extremamente favorável — o problema é liquidez, não solvência.
+        </div>
+        <div class="diag-impact">
+            <strong>Traduzindo:</strong> O Renato não está "quebrado" — ele tem o dinheiro, só que está em forma de boi, não em conta bancária.
+        </div>
+    </div>
+
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">5</div>
+            <div class="diag-title">Confinamento de terceiros é uma nova fonte de receita</div>
+        </div>
+        <div class="diag-desc">
+            713 cabeças de 10 clientes = 34,5% do confinamento pertence a terceiros. Isso representa uma <strong>receita adicional de serviço</strong> que não existia em 2025 e pode gerar <strong>R$ 500k a R$ 1M/ano</strong> em diárias de confinamento.
+        </div>
+    </div>
+
+    <div class="diag-block diag-green">
+        <div class="diag-header">
+            <div class="diag-number green">6</div>
+            <div class="diag-title">Abates programados geram receita expressiva</div>
+        </div>
+        <div class="diag-desc">
+            Mais de 1.100 cabeças previstas para abate entre Abr–Jul/2026, com receita bruta estimada de <strong>R$ 6,2M</strong>. O ciclo de caixa tende a se inverter a partir de abril.
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 3 — O QUE FALTA -->
+<!-- ============================================ -->
+<div class="section" id="oQueFalta">
+    <div class="section-title">❌ O Que Falta Para Uma Gestão Adequada</div>
+    <div class="section-subtitle">Lacunas críticas que impedem uma visão real da saúde do negócio</div>
+
+    <div class="alert alert-danger">
+        <span class="alert-icon">🚨</span>
+        <div><strong>Sem as informações abaixo, é impossível responder à pergunta mais básica de qualquer negócio:</strong> "Estou ganhando ou perdendo dinheiro?"</div>
+    </div>
+
+    <!-- NÍVEL 1 -->
+    <div class="card card-danger">
+        <div class="card-title">🔴 Nível 1 — SEM ISSO, NÃO EXISTE GESTÃO</div>
+
+        <div class="diag-block diag-red">
+            <div class="diag-header">
+                <div class="diag-number red">1</div>
+                <div class="diag-title">Fluxo de ENTRADAS (Receitas)</div>
+            </div>
+            <div class="diag-desc">
+                Não existe <strong>nenhum registro</strong> de quanto entra de dinheiro. Nem vendas de gado, nem recebimento de terceiros, nem leite, nem nada. Temos uma planilha detalhada de saídas, mas <strong>zero dados de receita</strong>.
+            </div>
+            <div class="diag-impact">
+                <strong>Impacto:</strong> Impossível calcular lucro, margem, ponto de equilíbrio, ROI ou qualquer indicador financeiro. É como dirigir no escuro — vê o velocímetro mas não vê a estrada.
+            </div>
+        </div>
+
+        <div class="diag-block diag-red">
+            <div class="diag-header">
+                <div class="diag-number red">2</div>
+                <div class="diag-title">DRE — Demonstração de Resultado</div>
+            </div>
+            <div class="diag-desc">
+                A Boipore (empresa que opera o confinamento) não apresentou nenhuma DRE. Não sabemos: faturamento bruto, impostos sobre venda, custo dos produtos vendidos, despesas administrativas, lucro ou prejuízo líquido.
+            </div>
+            <div class="diag-impact">
+                <strong>Impacto:</strong> Sem DRE, o negócio pode estar dando lucro ou prejuízo — e <strong>ninguém sabe</strong>. É o documento mais básico de qualquer empresa.
+            </div>
+        </div>
+
+        <div class="diag-block diag-red">
+            <div class="diag-header">
+                <div class="diag-number red">3</div>
+                <div class="diag-title">Custo por Cabeça / Dia (Diária de Confinamento)</div>
+            </div>
+            <div class="diag-desc">
+                Não existe apuração de quanto custa manter <strong>1 boi por 1 dia</strong> no confinamento. Essa é a unidade de medida mais importante do setor. Sem isso, não tem como saber se o preço cobrado dos terceiros cobre o custo.
+            </div>
+            <div class="diag-impact">
+                <strong>Conta básica que deveria existir:</strong> (Insumos + Mão de obra + Energia + Manutenção + Overhead) ÷ nº cabeças ÷ 30 dias = <strong>Custo/cab/dia</strong>. Referência de mercado: R$ 12 a R$ 22/cab/dia.
+            </div>
+        </div>
+
+        <div class="diag-block diag-red">
+            <div class="diag-header">
+                <div class="diag-number red">4</div>
+                <div class="diag-title">Contrato / Modelo de Cobrança com Terceiros</div>
+            </div>
+            <div class="diag-desc">
+                São 713 cabeças de 10 clientes — e <strong>não sabemos como é feita a cobrança</strong>. É diária? Participação na arroba produzida? Preço fechado? Sem essa informação, a segunda maior fonte de receita (estimada em R$ 500k–1M) é uma incógnita.
+            </div>
+            <div class="diag-impact">
+                <strong>Risco concreto:</strong> Se cobrar abaixo do custo, cada boi de terceiro é um prejuízo. 713 cabeças × 120 dias × R$ 2/dia de prejuízo = <strong>R$ 171k de perda</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- NÍVEL 2 -->
+    <div class="card" style="border-color:rgba(230,126,34,0.3)">
+        <div class="card-title" style="color:var(--warning-light)">🟠 Nível 2 — SEM ISSO, NÃO TEM EFICIÊNCIA</div>
+
+        <div class="diag-block diag-orange">
+            <div class="diag-header">
+                <div class="diag-number orange">5</div>
+                <div class="diag-title">GPD — Ganho de Peso Diário</div>
+            </div>
+            <div class="diag-desc">
+                O indicador <strong>#1 de performance do confinamento</strong>. Mede quantos kg o boi ganha por dia. A diferença entre 1,2 kg/dia e 1,8 kg/dia pode significar <strong>R$ 400 a R$ 600 a mais por cabeça</strong>.
+            </div>
+            <div class="diag-impact">
+                <strong>Benchmark:</strong> Bom ≥ 1,5 kg/dia • Excelente ≥ 1,8 kg/dia • Ruim &lt; 1,2 kg/dia
+            </div>
+        </div>
+
+        <div class="diag-block diag-orange">
+            <div class="diag-header">
+                <div class="diag-number orange">6</div>
+                <div class="diag-title">Conversão Alimentar (CA)</div>
+            </div>
+            <div class="diag-desc">
+                Quantos kg de ração são necessários para produzir 1 kg de peso vivo. Está diretamente ligado ao custo de nutrição, que é <strong>40% do gasto total</strong>. Uma CA de 6:1 vs 8:1 significa <strong>25% de economia em insumos</strong>.
+            </div>
+            <div class="diag-impact">
+                <strong>Benchmark:</strong> Excelente ≤ 6:1 • Bom 6–7:1 • Regular 7–8:1 • Ruim &gt; 8:1
+            </div>
+        </div>
+
+        <div class="diag-block diag-orange">
+            <div class="diag-header">
+                <div class="diag-number orange">7</div>
+                <div class="diag-title">Taxa de Mortalidade</div>
+            </div>
+            <div class="diag-desc">
+                Não temos nenhum dado de mortalidade no confinamento. No setor, 1-2% é aceitável. Acima de 3% é sinal de problema grave. Com 2.064 cabeças, cada 1% de mortalidade = <strong>~20 cabeças = ~R$ 110.000 de perda</strong>.
+            </div>
+        </div>
+
+        <div class="diag-block diag-orange">
+            <div class="diag-header">
+                <div class="diag-number orange">8</div>
+                <div class="diag-title">Rendimento de Carcaça Real</div>
+            </div>
+            <div class="diag-desc">
+                Usamos 53% como estimativa, porém o real pode variar de 50% a 56%. Cada ponto percentual sobre 1.100 cabeças de 500 kg impacta <strong>~R$ 180.000 na receita total</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- NÍVEL 3 -->
+    <div class="card" style="border-color:rgba(212,160,23,0.3)">
+        <div class="card-title" style="color:var(--accent-light)">🟡 Nível 3 — SEM ISSO, NÃO TEM CRESCIMENTO SUSTENTÁVEL</div>
+
+        <div class="diag-block diag-yellow">
+            <div class="diag-header">
+                <div class="diag-number yellow">9</div>
+                <div class="diag-title">Separação Contábil por Unidade (P&L por centro)</div>
+            </div>
+            <div class="diag-desc">
+                Confinamento Toca, VO IVA, Sítio Paraíso e Fazenda Toca da Onça estão todos misturados na mesma planilha. Não é possível saber <strong>qual unidade dá lucro e qual drena caixa</strong>. A coluna "LOCAL" existe nos dados, mas sem receita alocada por centro, é insuficiente.
+            </div>
+        </div>
+
+        <div class="diag-block diag-yellow">
+            <div class="diag-header">
+                <div class="diag-number yellow">10</div>
+                <div class="diag-title">Separação CAPEX × OPEX</div>
+            </div>
+            <div class="diag-desc">
+                Compra de caminhão (R$ 100k), poço artesiano (R$ 56k), automação (R$ 20k), obras no Sítio (R$ 137k) estão misturados com custo operacional do confinamento. Isso <strong>infla o custo aparente em ~R$ 400k</strong> e distorce qualquer análise de margem.
+            </div>
+        </div>
+
+        <div class="diag-block diag-yellow">
+            <div class="diag-header">
+                <div class="diag-number yellow">11</div>
+                <div class="diag-title">Fluxo de Caixa Projetado (12 meses)</div>
+            </div>
+            <div class="diag-desc">
+                Não existe nenhum planejamento financeiro prospectivo. O caixa negativo de março/26 era <strong>100% previsível</strong> pelo padrão de 2025 — mas ninguém projetou. Deveria existir um mapa de 12 meses mostrando mês a mês: entradas esperadas, saídas previstas e saldo projetado.
+            </div>
+        </div>
+
+        <div class="diag-block diag-yellow">
+            <div class="diag-header">
+                <div class="diag-number yellow">12</div>
+                <div class="diag-title">Endividamento / Financiamentos</div>
+            </div>
+            <div class="diag-desc">
+                Não temos informação sobre empréstimos, CPRs, financiamento de máquinas, Fiagro ou qualquer dívida de médio/longo prazo. Se existem, impactam diretamente o fluxo de caixa e a capacidade de investimento.
+            </div>
+        </div>
+
+        <div class="diag-block diag-yellow">
+            <div class="diag-header">
+                <div class="diag-number yellow">13</div>
+                <div class="diag-title">Seguro do Rebanho</div>
+            </div>
+            <div class="diag-desc">
+                Patrimônio biológico de R$ 6,5M+. Se está segurado, é um custo mas é proteção. Se <strong>não está segurado</strong>, um evento climático, sanitário ou incêndio pode liquidar o negócio. Não temos essa informação.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 4 — INDICADORES -->
+<!-- ============================================ -->
+<div class="section" id="indicadores">
+    <div class="section-title">📐 Indicadores Que Deveriam Existir</div>
+    <div class="section-subtitle">KPIs essenciais para gestão de confinamento — status atual de cada um</div>
+
+    <div class="card">
+        <div class="card-title">📊 Painel de Indicadores — Status</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Fórmula / Descrição</th>
+                        <th class="center">Benchmark</th>
+                        <th class="center">Status Atual</th>
+                        <th class="center">Calculável?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">💰 Custo/cab/dia</td>
+                        <td>Custo total mensal ÷ nº cabeças ÷ 30</td>
+                        <td class="center">R$ 12–22</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-orange">⚠️ Parcial</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">📈 Margem por cab</td>
+                        <td>Receita venda − Custo total da engorda</td>
+                        <td class="center">R$ 800–2.000</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem receita</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">⚖️ EBITDA</td>
+                        <td>Receita − Custos operacionais (sem CAPEX)</td>
+                        <td class="center">15–25%</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem receita</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🔄 ROI Confinamento</td>
+                        <td>Lucro líquido ÷ Capital empregado</td>
+                        <td class="center">8–15% /ciclo</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Faltam as 2 pontas</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">⚡ Break-even (ponto equil.)</td>
+                        <td>Custos fixos ÷ (Preço − Custo variável)</td>
+                        <td class="center">Variável</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-orange">⚠️ Parcial</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🐂 GPD (kg/dia)</td>
+                        <td>(Peso saída − Peso entrada) ÷ dias confinamento</td>
+                        <td class="center">≥ 1,5 kg</td>
+                        <td class="center"><span class="tag tag-gray">❓ Sem dados</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem pesagem</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🌾 Conversão Alimentar</td>
+                        <td>kg ração consumida ÷ kg de peso ganho</td>
+                        <td class="center">≤ 7:1</td>
+                        <td class="center"><span class="tag tag-gray">❓ Sem dados</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem consumo</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">💀 Taxa Mortalidade</td>
+                        <td>Mortes ÷ Total confinado × 100</td>
+                        <td class="center">≤ 2%</td>
+                        <td class="center"><span class="tag tag-gray">❓ Sem dados</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem registro</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🥩 Rendimento Carcaça</td>
+                        <td>Peso carcaça ÷ Peso vivo × 100</td>
+                        <td class="center">52–56%</td>
+                        <td class="center"><span class="tag tag-gray">❓ Estimado 53%</span></td>
+                        <td class="center"><span class="tag tag-orange">⚠️ Aproximado</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">🏦 Índice Endividamento</td>
+                        <td>Dívida total ÷ Patrimônio total</td>
+                        <td class="center">≤ 40%</td>
+                        <td class="center"><span class="tag tag-gray">❓ Não informado</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem dívidas</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">📊 Cobertura do Serv. Dívida</td>
+                        <td>EBITDA ÷ Parcelas de dívida</td>
+                        <td class="center">≥ 1,5x</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-red">❌ Sem EBITDA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bold">💸 Capital Giro / @ produzida</td>
+                        <td>Investimento necessário por arroba</td>
+                        <td class="center">R$ 250–350/@</td>
+                        <td class="center"><span class="tag tag-red">❌ Não existe</span></td>
+                        <td class="center"><span class="tag tag-orange">⚠️ Parcial</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- VISUAL: O QUE TEMOS VS O QUE PRECISAMOS -->
+    <div class="card">
+        <div class="card-title">📉 Taxa de Cobertura dos Indicadores</div>
+        <div style="margin:16px 0">
+            <div class="chart-bar-row">
+                <div class="chart-label">Saídas (Custos)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:85%; background:linear-gradient(135deg,#27ae60,#2ecc71)">85%</div></div>
+                <div class="chart-value" style="color:#27ae60">✅ Bom</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Rebanho</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:60%; background:linear-gradient(135deg,#f39c12,#e67e22)">60%</div></div>
+                <div class="chart-value" style="color:#f39c12">⚠️ Parcial</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Patrimônio</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%; background:linear-gradient(135deg,#f39c12,#e67e22)">55%</div></div>
+                <div class="chart-value" style="color:#f39c12">⚠️ Parcial</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Saldos Bancários</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:40%; background:linear-gradient(135deg,#e67e22,#d35400)">40%</div></div>
+                <div class="chart-value" style="color:#e67e22">⚠️ 3 meses</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Entradas (Receita)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%; background:linear-gradient(135deg,#e74c3c,#c0392b)"></div></div>
+                <div class="chart-value" style="color:#e74c3c">❌ 0%</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">DRE</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%; background:linear-gradient(135deg,#e74c3c,#c0392b)"></div></div>
+                <div class="chart-value" style="color:#e74c3c">❌ 0%</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Zootécnicos</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%; background:linear-gradient(135deg,#e74c3c,#c0392b)"></div></div>
+                <div class="chart-value" style="color:#e74c3c">❌ 0%</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Endividamento</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%; background:linear-gradient(135deg,#e74c3c,#c0392b)"></div></div>
+                <div class="chart-value" style="color:#e74c3c">❌ 0%</div>
+            </div>
+        </div>
+        <div class="alert alert-danger">
+            <span class="alert-icon">📊</span>
+            <div><strong>Cobertura geral dos indicadores: ~25%.</strong> Temos boa visibilidade de GASTOS, visibilidade parcial de PATRIMÔNIO, e <strong>zero visibilidade de RECEITA, RESULTADO e PERFORMANCE ZOOTÉCNICA</strong>.</div>
+        </div>
+    </div>
+
+    <!-- ESTIMATIVA DO QUE SERIA POSSÍVEL -->
+    <div class="card card-accent">
+        <div class="card-title">💡 Estimativa: Custo/Cab/Dia (com dados disponíveis)</div>
+        <div class="alert alert-info">
+            <span class="alert-icon">🧮</span>
+            <div>
+                Mesmo sem todos os dados, é possível fazer uma <strong>estimativa grosseira</strong> do custo por cabeça/dia usando os dados de saída de 2025:
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Premissa</th>
+                        <th class="right">Valor</th>
+                        <th>Fonte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Custo operacional Jan–Abr/2025 (sem CAPEX)</td>
+                        <td class="right bold">R$ 2.600.000</td>
+                        <td>Planilha (-R$ 700k de investimentos)</td>
+                    </tr>
+                    <tr>
+                        <td>Cabeças estimadas confinadas em 2025</td>
+                        <td class="right bold">~1.000</td>
+                        <td>Estimativa proporcional</td>
+                    </tr>
+                    <tr>
+                        <td>Dias no período (Jan–Abr)</td>
+                        <td class="right bold">120</td>
+                        <td>4 meses</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>CUSTO/CAB/DIA ESTIMADO (2025)</td>
+                        <td class="right">~R$ 21,67</td>
+                        <td>R$ 2,6M ÷ 1.000 ÷ 120</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-warning" style="margin-top:12px">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>~R$ 21,67/cab/dia está no topo da faixa de mercado (R$ 12–22).</strong> Isso pode significar: (a) a dieta é premium, (b) há custos mal alocados inflando o valor, ou (c) a eficiência precisa melhorar. <strong>Sem GPD e conversão alimentar, não é possível diagnosticar.</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 5 — GARGALOS -->
+<!-- ============================================ -->
+<div class="section" id="gargalos">
+    <div class="section-title">🚨 Gargalos e Riscos Identificados</div>
+    <div class="section-subtitle">Os 7 principais riscos que podem comprometer o resultado da operação</div>
+
+    <div class="card card-danger">
+        <div class="card-title">⚠️ Matriz de Riscos</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Risco</th>
+                        <th class="center">Probabilidade</th>
+                        <th class="center">Impacto</th>
+                        <th class="center">Severidade</th>
+                        <th class="right">Perda Potencial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bold">1</td>
+                        <td class="bold">Gestão sem dados de receita</td>
+                        <td class="center"><span class="tag tag-red">Certa</span></td>
+                        <td class="center"><span class="tag tag-red">Crítico</span></td>
+                        <td class="center" style="color:#e74c3c; font-weight:800">🔴 EXTREMA</td>
+                        <td class="right" style="color:#e74c3c">Inestimável</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">2</td>
+                        <td class="bold">Confinamento 3os abaixo do custo</td>
+                        <td class="center"><span class="tag tag-orange">Média</span></td>
+                        <td class="center"><span class="tag tag-red">Alto</span></td>
+                        <td class="center" style="color:#e74c3c; font-weight:800">🔴 ALTA</td>
+                        <td class="right" style="color:#e74c3c">R$ 170k–500k</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">3</td>
+                        <td class="bold">Concentração de fornecedores (87%)</td>
+                        <td class="center"><span class="tag tag-orange">Média</span></td>
+                        <td class="center"><span class="tag tag-orange">Médio-Alto</span></td>
+                        <td class="center" style="color:#e67e22; font-weight:800">🟠 MÉDIA-ALTA</td>
+                        <td class="right">R$ 200k–400k</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">4</td>
+                        <td class="bold">Gap de capital de giro (R$ 2,6M)</td>
+                        <td class="center"><span class="tag tag-red">Alta</span></td>
+                        <td class="center"><span class="tag tag-orange">Médio</span></td>
+                        <td class="center" style="color:#e67e22; font-weight:800">🟠 MÉDIA-ALTA</td>
+                        <td class="right">Juros: R$ 50k–150k</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">5</td>
+                        <td class="bold">Patrimônio sem seguro (R$ 6,5M+)</td>
+                        <td class="center"><span class="tag tag-gold">Baixa</span></td>
+                        <td class="center"><span class="tag tag-red">Catastrófico</span></td>
+                        <td class="center" style="color:#e67e22; font-weight:800">🟠 MÉDIA-ALTA</td>
+                        <td class="right" style="color:#e74c3c">R$ 6.500.000</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">6</td>
+                        <td class="bold">CAPEX misturado com OPEX</td>
+                        <td class="center"><span class="tag tag-red">Certa</span></td>
+                        <td class="center"><span class="tag tag-gold">Médio</span></td>
+                        <td class="center" style="color:#f39c12; font-weight:800">🟡 MÉDIA</td>
+                        <td class="right">Decisões distorcidas</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">7</td>
+                        <td class="bold">Queda no preço da arroba</td>
+                        <td class="center"><span class="tag tag-orange">Média</span></td>
+                        <td class="center"><span class="tag tag-orange">Médio-Alto</span></td>
+                        <td class="center" style="color:#f39c12; font-weight:800">🟡 MÉDIA</td>
+                        <td class="right">R$ 10/@  = R$ 180k</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- DETALHAMENTO DOS TOPS -->
+    <div class="grid-2">
+        <div class="card card-danger">
+            <div class="card-title">🔴 Risco #1 — Voar às Cegas</div>
+            <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6; margin-bottom:12px">
+                Uma operação de <strong>R$ 8–10M/ano</strong> sem controle de receitas é como pilotar um avião sem altímetro. Pode estar voando alto ou prestes a bater no chão — e o piloto não sabe qual.
+            </p>
+            <div class="alert alert-danger" style="margin:0">
+                <span class="alert-icon">💀</span>
+                <div><strong>O maior risco não é perder dinheiro — é não saber que está perdendo.</strong></div>
+            </div>
+        </div>
+
+        <div class="card card-danger">
+            <div class="card-title">🔴 Risco #2 — Subsidiar Terceiros</div>
+            <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6; margin-bottom:12px">
+                Se o custo/cab/dia real for <strong>R$ 22</strong> e estiver cobrando <strong>R$ 18</strong> dos terceiros, cada um dos 713 bois gera <strong>R$ 4/dia de prejuízo</strong>. Em 120 dias = <strong>R$ 342.240 de perda</strong>.
+            </p>
+            <div class="alert alert-warning" style="margin:0">
+                <span class="alert-icon">📝</span>
+                <div><strong>Sem contrato e sem custo apurado, não há como confirmar ou negar essa hipótese.</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEPENDÊNCIA DE FORNECEDORES -->
+    <div class="card">
+        <div class="card-title">🔗 Risco #3 — Concentração de Fornecedores</div>
+        <div style="margin:16px 0">
+            <div class="chart-bar-row">
+                <div class="chart-label">Neomille (Cerradinho)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:26%; background:linear-gradient(135deg,#e74c3c,#c0392b)">25,9%</div></div>
+                <div class="chart-value">R$ 338k</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Tiago Cadore (Milho)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:25%; background:linear-gradient(135deg,#e67e22,#d35400)">25,1%</div></div>
+                <div class="chart-value">R$ 329k</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">+Farelos (Casca Soja)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:20%; background:linear-gradient(135deg,#f39c12,#e67e22)">19,9%</div></div>
+                <div class="chart-value">R$ 261k</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Cargill (ProBeef)</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:17%; background:linear-gradient(135deg,#d4a017,#f0c75e)">16,6%</div></div>
+                <div class="chart-value">R$ 217k</div>
+            </div>
+            <div class="chart-bar-row">
+                <div class="chart-label">Demais</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:12%; background:linear-gradient(135deg,#27ae60,#1a5c2e)">12,5%</div></div>
+                <div class="chart-value">R$ 163k</div>
+            </div>
+        </div>
+        <div class="alert alert-warning">
+            <span class="alert-icon">⚠️</span>
+            <div><strong>87,5% do custo de nutrição em 4 fornecedores.</strong> Se a Neomille atrasar uma entrega de cerradinho, o confinamento inteiro para. Recomendação: diversificar e/ou firmar contratos de longo prazo com garantia de entrega.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 6 — PLANO DE AÇÃO -->
+<!-- ============================================ -->
+<div class="section" id="planoAcao">
+    <div class="section-title">🎯 Plano de Ação — Prioridades Imediatas</div>
+    <div class="section-subtitle">O que precisa ser feito, em que ordem, e o que cada ação resolve</div>
+
+    <div class="alert alert-info">
+        <span class="alert-icon">📋</span>
+        <div><strong>As ações estão priorizadas por impacto na qualidade da gestão.</strong> Prioridade 1 deve ser resolvida em até 15 dias. Prioridade 2 em até 30 dias. Prioridade 3 em até 60 dias. Prioridade 4 é melhoria contínua.</div>
+    </div>
+
+    <!-- P1 -->
+    <h3 style="color:var(--danger-light); margin:20px 0 12px; font-size:1rem">🔴 PRIORIDADE 1 — URGENTE (até 15 dias)</h3>
+
+    <div class="action-card">
+        <div class="action-priority p1">1</div>
+        <div>
+            <div class="action-title">Levantar todas as ENTRADAS de caixa de 2025 e 2026</div>
+            <div class="action-desc">
+                Solicitar ao Renato/contador: notas de venda de gado, recebimentos de terceiros, entrada de CPR, qualquer receita. Sem isso, NENHUMA análise de resultado é possível.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-red">Impacto: Crítico</span>
+                <span class="tag tag-blue">Responsável: Proprietário + Contador</span>
+                <span class="tag tag-gold">Prazo: 7 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p1">2</div>
+        <div>
+            <div class="action-title">Obter DRE da Boipore (2024 e 2025)</div>
+            <div class="action-desc">
+                A empresa que opera o confinamento PRECISA ter uma DRE. Se não tem, o contador precisa produzir. É obrigatório para qualquer análise de crédito, investidor ou parceiro.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-red">Impacto: Crítico</span>
+                <span class="tag tag-blue">Responsável: Contador / WS Aporé</span>
+                <span class="tag tag-gold">Prazo: 15 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p1">3</div>
+        <div>
+            <div class="action-title">Definir e documentar o modelo de cobrança de terceiros</div>
+            <div class="action-desc">
+                Como é cobrado o confinamento de terceiros? Diária por cabeça? Valor por arroba produzida? Participação no resultado? Cada modelo tem uma margem diferente — e sem saber qual é, impossível avaliar a rentabilidade.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-red">Impacto: Crítico</span>
+                <span class="tag tag-blue">Responsável: Renato</span>
+                <span class="tag tag-gold">Prazo: 7 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- P2 -->
+    <h3 style="color:var(--warning-light); margin:20px 0 12px; font-size:1rem">🟠 PRIORIDADE 2 — IMPORTANTE (até 30 dias)</h3>
+
+    <div class="action-card">
+        <div class="action-priority p2">4</div>
+        <div>
+            <div class="action-title">Calcular o Custo/Cab/Dia real</div>
+            <div class="action-desc">
+                Com os dados de saída que já existem + número de cabeças por mês, é possível apurar o custo real da diária. Esse número define se o confinamento de terceiros dá lucro ou prejuízo, e é base para precificação.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-orange">Impacto: Alto</span>
+                <span class="tag tag-blue">Responsável: Gestão financeira</span>
+                <span class="tag tag-gold">Prazo: 15 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p2">5</div>
+        <div>
+            <div class="action-title">Separar CAPEX de OPEX na planilha</div>
+            <div class="action-desc">
+                Criar categorias separadas para: investimentos de capital (obras, máquinas, veículos, infraestrutura) versus custos operacionais recorrentes (nutrição, mão de obra, energia). Sem isso, a margem operacional real fica distorcida em ~R$ 400k.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-orange">Impacto: Alto</span>
+                <span class="tag tag-blue">Responsável: Gestão financeira</span>
+                <span class="tag tag-gold">Prazo: 15 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p2">6</div>
+        <div>
+            <div class="action-title">Levantar endividamento total</div>
+            <div class="action-desc">
+                Listar todos os empréstimos, financiamentos, CPRs, Fiagro, crédito rural ou qualquer passivo de médio/longo prazo. Incluir: valor original, saldo devedor, taxa, parcela mensal e prazo final.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-orange">Impacto: Alto</span>
+                <span class="tag tag-blue">Responsável: Proprietário + Contador</span>
+                <span class="tag tag-gold">Prazo: 20 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p2">7</div>
+        <div>
+            <div class="action-title">Montar Fluxo de Caixa Projetado (12 meses)</div>
+            <div class="action-desc">
+                Com base na sazonalidade de 2025 + escala de 2026 + previsão de abates, criar projeção mês a mês de entradas e saídas. Identificar antecipadamente os meses de gap e planejar fontes de financiamento.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-orange">Impacto: Alto</span>
+                <span class="tag tag-blue">Responsável: Gestão financeira</span>
+                <span class="tag tag-gold">Prazo: 30 dias (após itens 1–3)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- P3 -->
+    <h3 style="color:var(--accent-light); margin:20px 0 12px; font-size:1rem">🟡 PRIORIDADE 3 — ESTRATÉGICO (até 60 dias)</h3>
+
+    <div class="action-card">
+        <div class="action-priority p3">8</div>
+        <div>
+            <div class="action-title">Implementar P&L por Centro de Custo</div>
+            <div class="action-desc">
+                Cada unidade (Confinamento Toca, VO IVA, Sítio Paraíso, Fazenda Toca) precisa de um resultado individual. A coluna LOCAL já existe nos dados — falta alocar receitas e gerar resultado por centro.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-blue">Impacto: Estrutural</span>
+                <span class="tag tag-gold">Prazo: 45 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p3">9</div>
+        <div>
+            <div class="action-title">Iniciar coleta de indicadores zootécnicos</div>
+            <div class="action-desc">
+                Implantar pesagem de entrada e saída dos lotes, controle de consumo de ração por lote, registro de mortalidade. Esses dados alimentam GPD, conversão alimentar e mortalidade — os 3 KPIs essenciais do confinamento.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-blue">Impacto: Estrutural</span>
+                <span class="tag tag-gold">Prazo: 45 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p3">10</div>
+        <div>
+            <div class="action-title">Avaliar seguro do rebanho</div>
+            <div class="action-desc">
+                R$ 6,5M+ em estoque biológico. Uma cotação de seguro pecuário (incêndio, raio, acidente, doença) protege contra perdas catastróficas. Custo típico: 0,5% a 2% do valor segurado (R$ 32k–130k/ano).
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-blue">Impacto: Proteção</span>
+                <span class="tag tag-gold">Prazo: 30 dias</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- P4 -->
+    <h3 style="color:var(--success); margin:20px 0 12px; font-size:1rem">🟢 PRIORIDADE 4 — MELHORIA CONTÍNUA</h3>
+
+    <div class="action-card">
+        <div class="action-priority p4">11</div>
+        <div>
+            <div class="action-title">Diversificar base de fornecedores de nutrição</div>
+            <div class="action-desc">
+                Buscar alternativas para milho e casca de soja. Considerar contratos de longo prazo com hedge de preço. Meta: nenhum fornecedor acima de 20% do custo total de nutrição.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-green">Melhoria contínua</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-card">
+        <div class="action-priority p4">12</div>
+        <div>
+            <div class="action-title">Implantar dashboard gerencial mensal</div>
+            <div class="action-desc">
+                Relatório automático com: receita × despesa, margem por cabeça, saldo de caixa, previsão de abates, indicadores zootécnicos. Uma reunião mensal de 30 minutos revisando os números transforma a gestão.
+            </div>
+            <div class="action-meta">
+                <span class="tag tag-green">Melhoria contínua</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESUMO VISUAL -->
+    <div class="card" style="margin-top:24px">
+        <div class="card-title">📊 Resumo do Plano — Visão por Prioridade</div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prioridade</th>
+                        <th class="center">Ações</th>
+                        <th>Prazo</th>
+                        <th>O Que Desbloqueia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background:rgba(192,57,43,0.08)">
+                        <td><span class="tag tag-red">🔴 P1 — Urgente</span></td>
+                        <td class="center bold">3</td>
+                        <td>7–15 dias</td>
+                        <td>Cálculo de lucro/prejuízo, margem e viabilidade dos 3os</td>
+                    </tr>
+                    <tr style="background:rgba(230,126,34,0.06)">
+                        <td><span class="tag tag-orange">🟠 P2 — Importante</span></td>
+                        <td class="center bold">4</td>
+                        <td>15–30 dias</td>
+                        <td>Custo real/cab, planejamento de caixa, visão de dívida</td>
+                    </tr>
+                    <tr style="background:rgba(212,160,23,0.06)">
+                        <td><span class="tag tag-gold">🟡 P3 — Estratégico</span></td>
+                        <td class="center bold">3</td>
+                        <td>30–60 dias</td>
+                        <td>P&L por centro, KPIs zootécnicos, proteção patrimonial</td>
+                    </tr>
+                    <tr style="background:rgba(39,174,96,0.06)">
+                        <td><span class="tag tag-green">🟢 P4 — Contínuo</span></td>
+                        <td class="center bold">2</td>
+                        <td>60+ dias</td>
+                        <td>Eficiência operacional, gestão por indicadores</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">TOTAL DE AÇÕES</td>
+                        <td class="bold">12</td>
+                        <td>Transformação completa da gestão</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SEÇÃO 7 — MENSAGEM FINAL -->
+<!-- ============================================ -->
+<div class="section" id="mensagem">
+    <div class="section-title">💬 Mensagem para a Reunião de Segunda</div>
+    <div class="section-subtitle">Síntese executiva para apresentação ao Rogério — 14/04/2026</div>
+
+    <div class="card card-gold" style="border-width:2px">
+        <div class="card-title" style="font-size:1.1rem">📋 Discurso-Chave</div>
+        <div class="quote-box" style="font-size:1rem; line-height:1.8">
+            "Rogério, a operação do Renato tem <strong>escala, patrimônio e potencial</strong>. São 2.064 cabeças no confinamento, patrimônio vivo de mais de R$ 6,5 milhões, uma nova linha de receita com gado de terceiros e abates programados que devem gerar mais de R$ 6 milhões entre abril e julho.
+            <br><br>
+            <strong>O problema não é falta de dinheiro — é falta de gestão financeira.</strong> Temos uma operação de R$ 8 a 10 milhões por ano sendo gerida como se fosse uma fazenda de R$ 500 mil. Existe um controle razoável de saídas, mas <strong>não há nenhum registro de receitas, não há DRE, não há custo por cabeça, e não há planejamento de caixa</strong>.
+            <br><br>
+            O caixa negativo de março não é surpresa — <strong>é consequência de um descasamento previsível</strong> entre desembolso (Jan–Mar) e receita de abates (Abr–Jul). Em 2025, janeiro também foi o mês mais pesado. Se tivesse um planejamento de 12 meses, esse gap teria sido financiado antecipadamente com uma linha de crédito rural a juros baixos, em vez de cheque especial.
+            <br><br>
+            As pendências que listamos <strong>não são burocracia — são as peças que faltam</strong> para saber se esse negócio é altamente lucrativo ou se está sangrando sem que ninguém perceba. Com os dados certos, podemos construir indicadores, projetar resultados e transformar essa operação em uma referência de gestão."
+        </div>
+    </div>
+
+    <!-- 3 MENSAGENS -->
+    <div class="grid-3">
+        <div class="card" style="border-color:var(--success)">
+            <div style="text-align:center">
+                <div style="font-size:2.5rem; margin-bottom:8px">💪</div>
+                <h4 style="color:var(--success); margin-bottom:8px">A BOA NOTÍCIA</h4>
+                <p style="font-size:0.85rem; color:var(--text-secondary)">
+                    O negócio tem fundamentos sólidos: escala, patrimônio, demanda (10 clientes terceiros), e um ciclo de receita grande chegando (R$ 6,2M em abates). A base está construída.
+                </p>
+            </div>
+        </div>
+        <div class="card" style="border-color:var(--danger)">
+            <div style="text-align:center">
+                <div style="font-size:2.5rem; margin-bottom:8px">⚠️</div>
+                <h4 style="color:var(--danger-light); margin-bottom:8px">O RISCO REAL</h4>
+                <p style="font-size:0.85rem; color:var(--text-secondary)">
+                    Operar R$ 8–10M/ano sem DRE, sem controle de receita e sem custo por cabeça é como construir um prédio sem projeto. Pode ficar de pé — ou pode desabar.
+                </p>
+            </div>
+        </div>
+        <div class="card" style="border-color:var(--accent)">
+            <div style="text-align:center">
+                <div style="font-size:2.5rem; margin-bottom:8px">🎯</div>
+                <h4 style="color:var(--accent-light); margin-bottom:8px">A OPORTUNIDADE</h4>
+                <p style="font-size:0.85rem; color:var(--text-secondary)">
+                    Com 12 ações estruturadas em 60 dias, essa operação pode saltar de um nível 3/10 para 7/10 de maturidade gerencial — e aí sim, demonstrar o valor real que tem.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- O QUE PEDIR NA REUNIÃO -->
+    <div class="card">
+        <div class="card-title">✋ O Que Solicitar na Reunião</div>
+        <ul class="checklist">
+            <li>
+                <span class="check-icon">1️⃣</span>
+                <div>
+                    <div class="title">Entradas de caixa 2025 e 2026 (notas de venda, recebimentos)</div>
+                    <div class="desc">Sem isso, a análise fica incompleta. É o dado mais importante que falta.</div>
+                </div>
+            </li>
+            <li>
+                <span class="check-icon">2️⃣</span>
+                <div>
+                    <div class="title">DRE ou balancete da Boipore</div>
+                    <div class="desc">A empresa opera sem demonstração de resultado. O contador precisa produzir.</div>
+                </div>
+            </li>
+            <li>
+                <span class="check-icon">3️⃣</span>
+                <div>
+                    <div class="title">Modelo de cobrança do confinamento de terceiros</div>
+                    <div class="desc">Como cobra? Diária? Participação? Isso define a margem do serviço.</div>
+                </div>
+            </li>
+            <li>
+                <span class="check-icon">4️⃣</span>
+                <div>
+                    <div class="title">Levantamento de dívidas e financiamentos</div>
+                    <div class="desc">CPR, crédito rural, financiamento de máquinas — tudo que gera parcela mensal.</div>
+                </div>
+            </li>
+            <li>
+                <span class="check-icon">5️⃣</span>
+                <div>
+                    <div class="title">Dados dos meses Mai a Dez/2025 (saídas)</div>
+                    <div class="desc">Recebemos Jan–Abr. O restante completa a base para projeção 2026.</div>
+                </div>
+            </li>
+            <li>
+                <span class="check-icon">6️⃣</span>
+                <div>
+                    <div class="title">Informação sobre seguro do rebanho</div>
+                    <div class="desc">R$ 6,5M em patrimônio vivo — precisa estar protegido.</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- PONTUAÇÃO FINAL -->
+    <div class="card" style="border-color:var(--accent); border-width:2px">
+        <div class="card-title" style="font-size:1.05rem">🏆 Nota de Maturidade Gerencial — Projeção</div>
+        <div class="grid-2" style="margin-top:12px">
+            <div style="text-align:center">
+                <h4 style="color:var(--warning-light); margin-bottom:12px">📍 HOJE</h4>
+                <div style="font-size:3rem; font-weight:800; color:var(--warning-light)">3,2</div>
+                <div style="font-size:0.85rem; color:var(--text-muted)">de 10</div>
+                <div style="margin-top:8px"><span class="tag tag-orange">Operacional Básico</span></div>
+                <p style="font-size:0.82rem; color:var(--text-secondary); margin-top:8px">Controle de saídas razoável, zero controle de receitas, sem indicadores, sem planejamento</p>
+            </div>
+            <div style="text-align:center">
+                <h4 style="color:var(--success); margin-bottom:12px">🎯 EM 60 DIAS (com o plano)</h4>
+                <div style="font-size:3rem; font-weight:800; color:var(--success)">7,0</div>
+                <div style="font-size:0.85rem; color:var(--text-muted)">de 10</div>
+                <div style="margin-top:8px"><span class="tag tag-green">Gestão Profissional</span></div>
+                <p style="font-size:0.82rem; color:var(--text-secondary); margin-top:8px">DRE, custo/cab, P&L por centro, fluxo projetado, indicadores zootécnicos</p>
+            </div>
+        </div>
+        <div class="alert alert-success" style="margin-top:20px">
+            <span class="alert-icon">🚀</span>
+            <div><strong>A distância entre 3,2 e 7,0 não é investimento financeiro — é organização da informação.</strong> Os dados existem (ou podem ser levantados). Falta estruturá-los em um sistema de gestão coerente. Com 12 ações bem executadas em 60 dias, a transformação é viável e o retorno é imediato.</div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-brand">🌾 Rural Investimentos — Diagnóstico Gerencial</div>
+    <div class="footer-text">Relatório gerado em 11 de Abril de 2026 — Preparado para reunião de 14/04/2026</div>
+    <div class="footer-text" style="margin-top:4px; color:#e74c3c; font-size:0.7rem; letter-spacing:1px">CONFIDENCIAL — USO INTERNO</div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Animate bars
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.chart-bar-fill').forEach(bar => {
+                    const w = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => { bar.style.width = w; }, 150);
+                });
+                entry.target.querySelectorAll('.progress-fill').forEach(bar => {
+                    const w = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => { bar.style.width = w; }, 150);
+                });
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach(c => observer.observe(c));
+
+    // Animate score needle
+    setTimeout(() => {
+        const needle = document.querySelector('.score-needle');
+        if (needle) needle.style.left = '32%';
+    }, 500);
+</script>
+
+</body>
+</html>
