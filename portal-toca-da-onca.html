@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rural IN — Portal Fazenda Toca da Onça</title>
+    <style>
+        /*===== RESET & VARIABLES =====*/
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --primary:#1a5632;--primary-light:#2d7a4a;--primary-dark:#0f3d22;
+            --accent:#d4a017;--accent-light:#f0c940;
+            --danger:#c0392b;--danger-light:#e74c3c;
+            --warning:#e67e22;--info:#2980b9;--success:#27ae60;
+            --bg:#0a0f0d;--bg-card:#111a14;--bg-card-alt:#162119;--bg-highlight:#1a2e20;
+            --text:#e8f0eb;--text-sec:#9cb3a4;--text-muted:#6b8576;
+            --border:#2a3d30;--border-light:#3a5244;
+            --shadow:0 4px 24px rgba(0,0,0,0.4);--shadow-lg:0 8px 48px rgba(0,0,0,0.6);
+            --radius:12px;--radius-sm:8px;
+        }
+        body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+        /*===== LOGIN =====*/
+        .login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#050a07 0%,var(--primary-dark) 50%,var(--primary) 100%);display:flex;align-items:center;justify-content:center;z-index:10000;transition:opacity .6s,visibility .6s}
+        .login-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .login-box{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:50px 40px;width:90%;max-width:420px;box-shadow:var(--shadow-lg);text-align:center;animation:slideUp .6s ease}
+        @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+        .login-box .logo-icon{font-size:56px;display:block;margin-bottom:10px}
+        .login-box h1{font-size:1.3rem;color:var(--accent-light);font-weight:700}
+        .login-box .login-sub{font-size:.85rem;color:var(--text-muted);margin-top:4px}
+        .login-box .input-group{margin-bottom:18px;text-align:left;margin-top:20px}
+        .login-box label{display:block;font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+        .login-box input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1rem;background:var(--bg);color:var(--text);outline:none;transition:all .3s}
+        .login-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(212,160,23,.15)}
+        .login-box input::placeholder{color:var(--text-muted)}
+        .btn-login{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent),var(--accent-light));color:var(--primary-dark);border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:700;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:1px;margin-top:8px}
+        .btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,160,23,.3)}
+        .login-error{color:var(--danger-light);font-size:.85rem;font-weight:600;margin-top:12px;display:none}
+        .login-error.show{display:block;animation:shake .4s ease}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+        .login-footer{margin-top:25px;font-size:.75rem;color:var(--text-muted)}
+
+        /*===== MAIN CONTENT =====*/
+        .main-content{display:none}
+        .main-content.visible{display:block}
+
+        /*===== TOP HEADER =====*/
+        .top-header{background:linear-gradient(135deg,#050a07,var(--primary-dark),var(--primary));padding:20px 24px;text-align:center;border-bottom:3px solid var(--accent);position:relative;overflow:hidden}
+        .top-header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(212,160,23,.06) 0%,transparent 60%);animation:pulse 8s ease-in-out infinite}
+        @keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.1);opacity:1}}
+        .top-header h1{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:800;color:#fff;position:relative}
+        .top-header .sub{font-size:.85rem;color:var(--accent-light);margin-top:4px;position:relative}
+        .top-header .badges{margin-top:8px;position:relative;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+        .top-header .badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.5px}
+        .badge-gold{background:rgba(212,160,23,.2);border:1px solid var(--accent);color:var(--accent-light)}
+        .badge-red{background:rgba(192,57,43,.2);border:1px solid var(--danger);color:var(--danger-light);text-transform:uppercase}
+
+        /*===== MAIN TABS (3 reports) =====*/
+        .main-tabs{display:flex;background:var(--bg-card);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:1000;overflow-x:auto}
+        .main-tab{flex:1;padding:16px 20px;background:transparent;border:none;color:var(--text-sec);cursor:pointer;font-size:.88rem;font-weight:700;transition:all .3s;white-space:nowrap;border-bottom:3px solid transparent;text-align:center;min-width:fit-content}
+        .main-tab:hover{background:var(--bg-highlight);color:var(--text)}
+        .main-tab.active{color:var(--accent-light);border-bottom-color:var(--accent);background:var(--bg-highlight)}
+        .main-tab .tab-icon{font-size:1.1rem;display:block;margin-bottom:2px}
+        .main-tab .tab-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+
+        /*===== REPORT PANELS =====*/
+        .report-panel{display:none;animation:fadeIn .4s ease}
+        .report-panel.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+        /*===== SUB NAVIGATION (within each report) =====*/
+        .sub-nav{display:flex;flex-wrap:wrap;gap:4px;padding:12px 24px;background:rgba(0,0,0,.3);border-bottom:1px solid var(--border);justify-content:center}
+        .sub-tab{padding:8px 16px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-sec);cursor:pointer;font-size:.78rem;font-weight:600;transition:all .3s;white-space:nowrap}
+        .sub-tab:hover{background:var(--bg-highlight);border-color:var(--primary-light);color:var(--text)}
+        .sub-tab.active{background:linear-gradient(135deg,var(--primary),var(--primary-light));border-color:var(--primary-light);color:#fff;box-shadow:0 2px 12px rgba(45,138,78,.3)}
+
+        /*===== SUB SECTIONS =====*/
+        .sub-section{display:none;padding:24px;max-width:1400px;margin:0 auto;animation:fadeIn .3s ease}
+        .sub-section.active{display:block}
+
+        /*===== SECTION TITLES =====*/
+        .section-title{font-size:clamp(1.1rem,3vw,1.5rem);font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+        .section-subtitle{color:var(--text-muted);font-size:.88rem;margin-bottom:24px}
+
+        /*===== CARDS =====*/
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
+        .card-title{font-size:1rem;font-weight:700;color:var(--accent-light);margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+
+        /*===== KPI GRID =====*/
+        .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+        .kpi-card{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;position:relative;overflow:hidden;transition:all .3s}
+        .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(135deg,var(--primary),var(--primary-light))}
+        .kpi-card.gold::before{background:linear-gradient(135deg,var(--accent),var(--accent-light))}
+        .kpi-card.danger::before{background:linear-gradient(135deg,var(--danger),var(--danger-light))}
+        .kpi-card.info::before{background:linear-gradient(135deg,var(--info),#3498db)}
+        .kpi-card.success::before{background:linear-gradient(135deg,var(--success),#2ecc71)}
+        .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+        .kpi-icon{font-size:1.8rem;margin-bottom:6px}
+        .kpi-value{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:800;color:#fff}
+        .kpi-value.gold{color:var(--accent-light)}.kpi-value.red{color:var(--danger-light)}.kpi-value.green{color:var(--success)}.kpi-value.blue{color:#3498db}
+        .kpi-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;font-weight:600}
+        .kpi-detail{font-size:.78rem;color:var(--text-sec);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+        /*===== TABLES =====*/
+        .table-wrapper{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px}
+        table{width:100%;border-collapse:collapse;font-size:.84rem}
+        thead th{background:var(--bg-highlight);color:var(--accent-light);padding:12px 14px;text-align:left;font-weight:700;font-size:.76rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--accent);white-space:nowrap}
+        thead th.right{text-align:right}thead th.center{text-align:center}
+        tbody td{padding:10px 14px;border-bottom:1px solid var(--border)}
+        tbody td.right{text-align:right;font-variant-numeric:tabular-nums}
+        tbody td.center{text-align:center}
+        tbody td.bold{font-weight:700}
+        tbody tr:hover{background:rgba(45,138,78,.06)}
+        tbody tr.total-row{background:var(--bg-highlight);font-weight:800;border-top:2px solid var(--accent)}
+        tbody tr.total-row td{color:var(--accent-light);padding:14px}
+        tbody tr.subtotal-row{background:rgba(45,138,78,.05);font-weight:700}
+
+        /*===== ALERTS =====*/
+        .alert{padding:16px 20px;border-radius:var(--radius);margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;font-size:.86rem;line-height:1.5}
+        .alert-danger{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);color:var(--danger-light)}
+        .alert-warning{background:rgba(230,126,34,.1);border:1px solid rgba(230,126,34,.3);color:#f39c12}
+        .alert-info{background:rgba(41,128,185,.1);border:1px solid rgba(41,128,185,.3);color:#3498db}
+        .alert-success{background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.3);color:var(--success)}
+        .alert-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+
+        /*===== COMMENT BOXES =====*/
+        .comment-box{background:rgba(39,174,96,.06);border-left:4px solid var(--success);padding:16px 20px;margin:15px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.86rem;line-height:1.7}
+        .comment-box.warning{background:rgba(230,126,34,.06);border-left-color:var(--warning)}
+        .comment-box.danger{background:rgba(192,57,43,.06);border-left-color:var(--danger)}
+        .comment-box.info{background:rgba(41,128,185,.06);border-left-color:var(--info)}
+        .comment-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px;display:block;color:var(--success)}
+        .comment-box.warning .comment-label{color:var(--warning)}
+        .comment-box.danger .comment-label{color:var(--danger-light)}
+        .comment-box.info .comment-label{color:var(--info)}
+
+        /*===== CHART BARS =====*/
+        .chart-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+        .chart-label{min-width:100px;font-size:.78rem;font-weight:700;color:var(--text-sec);text-align:right;flex-shrink:0}
+        .chart-bar-bg{flex:1;height:32px;background:var(--bg-highlight);border-radius:8px;overflow:hidden}
+        .chart-bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:.73rem;font-weight:700;color:#fff;transition:width 1.2s ease;min-width:fit-content}
+        .chart-bar-fill.green{background:linear-gradient(135deg,var(--primary),var(--primary-light))}
+        .chart-bar-fill.gold{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#1a1a1a}
+        .chart-bar-fill.red{background:linear-gradient(135deg,var(--danger),var(--danger-light))}
+        .chart-bar-fill.blue{background:linear-gradient(135deg,var(--info),#3498db)}
+        .chart-bar-fill.orange{background:linear-gradient(135deg,var(--warning),#f39c12);color:#1a1a1a}
+        .chart-value{font-size:.78rem;font-weight:700;color:var(--text);min-width:80px;text-align:right;flex-shrink:0}
+
+        /*===== STACKED BAR =====*/
+        .stacked-bar{display:flex;height:40px;border-radius:10px;overflow:hidden;margin:12px 0;box-shadow:var(--shadow)}
+        .stacked-segment{display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;cursor:pointer;transition:filter .3s}
+        .stacked-segment:hover{filter:brightness(1.2)}
+
+        /*===== LEGEND =====*/
+        .legend{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0}
+        .legend-item{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--text-sec)}
+        .legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+        /*===== PROGRESS =====*/
+        .progress-container{margin:8px 0}
+        .progress-header{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px}
+        .progress-label{color:var(--text-sec)}.progress-val{color:var(--text);font-weight:700}
+        .progress-track{height:10px;background:var(--bg-highlight);border-radius:5px;overflow:hidden}
+        .progress-fill{height:100%;border-radius:5px;transition:width 1.5s ease}
+
+        /*===== TIMELINE =====*/
+        .timeline{position:relative;padding-left:32px}
+        .timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:var(--border)}
+        .timeline-item{position:relative;margin-bottom:20px;padding:16px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius)}
+        .timeline-item::before{content:'';position:absolute;left:-26px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--primary-light);border:2px solid var(--bg)}
+        .timeline-date{font-size:.75rem;color:var(--accent);font-weight:700}
+        .timeline-title{font-size:.92rem;font-weight:700;margin:4px 0}
+        .timeline-desc{font-size:.82rem;color:var(--text-sec)}
+
+        /*===== TAGS =====*/
+        .tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700}
+        .tag-green{background:rgba(39,174,96,.2);color:var(--success)}
+        .tag-red{background:rgba(192,57,43,.2);color:var(--danger-light)}
+        .tag-gold{background:rgba(212,160,23,.2);color:var(--accent-light)}
+        .tag-blue{background:rgba(41,128,185,.2);color:#3498db}
+        .tag-orange{background:rgba(230,126,34,.2);color:#f39c12}
+        .tag-gray{background:rgba(127,140,141,.2);color:#bdc3c7}
+
+        /*===== GRID =====*/
+        .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+
+        /*===== DIAGNOSTIC BLOCKS =====*/
+        .diag-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;border-left:4px solid var(--border)}
+        .diag-block.diag-red{border-left-color:var(--danger-light)}
+        .diag-block.diag-orange{border-left-color:var(--warning)}
+        .diag-block.diag-yellow{border-left-color:var(--accent)}
+        .diag-block.diag-green{border-left-color:var(--success)}
+        .diag-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .diag-number{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#fff;flex-shrink:0}
+        .diag-number.red{background:var(--danger)}.diag-number.orange{background:var(--warning)}.diag-number.green{background:var(--success)}.diag-number.yellow{background:var(--accent)}.diag-number.blue{background:var(--info)}
+        .diag-title{font-weight:700;font-size:.95rem}
+        .diag-desc{font-size:.84rem;color:var(--text-sec);line-height:1.6}
+        .diag-impact{font-size:.78rem;margin-top:8px;padding:8px 12px;background:rgba(0,0,0,.2);border-radius:8px;color:var(--text-muted)}
+        .diag-impact strong{color:var(--text)}
+
+        /*===== SCORE METER =====*/
+        .score-container{text-align:center;margin:24px 0}
+        .score-meter{width:100%;max-width:500px;height:24px;background:linear-gradient(90deg,#c0392b 0%,#e74c3c 20%,#e67e22 35%,#f39c12 50%,#d4a017 65%,#27ae60 80%,#1a5c2e 100%);border-radius:12px;position:relative;margin:16px auto;box-shadow:var(--shadow)}
+        .score-needle{position:absolute;top:-8px;width:4px;height:40px;background:#fff;border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,.6)}
+        .score-labels{display:flex;justify-content:space-between;max-width:500px;margin:8px auto 0;font-size:.7rem;color:var(--text-muted)}
+
+        /*===== STATUS GRID =====*/
+        .status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+        .status-item{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+        .status-icon{font-size:1.8rem;margin-bottom:4px}
+        .status-label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;margin-bottom:4px}
+        .status-value{font-size:.82rem;font-weight:700}
+        .status-value.ok{color:var(--success)}.status-value.warn{color:#f39c12}.status-value.critical{color:var(--danger-light)}.status-value.missing{color:#7f8c8d}
+
+        /*===== QUOTE =====*/
+        .quote-box{background:linear-gradient(135deg,rgba(212,160,23,.06),rgba(212,160,23,.02));border:1px solid rgba(212,160,23,.2);border-left:4px solid var(--accent);border-radius:var(--radius);padding:24px;margin:20px 0;font-style:italic;font-size:.92rem;color:var(--accent-light);line-height:1.7}
+        .quote-author{font-style:normal;font-size:.78rem;color:var(--text-muted);margin-top:12px;text-align:right}
+
+        /*===== VS CONTAINER =====*/
+        .vs-container{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:center;margin:20px 0}
+        .vs-box{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+        .vs-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+        .vs-value{font-size:1.3rem;font-weight:800}
+        .vs-detail{font-size:.78rem;color:var(--text-sec);margin-top:4px}
+        .vs-icon{text-align:center;font-size:1.8rem;color:var(--accent);font-weight:800}
+
+        /*===== ACTION CARDS =====*/
+        .action-card{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;transition:all .3s}
+        .action-card:hover{border-color:var(--primary-light);background:var(--bg-highlight)}
+        .action-priority{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#fff;flex-shrink:0}
+        .action-priority.p1{background:var(--danger)}.action-priority.p2{background:var(--warning)}.action-priority.p3{background:var(--info)}.action-priority.p4{background:var(--success)}
+        .action-title{font-weight:700;font-size:.92rem;margin-bottom:4px}
+        .action-desc{font-size:.82rem;color:var(--text-sec);line-height:1.5}
+        .action-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+
+        /*===== METHOD BANNER =====*/
+        .method-banner{background:rgba(212,160,23,.08);border-left:5px solid var(--accent);padding:18px 24px;margin:0 auto 20px;max-width:1400px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.86rem;color:var(--accent-light)}
+
+        /*===== COMPARE ROW =====*/
+        .compare-row{display:flex;gap:15px;margin:15px 0;flex-wrap:wrap}
+        .compare-card{flex:1;min-width:220px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center}
+        .compare-card h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:8px}
+        .big-number{font-size:1.6rem;font-weight:800}
+        .big-number.green{color:var(--success)}.big-number.red{color:var(--danger-light)}.big-number.blue{color:#3498db}
+        .detail{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+
+        /*===== FOOTER =====*/
+        .footer{text-align:center;padding:32px 24px;background:var(--bg-card);border-top:1px solid var(--border);margin-top:40px}
+        .footer-brand{font-size:1.1rem;font-weight:800;color:var(--accent-light)}
+        .footer-text{font-size:.75rem;color:var(--text-muted);margin-top:4px}
+
+        /*===== RESPONSIVE =====*/
+        @media(max-width:768px){
+            .main-tab{padding:12px 10px;font-size:.75rem}
+            .main-tab .tab-icon{font-size:.9rem}
+            .sub-nav{padding:8px 12px}.sub-tab{padding:6px 10px;font-size:.72rem}
+            .sub-section{padding:16px}
+            .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+            .grid-2{grid-template-columns:1fr}
+            .chart-label{min-width:70px;font-size:.7rem}
+            table{font-size:.75rem}
+            thead th,tbody td{padding:8px 10px}
+            .vs-container{grid-template-columns:1fr}.vs-icon{transform:rotate(90deg)}
+            .status-grid{grid-template-columns:repeat(2,1fr)}
+            .login-box{padding:35px 25px}
+        }
+        @media print{
+            .login-overlay{display:none!important}
+            .main-content{display:block!important}
+            .main-tabs,.sub-nav{display:none}
+            .report-panel,.sub-section{display:block!important}
+            body{background:#fff;color:#111}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN ==================== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <span class="logo-icon">🐂</span>
+        <h1>Fazenda Toca da Onça</h1>
+        <p class="login-sub">Portal de Gestão — Área Restrita</p>
+        <form onsubmit="return handleLogin(event)">
+            <div class="input-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="off" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn-login">🔓 Acessar Portal</button>
+            <div class="login-error" id="loginError">⚠️ Usuário ou senha incorretos.</div>
+        </form>
+        <div class="login-footer">
+            <strong style="color:var(--accent-light)">Rural IN</strong> — Inteligência em Gestão Rural<br>
+            Documento confidencial · Acesso autorizado
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="main-content" id="mainContent">
+
+<!-- TOP HEADER -->
+<div class="top-header">
+    <h1>🐂 Fazenda Toca da Onça — Portal de Gestão</h1>
+    <p class="sub">Relatórios Analíticos Consolidados · Período: 2025 a Abril/2026</p>
+    <div class="badges">
+        <span class="badge badge-gold">📊 3 Relatórios Integrados</span>
+        <span class="badge badge-red">🔒 Confidencial</span>
+    </div>
+</div>
+
+<!-- MAIN TABS -->
+<div class="main-tabs">
+    <button class="main-tab active" onclick="showReport('report1')">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Relatório Analítico v2</span>
+    </button>
+    <button class="main-tab" onclick="showReport('report2')">
+        <span class="tab-icon">💰</span>
+        <span class="tab-label">Análise Financeira 2025</span>
+    </button>
+    <button class="main-tab" onclick="showReport('report3')">
+        <span class="tab-icon">🔍</span>
+        <span class="tab-label">Diagnóstico Gerencial</span>
+    </button>
+</div>
+
+<!-- ================================================================ -->
+<!-- REPORT 1: RELATÓRIO ANALÍTICO v2 (Rebanho + Receitas 2026)      -->
+<!-- ================================================================ -->
+<div class="report-panel active" id="report1">
+<div class="sub-nav" id="subNav1">
+    <button class="sub-tab active" onclick="showSub('r1','r1Dashboard')">📋 Dashboard</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Estoque')">🐄 Estoque</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Saidas')">📤 Saídas</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Entradas')">📥 Entradas</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Diarias')">💰 Diárias 3os</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Receita')">📊 Receita Total</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Metodo')">📐 Metodologia</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Timeline')">📅 Timeline</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Alertas')">🚨 Alertas</button>
+    <button class="sub-tab" onclick="showSub('r1','r1Plano')">🎯 Plano de Ação</button>
+</div>
+
+<!-- METHOD BANNER -->
+<div class="method-banner">
+    <strong>⚠️ NOTA METODOLÓGICA:</strong> Vendas de gado próprio em jan/2026 <u>não possuem preços registrados</u>.
+    Valores estimados com base no <strong>Indicador CEPEA/B3 (~R$319/@, SP)</strong>, descontado <strong>diferencial de base de R$22/@</strong> para Goiás, rendimento de carcaça 52%. Estimativa exclusivamente gerencial.
+</div>
+
+<!-- R1: DASHBOARD -->
+<div class="sub-section active" id="r1Dashboard">
+    <div class="section-title">📋 Dashboard Executivo — Jan a Abr/2026</div>
+    <div class="section-subtitle">Visão consolidada do período com dados de rebanho, receitas e movimentação</div>
+    <div class="kpi-grid">
+        <div class="kpi-card success"><div class="kpi-icon">💰</div><div class="kpi-value green">R$ 2,70M</div><div class="kpi-label">Receita Total Estimada</div><div class="kpi-detail">Vendas gado + Diárias 3os</div></div>
+        <div class="kpi-card gold"><div class="kpi-icon">🐂</div><div class="kpi-value gold">R$ 2,15M</div><div class="kpi-label">Vendas Gado (Est.)</div><div class="kpi-detail">548 cabeças · Jan/2026</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">🏦</div><div class="kpi-value blue">R$ 544k</div><div class="kpi-label">Diárias Terceiros</div><div class="kpi-detail">6 clientes · Fev-Abr/2026</div></div>
+        <div class="kpi-card"><div class="kpi-icon">📦</div><div class="kpi-value">1.732</div><div class="kpi-label">Estoque Inicial (01/01)</div><div class="kpi-detail">487 machos · 1.245 fêmeas</div></div>
+        <div class="kpi-card danger"><div class="kpi-icon">📤</div><div class="kpi-value red">548</div><div class="kpi-label">Saídas (Vendas)</div><div class="kpi-detail">Jan/2026</div></div>
+        <div class="kpi-card"><div class="kpi-icon">📥</div><div class="kpi-value">235</div><div class="kpi-label">Entradas (Compras)</div><div class="kpi-detail">Jan/2026</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">📉</div><div class="kpi-value red">-314</div><div class="kpi-label">Saldo Líquido</div><div class="kpi-detail">Redução de 18,1%</div></div>
+        <div class="kpi-card"><div class="kpi-icon">🐄</div><div class="kpi-value">~1.418</div><div class="kpi-label">Estoque Atual Est.</div><div class="kpi-detail">Após movimentações</div></div>
+    </div>
+    <div class="comment-box info">
+        <span class="comment-label">📋 Análise do Consultor</span>
+        A fazenda movimentou quase <strong>800 cabeças</strong> em janeiro (548 saídas + 235 entradas), indicando uma estratégia agressiva de renovação de plantel. A receita estimada de R$ 2,7M no período é expressiva, mas a <strong>ausência de preços reais nas vendas</strong> impede análise de margem. As diárias de terceiros (R$ 544k) representam receita recorrente relevante (20% do total).
+    </div>
+</div>
+
+<!-- R1: ESTOQUE -->
+<div class="sub-section" id="r1Estoque">
+    <div class="section-title">🐄 Composição do Rebanho — Estoque Inicial (01/01/2026)</div>
+    <div class="section-subtitle">Distribuição por faixa etária e sexo</div>
+    <div class="comment-box info">
+        <span class="comment-label">📋 Análise</span>
+        Rebanho de <strong>1.732 cabeças</strong> com forte predominância de fêmeas (71,9%). Perfil etário concentrado entre 13-36 meses indica operação de cria/recria com venda de fêmeas descartadas e machos engordados.
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Faixa Etária</th><th class="right">Machos</th><th class="right">Fêmeas</th><th class="right">Total</th><th class="right">%</th></tr></thead>
+            <tbody>
+                <tr><td>0 a 12 meses</td><td class="right">0</td><td class="right">35</td><td class="right bold">35</td><td class="right">2,0%</td></tr>
+                <tr><td>13 a 24 meses</td><td class="right">68</td><td class="right">481</td><td class="right bold">549</td><td class="right">31,7%</td></tr>
+                <tr><td>25 a 36 meses</td><td class="right">419</td><td class="right">499</td><td class="right bold">918</td><td class="right">53,0%</td></tr>
+                <tr><td>> 36 meses</td><td class="right">0</td><td class="right">230</td><td class="right bold">230</td><td class="right">13,3%</td></tr>
+                <tr class="total-row"><td>TOTAL</td><td class="right">487</td><td class="right">1.245</td><td class="right">1.732</td><td class="right">100%</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="comment-box warning">
+        <span class="comment-label">⚠️ Pontos de Atenção</span>
+        <strong>1.</strong> Zero machos > 36 meses — machos vendidos antes dos 3 anos (bom giro).<br>
+        <strong>2.</strong> Apenas 35 bezerros (0-12m) — possível subnotificação ou rebanho comprado jovem.<br>
+        <strong>3.</strong> 230 vacas > 36 meses — descarte de matrizes ocorreu em janeiro.
+    </div>
+</div>
+
+<!-- R1: SAÍDAS -->
+<div class="sub-section" id="r1Saidas">
+    <div class="section-title">📤 Saídas — Vendas Janeiro/2026 (548 cabeças)</div>
+    <div class="section-subtitle">Detalhamento por comprador com receita estimada (preço CEPEA/B3 -R$22/@)</div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Análise</span>
+        Em 21 dias, a fazenda vendeu <strong>548 cabeças (31,6% do rebanho)</strong>. Concentração em fêmeas (93,8%) indica decisão estratégica de redução de plantel — liberar capacidade para boitel ou gerar caixa.
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Data</th><th>Comprador</th><th class="center">Cab.</th><th class="center">Sexo</th><th class="center">Idade</th><th class="right">@/cab</th><th class="right">R$/@</th><th class="right">Receita Est.</th></tr></thead>
+            <tbody>
+                <tr><td>01/01</td><td>Renato Martins</td><td class="center">98</td><td class="center">F</td><td class="center">22m</td><td class="right">13,3</td><td class="right">258</td><td class="right bold">336.737</td></tr>
+                <tr><td>05/01</td><td>Kiko Castilho</td><td class="center">52</td><td class="center">F</td><td class="center">25m</td><td class="right">15,0</td><td class="right">273</td><td class="right bold">212.940</td></tr>
+                <tr><td>05/01</td><td>Antônio R. Ferreira Filho</td><td class="center">20</td><td class="center">M</td><td class="center">20m</td><td class="right">11,7</td><td class="right">283</td><td class="right bold">66.222</td></tr>
+                <tr><td>06/01</td><td>Maximum</td><td class="center">6</td><td class="center">M</td><td class="center">27m</td><td class="right">15,0</td><td class="right">297</td><td class="right bold">26.730</td></tr>
+                <tr><td>07/01</td><td>Alceu Barbosa</td><td class="center">44</td><td class="center">F</td><td class="center">26m</td><td class="right">15,0</td><td class="right">273</td><td class="right bold">180.180</td></tr>
+                <tr><td>09/01</td><td>José Urcesino</td><td class="center">19</td><td class="center">F</td><td class="center">42m</td><td class="right">16,7</td><td class="right">263</td><td class="right bold">83.459</td></tr>
+                <tr><td>09/01</td><td>Renato Martins (novas)</td><td class="center">39</td><td class="center">F</td><td class="center">20m</td><td class="right">11,7</td><td class="right">258</td><td class="right bold">117.791</td></tr>
+                <tr><td>09/01</td><td>Renato Martins (matrizes)</td><td class="center">13</td><td class="center">F</td><td class="center">44m</td><td class="right">16,7</td><td class="right">263</td><td class="right bold">57.087</td></tr>
+                <tr><td>09/01</td><td>Celso Veiga</td><td class="center">23</td><td class="center">F</td><td class="center">23m</td><td class="right">13,3</td><td class="right">258</td><td class="right bold">78.895</td></tr>
+                <tr><td>09/01</td><td>Charles</td><td class="center">27</td><td class="center">F</td><td class="center">42m</td><td class="right">16,7</td><td class="right">263</td><td class="right bold">118.530</td></tr>
+                <tr><td>09/01</td><td>Renato Martins (A02/A06)</td><td class="center">21</td><td class="center">F</td><td class="center">42m</td><td class="right">16,7</td><td class="right">263</td><td class="right bold">92.191</td></tr>
+                <tr><td>11/01</td><td>Novato</td><td class="center">47</td><td class="center">F</td><td class="center">26m</td><td class="right">15,0</td><td class="right">273</td><td class="right bold">192.465</td></tr>
+                <tr><td>14/01</td><td>Augusto Carvalhais</td><td class="center">34</td><td class="center">F</td><td class="center">37m</td><td class="right">17,9</td><td class="right">263</td><td class="right bold">159.910</td></tr>
+                <tr><td>16/01</td><td>Alvaro</td><td class="center">2</td><td class="center">M</td><td class="center">27m</td><td class="right">15,0</td><td class="right">297</td><td class="right bold">8.910</td></tr>
+                <tr><td>16/01</td><td>Pedro H. Campanha</td><td class="center">3</td><td class="center">M</td><td class="center">21m</td><td class="right">13,3</td><td class="right">283</td><td class="right bold">11.291</td></tr>
+                <tr><td>16/01</td><td>Rogério Teles</td><td class="center">1</td><td class="center">M</td><td class="center">17m</td><td class="right">11,2</td><td class="right">283</td><td class="right bold">3.170</td></tr>
+                <tr><td>16/01</td><td>Elisandro Cadore</td><td class="center">8</td><td class="center">M</td><td class="center">25m</td><td class="right">15,0</td><td class="right">297</td><td class="right bold">35.640</td></tr>
+                <tr><td>21/01</td><td>Cephora Martins</td><td class="center">91</td><td class="center">F</td><td class="center">27m</td><td class="right">15,0</td><td class="right">273</td><td class="right bold">372.645</td></tr>
+                <tr class="total-row"><td colspan="2">TOTAL</td><td class="center">548</td><td colspan="4"></td><td class="right">R$ 2.154.793</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="comment-box danger">
+        <span class="comment-label">🚨 Alerta Crítico</span>
+        <strong>ZERO preço real registrado.</strong> Valores são estimativas CEPEA -R$22/@. Recomendação: registrar preço/@, pesagem, NF e GTA em toda venda.
+    </div>
+    <div class="comment-box warning">
+        <span class="comment-label">⚠️ Concentração</span>
+        <strong>Renato + Cephora Martins = 48,5% das vendas (262 cab.)</strong> Sendo Renato o proprietário e Cephora provável familiar, metade do gado pode ter sido transferido a preço interno. Precificar como mercado é essencial.
+    </div>
+</div>
+
+<!-- R1: ENTRADAS -->
+<div class="sub-section" id="r1Entradas">
+    <div class="section-title">📥 Entradas — Compras Janeiro/2026 (235 cabeças)</div>
+    <div class="section-subtitle">Todas com pesagem de entrada registrada</div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Data</th><th>Fornecedor</th><th class="center">Cab.</th><th class="center">Sexo</th><th class="center">Idade</th><th class="right">Peso Méd.(kg)</th><th class="right">Peso Total</th></tr></thead>
+            <tbody>
+                <tr><td>09/01</td><td>João Campanha</td><td class="center">31</td><td class="center">30F+1M</td><td class="center">23-36m</td><td class="right">346</td><td class="right">10.729</td></tr>
+                <tr><td>15/01</td><td>Luiz Vieira</td><td class="center">42</td><td class="center">M</td><td class="center">24m</td><td class="right">367</td><td class="right">15.398</td></tr>
+                <tr><td>15/01</td><td>Renato Martins</td><td class="center">50</td><td class="center">M</td><td class="center">23m</td><td class="right">356</td><td class="right">17.797</td></tr>
+                <tr><td>21/01</td><td>Renato Martins</td><td class="center">58</td><td class="center">F</td><td class="center">24m</td><td class="right">254</td><td class="right">14.712</td></tr>
+                <tr><td>22/01</td><td>Renato Martins</td><td class="center">54</td><td class="center">M</td><td class="center">24m</td><td class="right">301</td><td class="right">16.244</td></tr>
+                <tr class="total-row"><td colspan="2">TOTAL</td><td class="center">235</td><td colspan="2"></td><td class="right">319 kg</td><td class="right">74.880 kg</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="comment-box warning">
+        <span class="comment-label">⚠️ Observação</span>
+        <strong>Renato forneceu 162 das 235 compras (68,9%)</strong>. Vendeu 171 e comprou 162 — renovação de plantel (vende matrizes velhas, compra jovens p/ engorda). Sem preço de compra, impossível calcular margem.
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">✅ Ponto Positivo</span>
+        Todas as entradas possuem <strong>pesagem individual</strong>. Essencial para GPD, custo/@ e análise de eficiência.
+    </div>
+    <div class="card" style="margin-top:16px">
+        <div class="card-title">☠️ Mortalidade</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Data</th><th>ID</th><th>Sexo</th><th>Idade</th><th>Peso</th><th>Origem</th><th class="right">Prejuízo</th></tr></thead>
+                <tbody>
+                    <tr><td>14/01/2026</td><td>00723</td><td>F</td><td>24m</td><td>246 kg</td><td>Lote João Campanha</td><td class="right" style="color:var(--danger-light)">~R$ 2.120</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="comment-box">
+            <span class="comment-label">📋 Comentário</span>
+            1 morte em ~1.700 cab. = <strong>0,06%</strong> — taxa excelente (ref. mercado: até 2%/ano).
+        </div>
+    </div>
+</div>
+
+<!-- R1: DIÁRIAS -->
+<div class="sub-section" id="r1Diarias">
+    <div class="section-title">💰 Receita de Diárias — Gado de Terceiros (Boitel)</div>
+    <div class="section-subtitle">Pagamentos recebidos Fev-Abr/2026 · Valor real registrado no financeiro</div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Data</th><th>Cliente</th><th>Descrição</th><th>Forma</th><th class="right">Valor (R$)</th></tr></thead>
+            <tbody>
+                <tr><td>24/02</td><td>Eldo Assis</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">214.276,00</td></tr>
+                <tr><td>24/02</td><td>Miguel Rodrigues</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">102.675,00</td></tr>
+                <tr><td>16/03</td><td>Antônio R. Ferreira Filho</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">73.711,44</td></tr>
+                <tr><td>09/03</td><td>João Batista</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">70.298,00</td></tr>
+                <tr><td>06/04</td><td>Jefferson Macedo Lisboa</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">67.996,80</td></tr>
+                <tr><td>08-09/03</td><td>João Campanha (2 pgtos)</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">14.117,12</td></tr>
+                <tr><td>24/03</td><td>Wilson</td><td>PG DIARIAS</td><td>PIX/Sicoob</td><td class="right bold">1.006,11</td></tr>
+                <tr class="total-row"><td colspan="4">TOTAL DIÁRIAS</td><td class="right">R$ 544.080,47</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top:16px">
+        <div class="chart-bar-row"><span class="chart-label">Eldo Assis</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:39.4%">R$ 214.276</div></div><span class="chart-value">39,4%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Miguel Rodrigues</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:18.9%">R$ 102.675</div></div><span class="chart-value">18,9%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Antônio R.F.F.</span><div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:13.5%">R$ 73.711</div></div><span class="chart-value">13,5%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">João Batista</span><div class="chart-bar-bg"><div class="chart-bar-fill orange" style="width:12.9%">R$ 70.298</div></div><span class="chart-value">12,9%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Jefferson M.L.</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:12.5%">R$ 67.997</div></div><span class="chart-value">12,5%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Outros (2)</span><div class="chart-bar-bg"><div class="chart-bar-fill red" style="width:2.8%">R$ 15.123</div></div><span class="chart-value">2,8%</span></div>
+    </div>
+    <div class="comment-box warning" style="margin-top:16px">
+        <span class="comment-label">⚠️ Dados Ausentes</span>
+        Para rentabilidade real do boitel: nº cabeças/cliente, data entrada/saída, custo direto/cab, contrato e valor diária. <strong>Sem isso, não é possível afirmar se boitel é lucrativo.</strong>
+    </div>
+</div>
+
+<!-- R1: RECEITA TOTAL -->
+<div class="sub-section" id="r1Receita">
+    <div class="section-title">📊 Receita Total Consolidada — Jan a Abr/2026</div>
+    <div class="compare-row">
+        <div class="compare-card"><h4>Vendas de Gado (Est.)</h4><div class="big-number green">R$ 2.154.793</div><div class="detail">548 cab. · Jan/2026 · CEPEA -R$22/@</div></div>
+        <div class="compare-card"><h4>Diárias Terceiros (Real)</h4><div class="big-number blue">R$ 544.080</div><div class="detail">6 clientes · Fev-Abr/2026</div></div>
+        <div class="compare-card"><h4>Receita Total Estimada</h4><div class="big-number green">R$ 2.698.873</div><div class="detail">80% gado próprio · 20% boitel</div></div>
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Análise</span>
+        Duas fontes claras: <strong>Venda de gado (~80%)</strong> concentrada em jan, e <strong>Diárias (~20%)</strong> como receita recorrente ~R$155k/mês. O problema nunca foi falta de faturamento, mas sim <strong>incapacidade de medir se cobre os custos</strong>.
+    </div>
+    <div class="alert alert-danger">
+        <span class="alert-icon">🔴</span>
+        <div><strong>Receita de venda NÃO aparece no financeiro.</strong> Os ~R$2,15M não constam como crédito bancário. Possíveis motivos: conta pessoal, pagamento a prazo, ou ausência de lançamento. <strong>Item #1 a esclarecer com Renato.</strong></div>
+    </div>
+</div>
+
+<!-- R1: METODOLOGIA -->
+<div class="sub-section" id="r1Metodo">
+    <div class="section-title">📐 Premissas e Metodologia de Precificação</div>
+    <div class="comment-box info">
+        <span class="comment-label">ℹ️ Por que precificar a preço de mercado?</span>
+        Toda saída deve ser precificada <strong>como se fosse venda a mercado</strong> — único caminho para saber lucro/prejuízo, comparar performance e tomar decisões baseadas em dados.
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>Parâmetro</th><th>Valor</th><th>Fonte</th></tr></thead>
+            <tbody>
+                <tr><td>Indicador Boi Gordo CEPEA/B3 (SP) Jan/26</td><td class="bold">R$ 319/@</td><td>CEPEA/Esalq</td></tr>
+                <tr><td>Diferencial de base (SP → GO)</td><td class="bold" style="color:var(--danger-light)">- R$ 22/@</td><td>Scot Consultoria</td></tr>
+                <tr><td>Boi Gordo Referência (GO)</td><td class="bold">R$ 297/@</td><td>Calculado</td></tr>
+                <tr><td>Vaca Gorda Referência (GO)</td><td class="bold">R$ 263/@</td><td>CEPEA ~R$285 - R$22</td></tr>
+                <tr><td>Novilha 24-36m (GO)</td><td class="bold">R$ 273/@</td><td>Estimativa</td></tr>
+                <tr><td>Fêmea jovem 13-24m (GO)</td><td class="bold">R$ 258/@</td><td>Estimativa</td></tr>
+                <tr><td>Macho 13-24m (GO)</td><td class="bold">R$ 283/@</td><td>Estimativa</td></tr>
+                <tr><td>Rendimento de carcaça</td><td class="bold">52%</td><td>Padrão nelore</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-wrapper" style="margin-top:16px">
+        <table>
+            <thead><tr><th>Idade (meses)</th><th class="right">Peso Vivo Est. (kg)</th><th class="right">@ Estimadas</th><th>Observação</th></tr></thead>
+            <tbody>
+                <tr><td>17-20</td><td class="right">350</td><td class="right">11,7</td><td>Garrote/Novilha jovem</td></tr>
+                <tr><td>21-23</td><td class="right">400</td><td class="right">13,3</td><td>Fase de engorda</td></tr>
+                <tr><td>25-27</td><td class="right">450</td><td class="right">15,0</td><td>Novilha/Boi magro</td></tr>
+                <tr><td>37</td><td class="right">536</td><td class="right">17,9</td><td>Peso real (lote Augusto)</td></tr>
+                <tr><td>42-44</td><td class="right">500</td><td class="right">16,7</td><td>Vaca madura/descarte</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Limitações:</strong> Pesos ±15% · Preço real pode diferir · Vendas intrafamiliares · Sem bonificações/frete/funrural · Única forma de precisão: <strong>registrar preço real</strong>.</div>
+    </div>
+</div>
+
+<!-- R1: TIMELINE -->
+<div class="sub-section" id="r1Timeline">
+    <div class="section-title">📅 Linha do Tempo — Jan a Abr/2026</div>
+    <div class="timeline">
+        <div class="timeline-item"><div class="timeline-date">01/01/2026</div><div class="timeline-title">Venda de 98 fêmeas (22m) → Renato Martins</div></div>
+        <div class="timeline-item"><div class="timeline-date">05/01/2026</div><div class="timeline-title">52 fêmeas (Kiko Castilho) + 20 machos (Antônio Ricardo)</div></div>
+        <div class="timeline-item"><div class="timeline-date">06–07/01/2026</div><div class="timeline-title">6 machos (Maximum) + 44 fêmeas (Alceu Barbosa)</div></div>
+        <div class="timeline-item"><div class="timeline-date">09/01/2026</div><div class="timeline-title">📤 Maior dia: 153 saídas + 📥 31 compras (J. Campanha)</div><div class="timeline-desc">Urcesino, Renato, Celso Veiga, Charles</div></div>
+        <div class="timeline-item"><div class="timeline-date">11/01/2026</div><div class="timeline-title">47 fêmeas → Novato</div></div>
+        <div class="timeline-item"><div class="timeline-date">14/01/2026</div><div class="timeline-title">34 fêmeas → Augusto Carvalhais (peso real: 536kg) + ☠️ 1 morte</div></div>
+        <div class="timeline-item"><div class="timeline-date">15/01/2026</div><div class="timeline-title">📥 92 machos comprados (Luiz Vieira 42 + Renato 50)</div></div>
+        <div class="timeline-item"><div class="timeline-date">16/01/2026</div><div class="timeline-title">Vendas diversas: Alvaro, Pedro, Rogério, Elisandro (14 cab.)</div></div>
+        <div class="timeline-item"><div class="timeline-date">21/01/2026</div><div class="timeline-title">📤 91 fêmeas → Cephora Martins + 📥 58 fêmeas (Renato)</div></div>
+        <div class="timeline-item"><div class="timeline-date">22/01/2026</div><div class="timeline-title">📥 54 machos comprados de Renato</div></div>
+        <div class="timeline-item"><div class="timeline-date">24/02/2026</div><div class="timeline-title">💰 Diárias: Eldo (R$214k) + Miguel (R$103k)</div></div>
+        <div class="timeline-item"><div class="timeline-date">Mar/2026</div><div class="timeline-title">💰 J.Batista (R$70k) + Antônio (R$74k) + J.Campanha (R$14k)</div></div>
+        <div class="timeline-item"><div class="timeline-date">06/04/2026</div><div class="timeline-title">💰 Jefferson Macedo (R$68k)</div></div>
+    </div>
+</div>
+
+<!-- R1: ALERTAS -->
+<div class="sub-section" id="r1Alertas">
+    <div class="section-title">🚨 Alertas Críticos e Gaps de Informação</div>
+    <div class="alert alert-danger"><span class="alert-icon">🔴</span><div><strong>1. ZERO preço nas vendas.</strong> 548 cab. sem valor unitário. Impossível calcular receita real ou margem.</div></div>
+    <div class="alert alert-danger"><span class="alert-icon">🔴</span><div><strong>2. Receita de vendas não aparece no financeiro.</strong> ~R$2,15M não constam como crédito no sistema.</div></div>
+    <div class="alert alert-danger"><span class="alert-icon">🔴</span><div><strong>3. Sem preço de compra dos 235 animais.</strong> Entradas têm peso mas não têm R$/@. Sem custo de reposição, sem ROI.</div></div>
+    <div class="alert alert-warning"><span class="alert-icon">🟡</span><div><strong>4. Despesas 2026 não disponíveis.</strong> Apenas referencial 2025. Sem DRE possível.</div></div>
+    <div class="alert alert-warning"><span class="alert-icon">🟡</span><div><strong>5. Qtd cabeças de terceiros por cliente desconhecida.</strong> Impossível calcular R$/cab/dia.</div></div>
+    <div class="alert alert-warning"><span class="alert-icon">🟡</span><div><strong>6. Vendas intrafamiliares sem transparência.</strong> Renato + Cephora = 48,5% das vendas.</div></div>
+    <div class="alert alert-info"><span class="alert-icon">🔵</span><div><strong>7. Receita de venda de gado existe mas não foi enviada.</strong> Item a ser coletado nas próximas etapas.</div></div>
+</div>
+
+<!-- R1: PLANO DE AÇÃO -->
+<div class="sub-section" id="r1Plano">
+    <div class="section-title">🎯 Plano de Ação — Próximos Passos</div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th class="center">#</th><th>Ação</th><th class="center">Prioridade</th><th class="center">Prazo</th><th>Responsável</th></tr></thead>
+            <tbody>
+                <tr><td class="center bold">1</td><td><strong>Levantar receita real de vendas</strong> (NFs, GTAs, extratos)</td><td class="center"><span class="tag tag-red">URGENTE</span></td><td class="center">7 dias</td><td>Renato / Contador</td></tr>
+                <tr><td class="center bold">2</td><td><strong>Levantar preço de compra</strong> dos 235 animais (R$/@)</td><td class="center"><span class="tag tag-red">URGENTE</span></td><td class="center">7 dias</td><td>Renato / Contador</td></tr>
+                <tr><td class="center bold">3</td><td><strong>Extrato despesas Jan-Abr/2026</strong></td><td class="center"><span class="tag tag-red">URGENTE</span></td><td class="center">7 dias</td><td>Renato / Financeiro</td></tr>
+                <tr><td class="center bold">4</td><td><strong>Mapear cabeças de terceiros</strong> por cliente (qtd, contrato, diária)</td><td class="center"><span class="tag tag-orange">ALTA</span></td><td class="center">15 dias</td><td>Gerente</td></tr>
+                <tr><td class="center bold">5</td><td><strong>Registrar preço em TODA venda</strong> (imediato)</td><td class="center"><span class="tag tag-orange">ALTA</span></td><td class="center">Imediato</td><td>Gerente / Sistema</td></tr>
+                <tr><td class="center bold">6</td><td><strong>Esclarecer destino financeiro</strong> das vendas de janeiro</td><td class="center"><span class="tag tag-orange">ALTA</span></td><td class="center">7 dias</td><td>Renato</td></tr>
+                <tr><td class="center bold">7</td><td><strong>Calcular custo/cab boitel</strong> (ração, MO, sanidade, estrutura)</td><td class="center"><span class="tag tag-blue">MÉDIA</span></td><td class="center">30 dias</td><td>Rural IN</td></tr>
+                <tr><td class="center bold">8</td><td><strong>DRE Gerencial completo</strong></td><td class="center"><span class="tag tag-blue">MÉDIA</span></td><td class="center">30 dias</td><td>Rural IN</td></tr>
+                <tr><td class="center bold">9</td><td><strong>KPIs mensais</strong> (custo/@, margem, mortalidade, GPD)</td><td class="center"><span class="tag tag-blue">MÉDIA</span></td><td class="center">30 dias</td><td>Rural IN</td></tr>
+                <tr><td class="center bold">10</td><td><strong>Pesagem periódica</strong> a cada 45-60 dias</td><td class="center"><span class="tag tag-green">NORMAL</span></td><td class="center">60 dias</td><td>Gerente</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Comentário Final</span>
+        A Fazenda tem <strong>escala, patrimônio e operação ativa</strong> — vendeu R$2M+ em um mês e recebe receita recorrente de boitel. O potencial é evidente. Porém a <strong>gestão não acompanhou o crescimento</strong>. Os próximos 30 dias são decisivos: com os itens 1 a 3, será possível responder: <em>"A Fazenda Toca da Onça dá lucro?"</em>
+    </div>
+</div>
+</div><!-- /report1 -->
+
+<!-- ================================================================ -->
+<!-- REPORT 2: ANÁLISE FINANCEIRA 2025                                -->
+<!-- ================================================================ -->
+<div class="report-panel" id="report2">
+<div class="sub-nav" id="subNav2">
+    <button class="sub-tab active" onclick="showSub('r2','r2Visao')">📋 Visão Geral</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Fluxo')">📊 Fluxo 2025</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Categorias')">📦 Categorias</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Centros')">🏭 Centros Custo</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Confinamento')">🐂 Confinamento</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Patrimonio')">💰 Patrimônio</button>
+    <button class="sub-tab" onclick="showSub('r2','r2Projecao')">🔮 Projeções</button>
+</div>
+
+<!-- R2: VISÃO GERAL -->
+<div class="sub-section active" id="r2Visao">
+    <div class="section-title">📋 Visão Geral Executiva — 2025</div>
+    <div class="section-subtitle">Resumo consolidado das operações — dados reais Jan-Abr/2025</div>
+    <div class="alert alert-info"><span class="alert-icon">ℹ️</span><div><strong>Base de dados:</strong> Planilha de saídas de caixa 2025 (Jan–Abr detalhado), dados bancários Jan–Mar/2026, confinamento e rebanho. Análise preliminar.</div></div>
+    <div class="kpi-grid">
+        <div class="kpi-card gold"><div class="kpi-icon">💰</div><div class="kpi-value gold">R$ 3,30M</div><div class="kpi-label">Saídas Jan–Abr/2025</div><div class="kpi-detail">Média: R$ 825k/mês</div></div>
+        <div class="kpi-card"><div class="kpi-icon">📦</div><div class="kpi-value green">R$ 1,31M</div><div class="kpi-label">Insumos (39,6%)</div><div class="kpi-detail">Maior centro de custo</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">🐂</div><div class="kpi-value blue">2.064</div><div class="kpi-label">Cabeças Conf. 2026</div><div class="kpi-detail">~100% crescimento vs 2025</div></div>
+        <div class="kpi-card gold"><div class="kpi-icon">🏦</div><div class="kpi-value gold">R$ 6,5M+</div><div class="kpi-label">Patrimônio Vivo Est.</div><div class="kpi-detail">1.763 cabeças Renato</div></div>
+    </div>
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">🏢 Estrutura Operacional</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Unidade</th><th>Atividade</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>🏭 Confinamento Toca</td><td>Confinamento intensivo (próprio + 3os)</td><td><span class="tag tag-green">Principal</span></td></tr>
+                        <tr><td>🌾 Fazenda Toca da Onça</td><td>Sede + recria a pasto</td><td><span class="tag tag-green">Ativa</span></td></tr>
+                        <tr><td>🐄 VO IVA Fazenda</td><td>Pecuária extensiva (arrendamento)</td><td><span class="tag tag-blue">Investimento</span></td></tr>
+                        <tr><td>🏠 Sítio Paraíso</td><td>Reforma/construção</td><td><span class="tag tag-orange">Obra</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">📅 Timeline — Marcos Importantes</div>
+            <div class="timeline">
+                <div class="timeline-item"><div class="timeline-date">Jan–Mar 2025</div><div class="timeline-title">Operação estabilizada</div><div class="timeline-desc">Confinamento ativo, investimentos em VO IVA e Sítio Paraíso</div></div>
+                <div class="timeline-item"><div class="timeline-date">Jan–Mar 2026</div><div class="timeline-title">Escalada da operação</div><div class="timeline-desc">Confinamento dobra para 2.064 cab. Entrada de 3os (~34%)</div></div>
+                <div class="timeline-item"><div class="timeline-date">Abr–Mai 2026</div><div class="timeline-title">🔥 Ciclo de Abates</div><div class="timeline-desc">~553 cabeças previstas. Receita R$ 3,0–3,2M</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- R2: FLUXO 2025 -->
+<div class="sub-section" id="r2Fluxo">
+    <div class="section-title">📊 Fluxo de Saídas — 2025</div>
+    <div class="section-subtitle">Jan–Abr realizado, Mai–Dez projetado</div>
+    <div class="kpi-grid">
+        <div class="kpi-card gold"><div class="kpi-icon">📊</div><div class="kpi-value gold">R$ 3,30M</div><div class="kpi-label">Realizado Jan–Abr</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">🔮</div><div class="kpi-value blue">R$ 3,65M</div><div class="kpi-label">Projeção Mai–Dez</div></div>
+        <div class="kpi-card danger"><div class="kpi-icon">📅</div><div class="kpi-value red">R$ 6,95M</div><div class="kpi-label">Projeção Total 2025</div></div>
+        <div class="kpi-card"><div class="kpi-icon">📈</div><div class="kpi-value">R$ 825k</div><div class="kpi-label">Pico Safra (Jan–Abr)</div></div>
+    </div>
+    <div class="card">
+        <div class="card-title">📊 Saídas Mensais (R$ mil)</div>
+        <div class="chart-bar-row"><span class="chart-label">Jan</span><div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:100%">R$ 1.320k</div></div><span class="chart-value" style="color:var(--accent-light)">R$ 1.320.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Fev</span><div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:59%">R$ 780k</div></div><span class="chart-value" style="color:var(--accent-light)">R$ 780.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Mar</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:39%">R$ 520k</div></div><span class="chart-value">R$ 520.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Abr</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:52%">R$ 680k</div></div><span class="chart-value">R$ 680.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Mai *</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:42%">R$ 550k</div></div><span class="chart-value" style="color:var(--text-muted)">R$ 550.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Jun *</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:34%">R$ 450k</div></div><span class="chart-value" style="color:var(--text-muted)">R$ 450.000</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Jul–Dez *</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:50%">~R$ 400-450k/m</div></div><span class="chart-value" style="color:var(--text-muted)">R$ 2.650.000</span></div>
+        <div class="legend" style="margin-top:12px">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent-light)"></div> Realizado (alto)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--primary-light)"></div> Realizado (moderado)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div> Projetado *</div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">📋 Demonstrativo Mensal</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Mês</th><th class="right">Insumos</th><th class="right">Investim.</th><th class="right">Serv. 3os</th><th class="right">Combust.</th><th class="right">Manut.</th><th class="right">Arrend.</th><th class="right">Folha</th><th class="right">Outros</th><th class="right">TOTAL</th></tr></thead>
+                <tbody>
+                    <tr><td class="bold">Jan/25</td><td class="right">596.482</td><td class="right">309.157</td><td class="right">92.605</td><td class="right">87.813</td><td class="right">28.520</td><td class="right">40.000</td><td class="right">55.839</td><td class="right">109.584</td><td class="right bold" style="color:var(--accent-light)">1.320.000</td></tr>
+                    <tr><td class="bold">Fev/25</td><td class="right">315.640</td><td class="right">153.310</td><td class="right">107.418</td><td class="right">72.551</td><td class="right">46.815</td><td class="right">37.000</td><td class="right">27.433</td><td class="right">19.833</td><td class="right bold" style="color:var(--accent-light)">780.000</td></tr>
+                    <tr><td class="bold">Mar/25</td><td class="right">158.010</td><td class="right">108.860</td><td class="right">66.440</td><td class="right">37.431</td><td class="right">28.270</td><td class="right">47.000</td><td class="right">19.003</td><td class="right">54.986</td><td class="right bold">520.000</td></tr>
+                    <tr><td class="bold">Abr/25</td><td class="right">238.098</td><td class="right">165.850</td><td class="right">113.260</td><td class="right">19.450</td><td class="right">52.590</td><td class="right">55.500</td><td class="right">25.602</td><td class="right">9.650</td><td class="right bold">680.000</td></tr>
+                    <tr class="subtotal-row"><td class="bold">SUB 1ºQ</td><td class="right">1.308.230</td><td class="right">737.177</td><td class="right">379.723</td><td class="right">217.245</td><td class="right">156.195</td><td class="right">179.500</td><td class="right">127.877</td><td class="right">194.053</td><td class="right bold" style="color:var(--accent-light)">3.300.000</td></tr>
+                    <tr class="total-row"><td colspan="8">PROJEÇÃO TOTAL 2025</td><td class="right">R$ 6.950.000</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- R2: CATEGORIAS -->
+<div class="sub-section" id="r2Categorias">
+    <div class="section-title">📦 Categorias de Gastos — 2025</div>
+    <div class="section-subtitle">Composição das saídas Jan–Abr/2025</div>
+    <div class="card">
+        <div class="card-title">🎨 Composição dos Gastos</div>
+        <div class="stacked-bar">
+            <div class="stacked-segment" style="width:39.6%;background:#e67e22" title="Insumos 39,6%">39,6%</div>
+            <div class="stacked-segment" style="width:22.3%;background:#2d8a4e" title="Investimentos 22,3%">22,3%</div>
+            <div class="stacked-segment" style="width:11.5%;background:#3498db" title="Serviços 3os 11,5%">11,5%</div>
+            <div class="stacked-segment" style="width:6.6%;background:#9b59b6" title="Combustível 6,6%">6,6%</div>
+            <div class="stacked-segment" style="width:4.7%;background:#e74c3c" title="Manutenção 4,7%">4,7%</div>
+            <div class="stacked-segment" style="width:5.4%;background:#1abc9c" title="Arrendamento 5,4%">5,4%</div>
+            <div class="stacked-segment" style="width:3.9%;background:#f39c12" title="Folha 3,9%">3,9%</div>
+            <div class="stacked-segment" style="width:6.0%;background:#7f8c8d" title="Outros 6,0%">6,0%</div>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> Insumos 39,6%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#2d8a4e"></div> Investimentos 22,3%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div> Serviços 3os 11,5%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9b59b6"></div> Combustível 6,6%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div> Manutenção 4,7%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#1abc9c"></div> Arrendamento 5,4%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> Folha 3,9%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#7f8c8d"></div> Outros 6,0%</div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">🏆 Ranking de Categorias</div>
+        <div class="chart-bar-row"><span class="chart-label">Insumos</span><div class="chart-bar-bg"><div class="chart-bar-fill orange" style="width:100%"></div></div><span class="chart-value">R$ 1.308.230</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Investim.</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:56%"></div></div><span class="chart-value">R$ 737.177</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Serviços 3os</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:29%"></div></div><span class="chart-value">R$ 379.723</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Combustível</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:17%;background:linear-gradient(135deg,#9b59b6,#8e44ad)"></div></div><span class="chart-value">R$ 217.245</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Arrendam.</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:14%;background:linear-gradient(135deg,#1abc9c,#16a085)"></div></div><span class="chart-value">R$ 179.500</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Manutenção</span><div class="chart-bar-bg"><div class="chart-bar-fill red" style="width:12%"></div></div><span class="chart-value">R$ 156.195</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Folha</span><div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:10%"></div></div><span class="chart-value">R$ 127.877</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Outros</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:15%;background:#7f8c8d"></div></div><span class="chart-value">R$ 194.053</span></div>
+    </div>
+    <div class="card">
+        <div class="card-title">🌽 Top 4 Fornecedores de Insumos (87,5% do custo)</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Fornecedor</th><th>Item</th><th class="right">Valor</th><th class="right">%</th></tr></thead>
+                <tbody>
+                    <tr><td class="bold">Neomille S.A.</td><td>Cerradinho</td><td class="right bold">R$ 338.599</td><td class="right">25,9%</td></tr>
+                    <tr><td class="bold">Tiago Cadore</td><td>Milho</td><td class="right bold">R$ 328.776</td><td class="right">25,1%</td></tr>
+                    <tr><td class="bold">+Farelos</td><td>Casca de Soja</td><td class="right bold">R$ 260.920</td><td class="right">19,9%</td></tr>
+                    <tr><td class="bold">Cargill</td><td>ProBeef + Casca</td><td class="right bold">R$ 217.189</td><td class="right">16,6%</td></tr>
+                    <tr class="total-row"><td colspan="2">TOTAL TOP 4</td><td class="right">R$ 1.145.484</td><td class="right">87,5%</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="alert alert-warning"><span class="alert-icon">⚠️</span><div><strong>Risco de concentração:</strong> 4 fornecedores = 87,5% da nutrição. Diversificar ou contratar hedge.</div></div>
+    </div>
+    <div class="card">
+        <div class="card-title">⚡ Custo Fixo Mensal Identificado</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Item</th><th class="right">Valor/Mês</th></tr></thead>
+                <tbody>
+                    <tr><td>Arrendamentos (Toca + VO IVA + Palestina)</td><td class="right">~R$ 50.000</td></tr>
+                    <tr><td>Folha de Pagamento</td><td class="right">~R$ 25.000</td></tr>
+                    <tr><td>Energia (todas unidades)</td><td class="right">~R$ 9.000</td></tr>
+                    <tr><td>Consultoria Barros + Contabilidade</td><td class="right">~R$ 10.345</td></tr>
+                    <tr><td>Sistemas + Internet</td><td class="right">~R$ 5.000</td></tr>
+                    <tr class="total-row"><td>TOTAL FIXO MENSAL</td><td class="right">~R$ 96.345</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- R2: CENTROS DE CUSTO -->
+<div class="sub-section" id="r2Centros">
+    <div class="section-title">🏭 Centros de Custo — Distribuição por Unidade</div>
+    <div class="comment-box warning">
+        <span class="comment-label">⚠️ Limitação</span>
+        Sem receita alocada por centro, não é possível calcular P&L individual. A distribuição abaixo refere-se apenas às <strong>saídas</strong>.
+    </div>
+    <div class="chart-bar-row"><span class="chart-label">Confinamento Toca</span><div class="chart-bar-bg"><div class="chart-bar-fill green" style="width:62%">~62%</div></div><span class="chart-value">~R$ 2,05M</span></div>
+    <div class="chart-bar-row"><span class="chart-label">Faz. Toca Onça</span><div class="chart-bar-bg"><div class="chart-bar-fill blue" style="width:18%">~18%</div></div><span class="chart-value">~R$ 594k</span></div>
+    <div class="chart-bar-row"><span class="chart-label">VO IVA</span><div class="chart-bar-bg"><div class="chart-bar-fill gold" style="width:12%">~12%</div></div><span class="chart-value">~R$ 396k</span></div>
+    <div class="chart-bar-row"><span class="chart-label">Sítio Paraíso</span><div class="chart-bar-bg"><div class="chart-bar-fill orange" style="width:8%">~8%</div></div><span class="chart-value">~R$ 264k</span></div>
+</div>
+
+<!-- R2: CONFINAMENTO -->
+<div class="sub-section" id="r2Confinamento">
+    <div class="section-title">🐂 Confinamento — Análise da Operação</div>
+    <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon">🐂</div><div class="kpi-value">2.064</div><div class="kpi-label">Cabeças Total 2026</div></div>
+        <div class="kpi-card success"><div class="kpi-icon">👤</div><div class="kpi-value green">1.351</div><div class="kpi-label">Próprias (65,5%)</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">🤝</div><div class="kpi-value blue">713</div><div class="kpi-label">Terceiros (34,5%)</div></div>
+        <div class="kpi-card gold"><div class="kpi-icon">📈</div><div class="kpi-value gold">~100%</div><div class="kpi-label">Crescimento vs 2025</div></div>
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Análise</span>
+        O confinamento dobrou de tamanho em 1 ano. A entrada de 713 cabeças de terceiros (~34,5%) representa uma nova linha de negócio (boitel) que gera receita de serviço sem necessidade de capital para compra de gado. Receita potencial: R$ 500k–1M/ano se bem precificado.
+    </div>
+</div>
+
+<!-- R2: PATRIMÔNIO -->
+<div class="sub-section" id="r2Patrimonio">
+    <div class="section-title">💰 Patrimônio Biológico Estimado</div>
+    <div class="kpi-grid">
+        <div class="kpi-card gold"><div class="kpi-icon">🐂</div><div class="kpi-value gold">R$ 6,5M+</div><div class="kpi-label">Patrimônio Vivo</div><div class="kpi-detail">1.763 cabeças Renato</div></div>
+        <div class="kpi-card danger"><div class="kpi-icon">🏦</div><div class="kpi-value red">-R$ 96,8k</div><div class="kpi-label">Saldo Bancário Mar/26</div><div class="kpi-detail">Cheque especial</div></div>
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Análise</span>
+        Patrimônio biológico de <strong>R$ 6,5M a R$ 8,3M</strong> vs saldo negativo de R$ 96k. A relação ativo/passivo é extremamente favorável. <strong>O problema é liquidez, não solvência.</strong> O dinheiro está em forma de boi, não em conta bancária.
+    </div>
+</div>
+
+<!-- R2: PROJEÇÕES -->
+<div class="sub-section" id="r2Projecao">
+    <div class="section-title">🔮 Projeções e Cenários</div>
+    <div class="card">
+        <div class="card-title">📊 Cenários de Receita de Abate (Abr–Jul/2026)</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Cenário</th><th class="right">Cabeças</th><th class="right">@/cab</th><th class="right">R$/@</th><th class="right">Receita Bruta</th></tr></thead>
+                <tbody>
+                    <tr><td class="bold" style="color:var(--danger-light)">Pessimista</td><td class="right">1.100</td><td class="right">17,5</td><td class="right">R$ 280</td><td class="right bold" style="color:var(--danger-light)">R$ 5,39M</td></tr>
+                    <tr><td class="bold" style="color:var(--accent-light)">Base</td><td class="right">1.100</td><td class="right">18,0</td><td class="right">R$ 310</td><td class="right bold" style="color:var(--accent-light)">R$ 6,14M</td></tr>
+                    <tr><td class="bold" style="color:var(--success)">Otimista</td><td class="right">1.100</td><td class="right">18,5</td><td class="right">R$ 340</td><td class="right bold" style="color:var(--success)">R$ 6,92M</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="comment-box">
+        <span class="comment-label">📋 Comentário</span>
+        Mesmo no cenário pessimista, a receita de abate (R$ 5,39M) superaria as saídas projetadas do 1º semestre (~R$ 4M). O ciclo de caixa tende a se inverter a partir de abril/2026.
+    </div>
+</div>
+</div><!-- /report2 -->
+
+<!-- ================================================================ -->
+<!-- REPORT 3: DIAGNÓSTICO GERENCIAL                                  -->
+<!-- ================================================================ -->
+<div class="report-panel" id="report3">
+<div class="sub-nav" id="subNav3">
+    <button class="sub-tab active" onclick="showSub('r3','r3RaioX')">🔍 Raio-X</button>
+    <button class="sub-tab" onclick="showSub('r3','r3Sabemos')">✅ O Que Sabemos</button>
+    <button class="sub-tab" onclick="showSub('r3','r3Falta')">❌ O Que Falta</button>
+    <button class="sub-tab" onclick="showSub('r3','r3Indicadores')">📐 Indicadores</button>
+    <button class="sub-tab" onclick="showSub('r3','r3Gargalos')">🚨 Gargalos</button>
+    <button class="sub-tab" onclick="showSub('r3','r3PlanoAcao')">🎯 Plano de Ação</button>
+</div>
+
+<!-- R3: RAIO-X -->
+<div class="sub-section active" id="r3RaioX">
+    <div class="section-title">🔍 Raio-X da Gestão Atual</div>
+    <div class="section-subtitle">Avaliação do nível de maturidade gerencial</div>
+    <div class="card" style="border-color:rgba(212,160,23,.3)">
+        <div class="card-title">📊 Índice de Maturidade Gerencial</div>
+        <div class="score-container">
+            <div style="font-size:1.4rem;font-weight:800;color:#f39c12">3,2 / 10</div>
+            <div style="font-size:.85rem;color:var(--text-sec)">Nível: <strong style="color:#f39c12">OPERACIONAL BÁSICO</strong></div>
+            <div class="score-meter"><div class="score-needle" style="left:32%"></div></div>
+            <div class="score-labels"><span>1—Crítico</span><span>3—Básico</span><span>5—Mediano</span><span>7—Bom</span><span>10—Excelente</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">🏥 Painel de Saúde</div>
+        <div class="status-grid">
+            <div class="status-item"><div class="status-icon">📊</div><div class="status-label">Controle Saídas</div><div class="status-value ok">✅ BOM</div></div>
+            <div class="status-item"><div class="status-icon">💰</div><div class="status-label">Controle Entradas</div><div class="status-value critical">❌ INEXISTENTE</div></div>
+            <div class="status-item"><div class="status-icon">📋</div><div class="status-label">DRE / Resultado</div><div class="status-value critical">❌ INEXISTENTE</div></div>
+            <div class="status-item"><div class="status-icon">🐂</div><div class="status-label">Controle Rebanho</div><div class="status-value warn">⚠️ PARCIAL</div></div>
+            <div class="status-item"><div class="status-icon">📦</div><div class="status-label">Custo por Cabeça</div><div class="status-value critical">❌ NÃO APURADO</div></div>
+            <div class="status-item"><div class="status-icon">🔮</div><div class="status-label">Planejamento Caixa</div><div class="status-value critical">❌ INEXISTENTE</div></div>
+            <div class="status-item"><div class="status-icon">⚖️</div><div class="status-label">Separação CAPEX/OPEX</div><div class="status-value critical">❌ MISTURADO</div></div>
+            <div class="status-item"><div class="status-icon">📈</div><div class="status-label">Indicadores Zootéc.</div><div class="status-value missing">❓ SEM DADOS</div></div>
+            <div class="status-item"><div class="status-icon">🏷️</div><div class="status-label">Centro de Custo</div><div class="status-value warn">⚠️ PARCIAL</div></div>
+            <div class="status-item"><div class="status-icon">📄</div><div class="status-label">Contratos 3os</div><div class="status-value missing">❓ NÃO INFORM.</div></div>
+            <div class="status-item"><div class="status-icon">🛡️</div><div class="status-label">Seguro Rebanho</div><div class="status-value missing">❓ NÃO INFORM.</div></div>
+            <div class="status-item"><div class="status-icon">🏦</div><div class="status-label">Endividamento</div><div class="status-value missing">❓ NÃO INFORM.</div></div>
+        </div>
+    </div>
+    <div class="quote-box">
+        "A Fazenda Toca da Onça opera uma estrutura de <strong>R$ 8 a 10 milhões por ano</strong>, com patrimônio vivo de <strong>R$ 6,5M+</strong>, 2.064 cabeças, 4 unidades — porém com o nível de controle financeiro de uma operação 10 vezes menor. Existe controle de saídas razoável, mas <strong>não há registro de entradas, não há DRE, não há custo por cabeça</strong>. O proprietário toma decisões de milhões baseando-se na intuição e no saldo bancário do dia."
+        <div class="quote-author">— Rural IN, Abril/2026</div>
+    </div>
+    <div class="vs-container">
+        <div class="vs-box" style="border-color:var(--success)">
+            <div class="vs-label">Tamanho da Operação</div>
+            <div class="vs-value" style="color:var(--success)">PROFISSIONAL</div>
+            <div class="vs-detail">2.064 cabeças · 4 unidades · R$ 8-10M/ano</div>
+        </div>
+        <div class="vs-icon">⚡</div>
+        <div class="vs-box" style="border-color:var(--danger-light)">
+            <div class="vs-label">Nível de Controle</div>
+            <div class="vs-value" style="color:var(--danger-light)">ARTESANAL</div>
+            <div class="vs-detail">1 planilha de saídas · Sem DRE · Sem custo/cab</div>
+        </div>
+    </div>
+    <div class="alert alert-danger">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>Esse descompasso é o maior risco do negócio.</strong> Não é o caixa negativo, não é o preço do milho — é tomar decisões de milhões sem informação estruturada.</div>
+    </div>
+</div>
+
+<!-- R3: O QUE SABEMOS -->
+<div class="sub-section" id="r3Sabemos">
+    <div class="section-title">✅ O Que os Números Mostram com Clareza</div>
+    <div class="kpi-grid">
+        <div class="kpi-card gold"><div class="kpi-icon">📊</div><div class="kpi-value gold">R$ 3,30M</div><div class="kpi-label">Saídas Jan–Abr/25</div></div>
+        <div class="kpi-card"><div class="kpi-icon">🐂</div><div class="kpi-value green">2.064</div><div class="kpi-label">Cabeças Conf. 2026</div></div>
+        <div class="kpi-card info"><div class="kpi-icon">💰</div><div class="kpi-value blue">R$ 6,5M+</div><div class="kpi-label">Patrimônio Vivo</div></div>
+        <div class="kpi-card danger"><div class="kpi-icon">🏦</div><div class="kpi-value red">-R$ 96,8k</div><div class="kpi-label">Saldo Mar/26</div></div>
+    </div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">1</div><div class="diag-title">Operação GRANDE com ESCALA</div></div><div class="diag-desc">2.064 cabeças, 4 unidades, 15+ colaboradores, 10+ clientes terceiros. Faturamento na faixa de R$ 8-10M/ano.</div></div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">2</div><div class="diag-title">Padrão de saídas é PREVISÍVEL</div></div><div class="diag-desc">Pico em Jan-Fev (entrada de lotes), queda progressiva até entressafra. Padrão clássico de confinamento.</div><div class="diag-impact"><strong>Conclusão:</strong> Caixa negativo de Mar/26 era cíclico e previsível — deveria ter sido planejado.</div></div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">3</div><div class="diag-title">Custo fixo BAIXO (12% do total)</div></div><div class="diag-desc">~R$ 96k/mês de custo fixo. Operação predominantemente variável — escala compensa.</div></div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">4</div><div class="diag-title">Patrimônio vivo cobre o passivo</div></div><div class="diag-desc">R$ 6,5M+ em gado vs R$ 96k negativo no banco. <strong>Problema é liquidez, não solvência.</strong></div></div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">5</div><div class="diag-title">Confinamento de 3os é nova fonte de receita</div></div><div class="diag-desc">713 cabeças de 10 clientes (34,5%). Potencial de R$ 500k–1M/ano em diárias.</div></div>
+    <div class="diag-block diag-green"><div class="diag-header"><div class="diag-number green">6</div><div class="diag-title">Abates programados geram receita expressiva</div></div><div class="diag-desc">1.100+ cabeças Abr–Jul/2026. Receita bruta estimada R$ 6,2M.</div></div>
+</div>
+
+<!-- R3: O QUE FALTA -->
+<div class="sub-section" id="r3Falta">
+    <div class="section-title">❌ O Que Falta Para Gestão Adequada</div>
+    <div class="alert alert-danger"><span class="alert-icon">🚨</span><div><strong>Sem as informações abaixo, impossível responder:</strong> "Estou ganhando ou perdendo dinheiro?"</div></div>
+    <div class="card" style="border-color:rgba(192,57,43,.3)">
+        <div class="card-title" style="color:var(--danger-light)">🔴 Nível 1 — SEM ISSO, NÃO EXISTE GESTÃO</div>
+        <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">1</div><div class="diag-title">Fluxo de ENTRADAS (Receitas)</div></div><div class="diag-desc">Zero registros de quanto entra. Nem vendas, nem recebimento de 3os. Temos saídas detalhadas, <strong>zero dados de receita</strong>.</div><div class="diag-impact"><strong>Impacto:</strong> Impossível calcular lucro, margem, ponto de equilíbrio ou qualquer indicador financeiro.</div></div>
+        <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">2</div><div class="diag-title">DRE — Demonstração de Resultado</div></div><div class="diag-desc">Nenhuma DRE apresentada. Não sabemos faturamento bruto, impostos, CPV, despesas ou lucro/prejuízo.</div></div>
+        <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">3</div><div class="diag-title">Custo por Cabeça / Dia</div></div><div class="diag-desc">Não existe apuração de quanto custa manter 1 boi por 1 dia. Sem isso, sem saber se a diária cobrada dos 3os cobre o custo.</div><div class="diag-impact"><strong>Referência mercado:</strong> R$ 12–22/cab/dia</div></div>
+        <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">4</div><div class="diag-title">Contrato/Modelo de Cobrança com Terceiros</div></div><div class="diag-desc">713 cabeças de 10 clientes — não sabemos como é feita a cobrança. Se cobrar abaixo do custo, 713 cab × 120 dias × R$2/dia = <strong>R$ 171k de prejuízo</strong>.</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(230,126,34,.3)">
+        <div class="card-title" style="color:#f39c12">🟠 Nível 2 — SEM ISSO, NÃO TEM EFICIÊNCIA</div>
+        <div class="diag-block diag-orange"><div class="diag-header"><div class="diag-number orange">5</div><div class="diag-title">GPD — Ganho de Peso Diário</div></div><div class="diag-desc">Indicador #1 do confinamento. A diferença entre 1,2 e 1,8 kg/dia = R$ 400-600 a mais por cabeça.</div></div>
+        <div class="diag-block diag-orange"><div class="diag-header"><div class="diag-number orange">6</div><div class="diag-title">Conversão Alimentar (CA)</div></div><div class="diag-desc">Ligado a 40% do custo total. CA 6:1 vs 8:1 = 25% de economia em insumos.</div></div>
+        <div class="diag-block diag-orange"><div class="diag-header"><div class="diag-number orange">7</div><div class="diag-title">Taxa de Mortalidade</div></div><div class="diag-desc">Cada 1% = ~20 cabeças = ~R$ 110.000 de perda.</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(212,160,23,.3)">
+        <div class="card-title" style="color:var(--accent-light)">🟡 Nível 3 — SEM ISSO, NÃO TEM CRESCIMENTO SUSTENTÁVEL</div>
+        <div class="diag-block diag-yellow"><div class="diag-header"><div class="diag-number yellow">9</div><div class="diag-title">Separação P&L por Unidade</div></div><div class="diag-desc">4 unidades misturadas. Não se sabe qual dá lucro e qual drena caixa.</div></div>
+        <div class="diag-block diag-yellow"><div class="diag-header"><div class="diag-number yellow">10</div><div class="diag-title">Separação CAPEX × OPEX</div></div><div class="diag-desc">Compra de caminhão, poço artesiano, obras — misturados com custo operacional. Infla custo aparente em ~R$ 400k.</div></div>
+        <div class="diag-block diag-yellow"><div class="diag-header"><div class="diag-number yellow">11</div><div class="diag-title">Fluxo de Caixa Projetado (12 meses)</div></div><div class="diag-desc">Nenhum planejamento prospectivo. O caixa negativo de Mar/26 era 100% previsível — mas ninguém projetou.</div></div>
+    </div>
+</div>
+
+<!-- R3: INDICADORES -->
+<div class="sub-section" id="r3Indicadores">
+    <div class="section-title">📐 Indicadores Que Deveriam Existir</div>
+    <div class="card">
+        <div class="card-title">📊 Status dos KPIs</div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Indicador</th><th>Descrição</th><th class="center">Benchmark</th><th class="center">Status</th></tr></thead>
+                <tbody>
+                    <tr><td class="bold">💰 Custo/cab/dia</td><td>Custo total ÷ nº cab ÷ 30</td><td class="center">R$ 12–22</td><td class="center"><span class="tag tag-red">❌ Não existe</span></td></tr>
+                    <tr><td class="bold">📈 Margem/cab</td><td>Receita venda − Custo engorda</td><td class="center">R$ 800–2.000</td><td class="center"><span class="tag tag-red">❌ Sem receita</span></td></tr>
+                    <tr><td class="bold">⚖️ EBITDA</td><td>Receita − Custos operacionais</td><td class="center">15–25%</td><td class="center"><span class="tag tag-red">❌ Sem receita</span></td></tr>
+                    <tr><td class="bold">🔄 ROI Conf.</td><td>Lucro ÷ Capital empregado</td><td class="center">8–15%/ciclo</td><td class="center"><span class="tag tag-red">❌ Faltam 2 pontas</span></td></tr>
+                    <tr><td class="bold">🐂 GPD</td><td>(Peso saída − entrada) ÷ dias</td><td class="center">≥ 1,5 kg</td><td class="center"><span class="tag tag-gray">❓ Sem dados</span></td></tr>
+                    <tr><td class="bold">🌾 Conv. Alimentar</td><td>kg ração ÷ kg ganho</td><td class="center">≤ 7:1</td><td class="center"><span class="tag tag-gray">❓ Sem dados</span></td></tr>
+                    <tr><td class="bold">💀 Mortalidade</td><td>Mortes ÷ Total × 100</td><td class="center">≤ 2%</td><td class="center"><span class="tag tag-gray">❓ Sem dados</span></td></tr>
+                    <tr><td class="bold">🥩 Rend. Carcaça</td><td>Peso carcaça ÷ vivo × 100</td><td class="center">52–56%</td><td class="center"><span class="tag tag-orange">⚠️ Est. 53%</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-title">📉 Cobertura dos Indicadores</div>
+        <div class="chart-bar-row"><span class="chart-label">Saídas (Custos)</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:85%;background:linear-gradient(135deg,#27ae60,#2ecc71)">85%</div></div><span class="chart-value" style="color:var(--success)">✅ Bom</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Rebanho</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:60%;background:linear-gradient(135deg,#f39c12,#e67e22)">60%</div></div><span class="chart-value" style="color:#f39c12">⚠️ Parcial</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Patrimônio</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:55%;background:linear-gradient(135deg,#f39c12,#e67e22)">55%</div></div><span class="chart-value" style="color:#f39c12">⚠️ Parcial</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Entradas (Receita)</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:15%;background:linear-gradient(135deg,#e74c3c,#c0392b)">15%</div></div><span class="chart-value" style="color:var(--danger-light)">⚠️ Parcial *</span></div>
+        <div class="chart-bar-row"><span class="chart-label">DRE</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%;background:var(--danger)"></div></div><span class="chart-value" style="color:var(--danger-light)">❌ 0%</span></div>
+        <div class="chart-bar-row"><span class="chart-label">Zootécnicos</span><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:0%;background:var(--danger)"></div></div><span class="chart-value" style="color:var(--danger-light)">❌ 0%</span></div>
+    </div>
+    <div class="alert alert-success"><span class="alert-icon">📊</span><div><strong>* Atualização v2:</strong> Com os dados de receita de diárias (R$ 544k) e estimativa de vendas de gado (R$ 2,15M), a cobertura de Entradas subiu de 0% para ~15%. Ainda insuficiente — precisa dos valores reais.</div></div>
+</div>
+
+<!-- R3: GARGALOS -->
+<div class="sub-section" id="r3Gargalos">
+    <div class="section-title">🚨 Gargalos Identificados</div>
+    <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">1</div><div class="diag-title">Gestão financeira artesanal para operação de R$ 8-10M/ano</div></div><div class="diag-desc">Maior risco: decisões de milhões baseadas em intuição e saldo do dia.</div></div>
+    <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">2</div><div class="diag-title">Ausência de DRE e fluxo de receitas</div></div><div class="diag-desc">Impossível saber se o negócio dá lucro. Vendas de R$ 2,15M em jan/26 sequer aparecem no financeiro.</div></div>
+    <div class="diag-block diag-red"><div class="diag-header"><div class="diag-number red">3</div><div class="diag-title">Vendas sem preço / Transferências intrafamiliares</div></div><div class="diag-desc">48,5% das vendas para Renato/Cephora (família), sem registro de preço. Pode mascarar resultado.</div></div>
+    <div class="diag-block diag-orange"><div class="diag-header"><div class="diag-number orange">4</div><div class="diag-title">Boitel sem precificação transparente</div></div><div class="diag-desc">R$ 544k recebidos, mas sem saber custo/cab/dia. Pode estar dando prejuízo.</div></div>
+    <div class="diag-block diag-orange"><div class="diag-header"><div class="diag-number orange">5</div><div class="diag-title">CAPEX e OPEX misturados</div></div><div class="diag-desc">Inflam custo operacional em ~R$ 400k e distorcem análise de margem.</div></div>
+    <div class="diag-block diag-yellow"><div class="diag-header"><div class="diag-number yellow">6</div><div class="diag-title">Sem planejamento de caixa prospectivo</div></div><div class="diag-desc">Caixa negativo de Mar/26 era previsível pelo padrão de 2025 — ninguém projetou.</div></div>
+</div>
+
+<!-- R3: PLANO DE AÇÃO -->
+<div class="sub-section" id="r3PlanoAcao">
+    <div class="section-title">🎯 Plano de Ação Consolidado</div>
+    <div class="section-subtitle">Prioridades para os próximos 30–60 dias</div>
+    <div class="action-card"><div class="action-priority p1">P1</div><div><div class="action-title">Levantar receitas reais (NFs, GTAs, extratos)</div><div class="action-desc">Vendas de gado + diárias — todos os créditos do período. Sem isso, nada avança.</div><div class="action-meta"><span class="tag tag-red">URGENTE</span><span class="tag tag-gold">7 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p1">P1</div><div><div class="action-title">Montar DRE Gerencial (Receita × Despesa)</div><div class="action-desc">Com receitas + saídas já mapeadas, é possível montar o primeiro resultado.</div><div class="action-meta"><span class="tag tag-red">URGENTE</span><span class="tag tag-gold">15 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p1">P1</div><div><div class="action-title">Apurar custo/cabeça/dia do confinamento</div><div class="action-desc">Calcular o custo real da diária para comparar com o que é cobrado dos terceiros.</div><div class="action-meta"><span class="tag tag-red">URGENTE</span><span class="tag tag-gold">15 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p2">P2</div><div><div class="action-title">Separar CAPEX × OPEX retroativamente</div><div class="action-desc">Reclassificar investimentos (caminhão, poço, obras) para limpar o custo operacional.</div><div class="action-meta"><span class="tag tag-orange">ALTA</span><span class="tag tag-gold">30 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p2">P2</div><div><div class="action-title">Implementar fluxo de caixa projetado 12 meses</div><div class="action-desc">Planilha/sistema com previsão mensal de entradas e saídas. Evitar surpresas.</div><div class="action-meta"><span class="tag tag-orange">ALTA</span><span class="tag tag-gold">30 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p2">P2</div><div><div class="action-title">Registrar preço em TODA venda — imediatamente</div><div class="action-desc">Preço/@, pesagem, NF, GTA. Sem exceção, inclusive transferências intrafamiliares.</div><div class="action-meta"><span class="tag tag-orange">IMEDIATO</span></div></div></div>
+    <div class="action-card"><div class="action-priority p3">P3</div><div><div class="action-title">Montar P&L por unidade (centro de custo)</div><div class="action-desc">Confinamento Toca, Fazenda Toca, VO IVA, Sítio Paraíso — cada um com seu resultado.</div><div class="action-meta"><span class="tag tag-blue">MÉDIA</span><span class="tag tag-gold">60 dias</span></div></div></div>
+    <div class="action-card"><div class="action-priority p3">P3</div><div><div class="action-title">Definir KPIs mensais e dashboard de acompanhamento</div><div class="action-desc">Custo/@, margem, mortalidade, GPD, R$/cab/dia boitel.</div><div class="action-meta"><span class="tag tag-blue">MÉDIA</span><span class="tag tag-gold">60 dias</span></div></div></div>
+
+    <div class="quote-box" style="margin-top:24px">
+        "A Fazenda Toca da Onça não precisa de um milagre — precisa de <strong>informação</strong>. Os números existem, o patrimônio é robusto, a operação tem escala. O que falta é <strong>organizar, medir e decidir com base em dados</strong>. Com 60 dias de trabalho estruturado, é possível sair do nível 3,2 para 6+ no índice de maturidade."
+        <div class="quote-author">— Rural IN, Abril/2026</div>
+    </div>
+</div>
+</div><!-- /report3 -->
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+    <div class="footer-brand">🐂 Rural IN — Inteligência em Gestão Rural</div>
+    <div class="footer-text">
+        Portal Integrado · Fazenda Toca da Onça · Proprietário: Renato Martins<br>
+        3 Relatórios Consolidados · Gerado em 13/04/2026 · Confidencial — Uso restrito<br><br>
+        <em>Valores estimados de venda baseados em CEPEA/B3 (-R$22/@ base GO). Não representam faturamento real.
+        Dados de despesas referentes a 2025. Análise sujeita a complementação com dados reais.</em>
+    </div>
+</div>
+
+</div><!-- /main-content -->
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+function handleLogin(e){
+    e.preventDefault();
+    const u=document.getElementById('username').value.trim().toLowerCase();
+    const p=document.getElementById('password').value;
+    if(u==='gestor'&&p==='ruralin2026'){
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('mainContent').classList.add('visible');
+        return false;
+    }
+    const err=document.getElementById('loginError');
+    err.classList.remove('show');
+    void err.offsetWidth;
+    err.classList.add('show');
+    return false;
+}
+
+function showReport(id){
+    document.querySelectorAll('.report-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    // Show first sub-section
+    const panel=document.getElementById(id);
+    const subs=panel.querySelectorAll('.sub-section');
+    const tabs=panel.querySelectorAll('.sub-tab');
+    subs.forEach(s=>s.classList.remove('active'));
+    tabs.forEach(t=>t.classList.remove('active'));
+    if(subs[0])subs[0].classList.add('active');
+    if(tabs[0])tabs[0].classList.add('active');
+}
+
+function showSub(prefix,id){
+    const panel=document.getElementById(prefix==='r1'?'report1':prefix==='r2'?'report2':'report3');
+    panel.querySelectorAll('.sub-section').forEach(s=>s.classList.remove('active'));
+    panel.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

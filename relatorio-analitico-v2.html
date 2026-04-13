@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazenda Toca da Onça — Relatório Analítico v2 | Rural IN</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #1a5632;
+            --primary-light: #2d7a4a;
+            --primary-dark: #0f3d22;
+            --accent: #d4a017;
+            --accent-light: #f0c940;
+            --danger: #c0392b;
+            --danger-light: #e74c3c;
+            --warning: #e67e22;
+            --info: #2980b9;
+            --success: #27ae60;
+            --bg: #f4f6f8;
+            --bg-card: #ffffff;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --text-white: #ffffff;
+            --border: #dfe6e9;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s ease;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .login-overlay.hidden {
+            opacity: 0; visibility: hidden; pointer-events: none;
+        }
+        .login-box {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideUp 0.6s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-box .logo-area {
+            margin-bottom: 30px;
+        }
+        .login-box .logo-area .icon-farm {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .login-box .logo-area h1 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .login-box .logo-area p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        .login-box .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .login-box label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+        .login-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,86,50,0.1);
+        }
+        .login-box .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+        .login-box .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26,86,50,0.3);
+        }
+        .login-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 12px;
+            display: none;
+        }
+        .login-error.show { display: block; animation: shake 0.4s ease; }
+        @keyframes shake {
+            0%,100%{ transform: translateX(0); }
+            25%{ transform: translateX(-8px); }
+            75%{ transform: translateX(8px); }
+        }
+        .login-footer {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* ===== MAIN CONTENT (hidden until login) ===== */
+        .main-content {
+            display: none;
+        }
+        .main-content.visible {
+            display: block;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            color: white;
+            padding: 40px 20px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .header-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+        .header h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        .header .subtitle { font-size: 1rem; opacity: 0.9; margin-top: 6px; }
+        .header .version-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--primary-dark);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header .date-info {
+            font-size: 0.82rem;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        /* ===== METHODOLOGY BANNER ===== */
+        .method-banner {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left: 5px solid var(--accent);
+            padding: 20px 25px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.9rem;
+        }
+        .method-banner strong { color: var(--warning); }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== KPI CARDS ===== */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .kpi-card.accent { border-top-color: var(--accent); }
+        .kpi-card.danger { border-top-color: var(--danger); }
+        .kpi-card.info { border-top-color: var(--info); }
+        .kpi-card.success { border-top-color: var(--success); }
+        .kpi-card .kpi-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .kpi-card .kpi-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-top: 6px;
+            color: var(--text);
+        }
+        .kpi-card .kpi-detail {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        .section-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-header:hover { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+        .section-header .toggle-icon {
+            margin-left: auto;
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+        .section-header .toggle-icon.collapsed { transform: rotate(-90deg); }
+        .section-body {
+            padding: 25px;
+            transition: max-height 0.4s ease;
+        }
+        .section-body.collapsed {
+            display: none;
+        }
+
+        /* ===== COMMENTS ===== */
+        .comment-box {
+            background: linear-gradient(135deg, #f0faf4, #e8f5e9);
+            border-left: 4px solid var(--success);
+            padding: 16px 20px;
+            margin: 15px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+        .comment-box.warning {
+            background: linear-gradient(135deg, #fff8e1, #fff3cd);
+            border-left-color: var(--warning);
+        }
+        .comment-box.danger {
+            background: linear-gradient(135deg, #fde8e8, #fdd);
+            border-left-color: var(--danger);
+        }
+        .comment-box.info {
+            background: linear-gradient(135deg, #e8f0fe, #d4e6fd);
+            border-left-color: var(--info);
+        }
+        .comment-box strong { color: var(--primary-dark); }
+        .comment-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .comment-box.warning .comment-label { color: var(--warning); }
+        .comment-box.danger .comment-label { color: var(--danger); }
+        .comment-box.info .comment-label { color: var(--info); }
+        .comment-box .comment-label { color: var(--success); }
+
+        /* ===== TABLES ===== */
+        .table-wrapper { overflow-x: auto; margin: 15px 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+        tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:hover { background: #f0faf4; }
+        tbody tr:nth-child(even) { background: #f9fafb; }
+        tbody tr:nth-child(even):hover { background: #f0faf4; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-bold { font-weight: 700; }
+        .text-green { color: var(--success); }
+        .text-red { color: var(--danger); }
+        .text-orange { color: var(--warning); }
+        .text-blue { color: var(--info); }
+        .row-total {
+            background: var(--primary-dark) !important;
+            color: white !important;
+            font-weight: 700;
+        }
+        .row-total td { border: none; color: white !important; }
+        .row-subtotal {
+            background: #e8f5e9 !important;
+            font-weight: 600;
+        }
+
+        /* ===== CHART BARS (CSS only) ===== */
+        .bar-chart { margin: 15px 0; }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .bar-label {
+            min-width: 160px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: right;
+        }
+        .bar-track {
+            flex: 1;
+            background: #ecf0f1;
+            border-radius: 6px;
+            height: 28px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: white;
+            transition: width 1.5s ease;
+            min-width: fit-content;
+        }
+        .bar-fill.green { background: linear-gradient(90deg, var(--success), #2ecc71); }
+        .bar-fill.blue { background: linear-gradient(90deg, var(--info), #3498db); }
+        .bar-fill.orange { background: linear-gradient(90deg, var(--warning), #f39c12); }
+        .bar-fill.red { background: linear-gradient(90deg, var(--danger), #e74c3c); }
+        .bar-fill.gold { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+        .bar-value {
+            font-size: 0.82rem;
+            font-weight: 600;
+            min-width: 100px;
+        }
+
+        /* ===== STACKED COMPARISON ===== */
+        .compare-row {
+            display: flex; gap: 15px; margin: 15px 0; flex-wrap: wrap;
+        }
+        .compare-card {
+            flex: 1; min-width: 250px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            text-align: center;
+        }
+        .compare-card h4 {
+            font-size: 0.82rem; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .compare-card .big-number {
+            font-size: 1.8rem; font-weight: 800;
+        }
+        .compare-card .big-number.green { color: var(--success); }
+        .compare-card .big-number.red { color: var(--danger); }
+        .compare-card .big-number.blue { color: var(--info); }
+        .compare-card .detail { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+
+        /* ===== ALERT BOXES ===== */
+        .alert {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .alert-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .alert-danger { background: #fde8e8; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .alert-info { background: #d4e6fd; color: #0c5460; border: 1px solid #b8daff; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+        /* ===== TIMELINE ===== */
+        .timeline { margin: 15px 0; padding-left: 20px; border-left: 3px solid var(--primary); }
+        .timeline-item { padding: 12px 0 12px 20px; position: relative; }
+        .timeline-item::before {
+            content: '';
+            position: absolute; left: -11px; top: 18px;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .timeline-item .t-date { font-weight: 700; font-size: 0.85rem; color: var(--primary); }
+        .timeline-item .t-desc { font-size: 0.85rem; margin-top: 3px; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        .footer .brand { font-weight: 700; color: var(--primary); }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .login-overlay { display: none !important; }
+            .main-content { display: block !important; }
+            .section-header .toggle-icon { display: none; }
+            .section-body.collapsed { display: block !important; }
+            body { background: white; }
+            .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .kpi-card .kpi-value { font-size: 1.3rem; }
+            .header h1 { font-size: 1.4rem; }
+            .section-body { padding: 15px; }
+            .bar-label { min-width: 100px; font-size: 0.75rem; }
+            .login-box { padding: 35px 25px; }
+        }
+        @media (max-width: 480px) {
+            .kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <div class="logo-area">
+            <span class="icon-farm">🏛️</span>
+            <h1>Fazenda Toca da Onça</h1>
+            <p>Relatório Analítico v2 — Área Restrita</p>
+        </div>
+        <form onsubmit="return handleLogin(event)">
+            <div class="input-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="off" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn-login">🔓 Acessar Relatório</button>
+            <div class="login-error" id="loginError">⚠️ Usuário ou senha incorretos. Tente novamente.</div>
+        </form>
+        <div class="login-footer">
+            <strong>Rural IN</strong> — Inteligência em Gestão Rural<br>
+            Documento confidencial · Acesso autorizado
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="main-content" id="mainContent">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-content">
+            <h1>📊 Fazenda Toca da Onça — Relatório Analítico Completo</h1>
+            <p class="subtitle">Movimentação de Rebanho · Receitas · Fluxo de Caixa · Indicadores · Diagnóstico</p>
+            <span class="version-badge">v2.0 — Atualizado</span>
+            <p class="date-info">Período: 01/01/2026 a 13/04/2026 · Gerado em: 13/04/2026 · Proprietário: Renato Martins</p>
+        </div>
+    </div>
+
+    <!-- METHODOLOGY BANNER -->
+    <div class="method-banner">
+        <strong>⚠️ NOTA METODOLÓGICA:</strong> As vendas de gado próprio em janeiro/2026 <u>não possuem preços registrados</u>.
+        Para fins de análise gerencial, os valores foram estimados com base no <strong>Indicador CEPEA/B3 de janeiro/2026
+        (~R$ 319/@, SP)</strong>, descontado o <strong>diferencial de base de R$ 22,00/@</strong> para Goiás, e aplicado rendimento
+        de carcaça de 52%. Esta precificação é <strong>estimativa</strong> e serve exclusivamente para demonstrar a necessidade de
+        precificar todas as saídas a preço de mercado, como se fossem vendas a terceiros. Somente assim é possível medir, com precisão,
+        se cada operação gera lucro ou prejuízo.
+    </div>
+
+    <div class="container">
+
+        <!-- ==================== KPI DASHBOARD ==================== -->
+        <div class="kpi-grid">
+            <div class="kpi-card success">
+                <div class="kpi-label">Receita Total Estimada</div>
+                <div class="kpi-value">R$ 2,70 Mi</div>
+                <div class="kpi-detail">Vendas gado + Diárias terceiros</div>
+            </div>
+            <div class="kpi-card accent">
+                <div class="kpi-label">Vendas de Gado (Est.)</div>
+                <div class="kpi-value">R$ 2,15 Mi</div>
+                <div class="kpi-detail">548 cabeças · Janeiro/2026</div>
+            </div>
+            <div class="kpi-card info">
+                <div class="kpi-label">Receita Diárias Terceiros</div>
+                <div class="kpi-value">R$ 544 mil</div>
+                <div class="kpi-detail">6 clientes · Fev a Abr/2026</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Estoque Inicial (01/01)</div>
+                <div class="kpi-value">1.732</div>
+                <div class="kpi-detail">487 machos · 1.245 fêmeas</div>
+            </div>
+            <div class="kpi-card danger">
+                <div class="kpi-label">Saídas (Vendas)</div>
+                <div class="kpi-value">548</div>
+                <div class="kpi-detail">cabeças vendidas em jan/2026</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Entradas (Compras)</div>
+                <div class="kpi-value">235</div>
+                <div class="kpi-detail">cabeças compradas em jan/2026</div>
+            </div>
+            <div class="kpi-card info">
+                <div class="kpi-label">Saldo Líquido Rebanho</div>
+                <div class="kpi-value text-red">-314</div>
+                <div class="kpi-detail">Redução de 18,1% no plantel</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Estoque Atual Estimado</div>
+                <div class="kpi-value">~1.418</div>
+                <div class="kpi-detail">Após movimentações jan/2026</div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 1: ESTOQUE INICIAL ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                🐄 1. Composição do Rebanho — Estoque Inicial (01/01/2026)
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="comment-box info">
+                    <span class="comment-label">📋 Análise do Consultor</span>
+                    O rebanho da Toca da Onça iniciou 2026 com <strong>1.732 cabeças</strong>, com forte predominância de fêmeas (71,9%). O perfil etário concentrado entre 13-36 meses indica um rebanho jovem, típico de operação de cria/recria com venda de fêmeas descartadas e machos engordados.
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Faixa Etária</th>
+                                <th class="text-right">Machos</th>
+                                <th class="text-right">Fêmeas</th>
+                                <th class="text-right">Total</th>
+                                <th class="text-right">% do Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0 a 12 meses (bezerros)</td>
+                                <td class="text-right">0</td>
+                                <td class="text-right">35</td>
+                                <td class="text-right text-bold">35</td>
+                                <td class="text-right">2,0%</td>
+                            </tr>
+                            <tr>
+                                <td>13 a 24 meses (desmamados/garrotes)</td>
+                                <td class="text-right">68</td>
+                                <td class="text-right">481</td>
+                                <td class="text-right text-bold">549</td>
+                                <td class="text-right">31,7%</td>
+                            </tr>
+                            <tr>
+                                <td>25 a 36 meses (novilhas/bois magros)</td>
+                                <td class="text-right">419</td>
+                                <td class="text-right">499</td>
+                                <td class="text-right text-bold">918</td>
+                                <td class="text-right">53,0%</td>
+                            </tr>
+                            <tr>
+                                <td>> 36 meses (vacas/bois gordos)</td>
+                                <td class="text-right">0</td>
+                                <td class="text-right">230</td>
+                                <td class="text-right text-bold">230</td>
+                                <td class="text-right">13,3%</td>
+                            </tr>
+                            <tr class="row-total">
+                                <td>TOTAL</td>
+                                <td class="text-right">487</td>
+                                <td class="text-right">1.245</td>
+                                <td class="text-right">1.732</td>
+                                <td class="text-right">100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Distribuição Visual do Rebanho</h4>
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <span class="bar-label">0-12m</span>
+                        <div class="bar-track"><div class="bar-fill blue" style="width:2%">35</div></div>
+                        <span class="bar-value">2,0%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">13-24m</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:31.7%">549</div></div>
+                        <span class="bar-value">31,7%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">25-36m</span>
+                        <div class="bar-track"><div class="bar-fill gold" style="width:53%">918</div></div>
+                        <span class="bar-value">53,0%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">> 36m</span>
+                        <div class="bar-track"><div class="bar-fill orange" style="width:13.3%">230</div></div>
+                        <span class="bar-value">13,3%</span>
+                    </div>
+                </div>
+
+                <div class="comment-box warning">
+                    <span class="comment-label">⚠️ Pontos de Atenção</span>
+                    <strong>1.</strong> Zero machos na faixa > 36 meses — indica que machos são vendidos/abatidos antes dos 3 anos (bom giro).<br>
+                    <strong>2.</strong> Apenas 35 bezerros (0-12m) — possível subnotificação de nascimentos ou rebanho comprado jovem.<br>
+                    <strong>3.</strong> 230 vacas > 36 meses — potencial descarte de matrizes que ocorreu logo em janeiro (vendas para José Urcesino, Charles, Renato).
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 2: MOVIMENTAÇÃO - SAÍDAS ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                📤 2. Saídas de Gado — Vendas Janeiro/2026 (548 cabeças)
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="comment-box">
+                    <span class="comment-label">📋 Análise do Consultor</span>
+                    Em apenas <strong>21 dias de janeiro</strong>, a fazenda vendeu <strong>548 cabeças</strong> — 31,6% de todo o rebanho.
+                    Este é um volume muito expressivo e indica uma decisão estratégica de redução de plantel, possivelmente para:
+                    (a) gerar caixa, (b) liberar capacidade para gado de terceiros (boitel), ou (c) descarte de categorias menos produtivas.
+                    A concentração em <strong>fêmeas (514 cab. = 93,8%)</strong> é um dado relevante que merece atenção.
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Comprador</th>
+                                <th class="text-center">Cab.</th>
+                                <th class="text-center">Sexo</th>
+                                <th class="text-center">Idade (m)</th>
+                                <th class="text-right">@/cab est.</th>
+                                <th class="text-right">Preço/@ (GO)</th>
+                                <th class="text-right">Receita Estimada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01/01</td>
+                                <td>Renato Martins</td>
+                                <td class="text-center">98</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">22</td>
+                                <td class="text-right">13,3</td>
+                                <td class="text-right">R$ 258</td>
+                                <td class="text-right text-bold">R$ 336.737</td>
+                            </tr>
+                            <tr>
+                                <td>05/01</td>
+                                <td>Kiko Castilho</td>
+                                <td class="text-center">52</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">25</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 273</td>
+                                <td class="text-right text-bold">R$ 212.940</td>
+                            </tr>
+                            <tr>
+                                <td>05/01</td>
+                                <td>Antônio R. Ferreira Filho</td>
+                                <td class="text-center">20</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">20</td>
+                                <td class="text-right">11,7</td>
+                                <td class="text-right">R$ 283</td>
+                                <td class="text-right text-bold">R$ 66.222</td>
+                            </tr>
+                            <tr>
+                                <td>06/01</td>
+                                <td>Maximum</td>
+                                <td class="text-center">6</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">27</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 297</td>
+                                <td class="text-right text-bold">R$ 26.730</td>
+                            </tr>
+                            <tr>
+                                <td>07/01</td>
+                                <td>Alceu Barbosa de Moraes</td>
+                                <td class="text-center">44</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">26</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 273</td>
+                                <td class="text-right text-bold">R$ 180.180</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>José Urcesino</td>
+                                <td class="text-center">19</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">42</td>
+                                <td class="text-right">16,7</td>
+                                <td class="text-right">R$ 263</td>
+                                <td class="text-right text-bold">R$ 83.459</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>Renato Martins (novas)</td>
+                                <td class="text-center">39</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">20</td>
+                                <td class="text-right">11,7</td>
+                                <td class="text-right">R$ 258</td>
+                                <td class="text-right text-bold">R$ 117.791</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>Renato Martins (matrizes)</td>
+                                <td class="text-center">13</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">44</td>
+                                <td class="text-right">16,7</td>
+                                <td class="text-right">R$ 263</td>
+                                <td class="text-right text-bold">R$ 57.087</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>Celso Veiga</td>
+                                <td class="text-center">23</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">23</td>
+                                <td class="text-right">13,3</td>
+                                <td class="text-right">R$ 258</td>
+                                <td class="text-right text-bold">R$ 78.895</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>Charles</td>
+                                <td class="text-center">27</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">42</td>
+                                <td class="text-right">16,7</td>
+                                <td class="text-right">R$ 263</td>
+                                <td class="text-right text-bold">R$ 118.530</td>
+                            </tr>
+                            <tr>
+                                <td>09/01</td>
+                                <td>Renato Martins (A02/A06)</td>
+                                <td class="text-center">21</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">42</td>
+                                <td class="text-right">16,7</td>
+                                <td class="text-right">R$ 263</td>
+                                <td class="text-right text-bold">R$ 92.191</td>
+                            </tr>
+                            <tr>
+                                <td>11/01</td>
+                                <td>Novato</td>
+                                <td class="text-center">47</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">26</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 273</td>
+                                <td class="text-right text-bold">R$ 192.465</td>
+                            </tr>
+                            <tr>
+                                <td>14/01</td>
+                                <td>Augusto D. V. Carvalhais</td>
+                                <td class="text-center">34</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">37</td>
+                                <td class="text-right">17,9</td>
+                                <td class="text-right">R$ 263</td>
+                                <td class="text-right text-bold">R$ 159.910</td>
+                            </tr>
+                            <tr>
+                                <td>16/01</td>
+                                <td>Alvaro</td>
+                                <td class="text-center">2</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">27</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 297</td>
+                                <td class="text-right text-bold">R$ 8.910</td>
+                            </tr>
+                            <tr>
+                                <td>16/01</td>
+                                <td>Pedro H. Campanha Silva</td>
+                                <td class="text-center">3</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">21</td>
+                                <td class="text-right">13,3</td>
+                                <td class="text-right">R$ 283</td>
+                                <td class="text-right text-bold">R$ 11.291</td>
+                            </tr>
+                            <tr>
+                                <td>16/01</td>
+                                <td>Rogério Teles</td>
+                                <td class="text-center">1</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">17</td>
+                                <td class="text-right">11,2</td>
+                                <td class="text-right">R$ 283</td>
+                                <td class="text-right text-bold">R$ 3.170</td>
+                            </tr>
+                            <tr>
+                                <td>16/01</td>
+                                <td>Elisandro Cadore</td>
+                                <td class="text-center">8</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">25</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 297</td>
+                                <td class="text-right text-bold">R$ 35.640</td>
+                            </tr>
+                            <tr>
+                                <td>21/01</td>
+                                <td>Cephora Martins</td>
+                                <td class="text-center">91</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">27</td>
+                                <td class="text-right">15,0</td>
+                                <td class="text-right">R$ 273</td>
+                                <td class="text-right text-bold">R$ 372.645</td>
+                            </tr>
+                            <tr class="row-total">
+                                <td colspan="2">TOTAL GERAL</td>
+                                <td class="text-center">548</td>
+                                <td colspan="4"></td>
+                                <td class="text-right">R$ 2.154.793</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="comment-box danger">
+                    <span class="comment-label">🚨 Alerta Crítico — Ausência de Preço Real</span>
+                    <strong>Nenhuma das 548 cabeças vendidas possui preço de venda registrado no sistema.</strong>
+                    Os valores acima são estimativas baseadas no CEPEA/B3 com desconto de R$ 22/@ (base GO).
+                    Na prática, isso significa que a fazenda não sabe — com precisão — quanto faturou com as vendas de gado próprio.
+                    <strong>Recomendação:</strong> Implementar imediatamente o registro de preço unitário (R$/@) em toda venda,
+                    com número de GTA, pesagem e nota fiscal vinculada.
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Concentração de Vendas por Comprador</h4>
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <span class="bar-label">Renato Martins</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:28%">171 cab · R$ 603.806</div></div>
+                        <span class="bar-value">31,2%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Cephora Martins</span>
+                        <div class="bar-track"><div class="bar-fill blue" style="width:17.3%">91 cab · R$ 372.645</div></div>
+                        <span class="bar-value">17,3%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Kiko Castilho</span>
+                        <div class="bar-track"><div class="bar-fill gold" style="width:9.9%">52 cab · R$ 212.940</div></div>
+                        <span class="bar-value">9,9%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Novato</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:8.9%">47 cab · R$ 192.465</div></div>
+                        <span class="bar-value">8,9%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Alceu Barbosa</span>
+                        <div class="bar-track"><div class="bar-fill blue" style="width:8.4%">44 cab · R$ 180.180</div></div>
+                        <span class="bar-value">8,4%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Augusto Carvalhais</span>
+                        <div class="bar-track"><div class="bar-fill gold" style="width:7.4%">34 cab · R$ 159.910</div></div>
+                        <span class="bar-value">7,4%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Charles</span>
+                        <div class="bar-track"><div class="bar-fill orange" style="width:5.5%">27 cab · R$ 118.530</div></div>
+                        <span class="bar-value">5,5%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Demais (6)</span>
+                        <div class="bar-track"><div class="bar-fill red" style="width:13.6%">82 cab · R$ 314.317</div></div>
+                        <span class="bar-value">14,6%</span>
+                    </div>
+                </div>
+
+                <div class="comment-box warning">
+                    <span class="comment-label">⚠️ Risco de Concentração</span>
+                    <strong>Renato Martins + Cephora Martins</strong> juntos representam <strong>48,5% das vendas</strong> (262 cab. de 548).
+                    Considerando que Renato é o próprio proprietário e Cephora provavelmente é familiar, praticamente metade do gado
+                    foi transferido dentro do grupo familiar — possivelmente a preço interno, não de mercado. Isso reforça a necessidade
+                    de <strong>precificar a preço de mercado como se fosse para terceiro</strong>.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 3: MOVIMENTAÇÃO - ENTRADAS ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                📥 3. Entradas de Gado — Compras Janeiro/2026 (235 cabeças)
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="comment-box info">
+                    <span class="comment-label">📋 Análise do Consultor</span>
+                    A fazenda comprou <strong>235 cabeças</strong> em janeiro, todas com <strong>pesagem de entrada registrada</strong> — o que é um ponto positivo de controle. A reposição foi inferior à venda (235 vs. 548), gerando uma redução líquida de 314 cabeças. Nota-se que <strong>Renato Martins é simultaneamente o maior vendedor e comprador</strong>, comprando animais mais jovens/leves para engorda.
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Fornecedor</th>
+                                <th class="text-center">Cab.</th>
+                                <th class="text-center">Sexo</th>
+                                <th class="text-center">Idade (m)</th>
+                                <th class="text-right">Peso Médio (kg)</th>
+                                <th class="text-right">Peso Total (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09/01</td>
+                                <td>João Campanha</td>
+                                <td class="text-center">31</td>
+                                <td class="text-center">30F + 1M</td>
+                                <td class="text-center">23-36</td>
+                                <td class="text-right">346 kg</td>
+                                <td class="text-right">10.729 kg</td>
+                            </tr>
+                            <tr>
+                                <td>15/01</td>
+                                <td>Luiz Vieira</td>
+                                <td class="text-center">42</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">24</td>
+                                <td class="text-right">367 kg</td>
+                                <td class="text-right">15.398 kg</td>
+                            </tr>
+                            <tr>
+                                <td>15/01</td>
+                                <td>Renato Martins</td>
+                                <td class="text-center">50</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">23</td>
+                                <td class="text-right">356 kg</td>
+                                <td class="text-right">17.797 kg</td>
+                            </tr>
+                            <tr>
+                                <td>21/01</td>
+                                <td>Renato Martins</td>
+                                <td class="text-center">58</td>
+                                <td class="text-center">F</td>
+                                <td class="text-center">24</td>
+                                <td class="text-right">254 kg</td>
+                                <td class="text-right">14.712 kg</td>
+                            </tr>
+                            <tr>
+                                <td>22/01</td>
+                                <td>Renato Martins</td>
+                                <td class="text-center">54</td>
+                                <td class="text-center">M</td>
+                                <td class="text-center">24</td>
+                                <td class="text-right">301 kg</td>
+                                <td class="text-right">16.244 kg</td>
+                            </tr>
+                            <tr class="row-total">
+                                <td colspan="2">TOTAL</td>
+                                <td class="text-center">235</td>
+                                <td colspan="2"></td>
+                                <td class="text-right">319 kg</td>
+                                <td class="text-right">74.880 kg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="comment-box warning">
+                    <span class="comment-label">⚠️ Observação Importante</span>
+                    <strong>Renato Martins forneceu 162 das 235 cabeças compradas (68,9%).</strong>
+                    Combinando com as vendas, Renato vendeu 171 cabeças e comprou 162 — um fluxo quase equivalente.
+                    Isso pode indicar: (a) renovação estratégica do plantel (vende matrizes velhas, compra animais jovens para engorda),
+                    ou (b) movimentação entre fazendas do mesmo grupo. <strong>Sem preço de compra registrado</strong>,
+                    não é possível calcular a margem real da operação.
+                </div>
+
+                <div class="comment-box">
+                    <span class="comment-label">✅ Ponto Positivo</span>
+                    Todas as entradas possuem <strong>pesagem individual registrada</strong>. Isso é essencial para cálculo futuro de
+                    ganho de peso diário (GPD), custo por @ adquirida e análise de eficiência de engorda.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 4: MORTE ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                ☠️ 4. Mortalidade — Registro de Perdas
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>ID Animal</th>
+                                <th>Sexo</th>
+                                <th>Idade (m)</th>
+                                <th>Peso (kg)</th>
+                                <th>Origem</th>
+                                <th>Prejuízo Est.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>14/01/2026</td>
+                                <td>00723</td>
+                                <td>Fêmea</td>
+                                <td>24</td>
+                                <td>246 kg</td>
+                                <td>Lote João Campanha</td>
+                                <td class="text-right text-red text-bold">~R$ 2.120</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="comment-box">
+                    <span class="comment-label">📋 Comentário</span>
+                    Apenas <strong>1 morte registrada</strong> em 3,5 meses para um rebanho de ~1.700 cabeças = taxa de mortalidade de <strong>0,06%</strong>,
+                    o que é <strong>excelente</strong> (referência pecuária: até 2% ao ano é considerado aceitável).
+                    O animal era do lote comprado de João Campanha em 09/01 (5 dias após entrada) — pode indicar estresse de transporte
+                    ou animal já debilitado na chegada.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 5: RECEITA DIÁRIAS TERCEIROS ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                💰 5. Receita de Diárias — Gado de Terceiros (Boitel)
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="comment-box info">
+                    <span class="comment-label">📋 Análise do Consultor</span>
+                    A fazenda opera um modelo de <strong>boitel (confinamento de gado de terceiros)</strong>,
+                    cobrando diárias por cabeça. No período de fevereiro a abril/2026, foram recebidos <strong>R$ 544.080,47</strong>
+                    de 6 clientes distintos. Esta receita, embora significativa, é a <strong>única fonte de receita registrada no financeiro</strong>
+                    — todas as vendas de gado próprio (~R$ 2,15 Mi estimados) não aparecem como créditos no sistema financeiro,
+                    o que é uma lacuna crítica.
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data Pgto</th>
+                                <th>Cliente</th>
+                                <th>Descrição</th>
+                                <th>Forma</th>
+                                <th class="text-right">Valor (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>24/02/2026</td>
+                                <td>Eldo Assis</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">214.276,00</td>
+                            </tr>
+                            <tr>
+                                <td>24/02/2026</td>
+                                <td>Miguel Rodrigues</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">102.675,00</td>
+                            </tr>
+                            <tr>
+                                <td>16/03/2026</td>
+                                <td>Antônio R. Ferreira Filho</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">73.711,44</td>
+                            </tr>
+                            <tr>
+                                <td>09/03/2026</td>
+                                <td>João Batista</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">70.298,00</td>
+                            </tr>
+                            <tr>
+                                <td>06/04/2026</td>
+                                <td>Jefferson Macedo Lisboa</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">67.996,80</td>
+                            </tr>
+                            <tr>
+                                <td>08-09/03</td>
+                                <td>João Campanha (2 pgtos)</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">14.117,12</td>
+                            </tr>
+                            <tr>
+                                <td>24/03/2026</td>
+                                <td>Wilson</td>
+                                <td>PG DIARIAS</td>
+                                <td>PIX/Sicoob</td>
+                                <td class="text-right text-bold">1.006,11</td>
+                            </tr>
+                            <tr class="row-total">
+                                <td colspan="4">TOTAL RECEITA DIÁRIAS</td>
+                                <td class="text-right">R$ 544.080,47</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Distribuição por Mês</h4>
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <span class="bar-label">Fevereiro/2026</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:58.3%">R$ 316.951,00</div></div>
+                        <span class="bar-value">58,3%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Março/2026</span>
+                        <div class="bar-track"><div class="bar-fill blue" style="width:29.2%">R$ 159.132,67</div></div>
+                        <span class="bar-value">29,2%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Abril/2026</span>
+                        <div class="bar-track"><div class="bar-fill gold" style="width:12.5%">R$ 67.996,80</div></div>
+                        <span class="bar-value">12,5%</span>
+                    </div>
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Participação por Cliente</h4>
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <span class="bar-label">Eldo Assis</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:39.4%">R$ 214.276</div></div>
+                        <span class="bar-value">39,4%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Miguel Rodrigues</span>
+                        <div class="bar-track"><div class="bar-fill blue" style="width:18.9%">R$ 102.675</div></div>
+                        <span class="bar-value">18,9%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Antônio R. F. Filho</span>
+                        <div class="bar-track"><div class="bar-fill gold" style="width:13.5%">R$ 73.711</div></div>
+                        <span class="bar-value">13,5%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">João Batista</span>
+                        <div class="bar-track"><div class="bar-fill orange" style="width:12.9%">R$ 70.298</div></div>
+                        <span class="bar-value">12,9%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Jefferson M. Lisboa</span>
+                        <div class="bar-track"><div class="bar-fill green" style="width:12.5%">R$ 67.997</div></div>
+                        <span class="bar-value">12,5%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Outros (2)</span>
+                        <div class="bar-track"><div class="bar-fill red" style="width:2.8%">R$ 15.123</div></div>
+                        <span class="bar-value">2,8%</span>
+                    </div>
+                </div>
+
+                <div class="comment-box warning">
+                    <span class="comment-label">⚠️ Dados Ausentes para Análise Completa</span>
+                    Para calcular a <strong>rentabilidade real do boitel</strong>, precisamos saber:<br>
+                    • Número de cabeças por cliente (para calcular R$/cab/dia)<br>
+                    • Data de entrada e saída dos lotes de terceiros<br>
+                    • Custos diretos por cabeça (ração, mão de obra alocada, sanidade)<br>
+                    <strong>Sem esses dados, não é possível afirmar se o boitel é lucrativo.</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 6: RECEITA TOTAL CONSOLIDADA ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                📊 6. Receita Total Consolidada — Janeiro a Abril/2026
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="compare-row">
+                    <div class="compare-card">
+                        <h4>Vendas de Gado Próprio (Est.)</h4>
+                        <div class="big-number green">R$ 2.154.793</div>
+                        <div class="detail">548 cabeças · Jan/2026 · Preço CEPEA -R$22/@</div>
+                    </div>
+                    <div class="compare-card">
+                        <h4>Diárias Terceiros (Real)</h4>
+                        <div class="big-number blue">R$ 544.080</div>
+                        <div class="detail">6 clientes · Fev-Abr/2026 · Valor efetivamente recebido</div>
+                    </div>
+                    <div class="compare-card">
+                        <h4>Receita Total Estimada</h4>
+                        <div class="big-number green">R$ 2.698.873</div>
+                        <div class="detail">80% gado próprio · 20% boitel</div>
+                    </div>
+                </div>
+
+                <div class="comment-box">
+                    <span class="comment-label">📋 Análise do Consultor</span>
+                    A operação mostra duas fontes de receita bem definidas:<br><br>
+                    <strong>1. Venda de gado próprio (~80%)</strong> — concentrada em janeiro, com movimentação massiva de fêmeas.
+                    A ausência de preço real impede análise de margem, mas a estimativa indica faturamento robusto.<br><br>
+                    <strong>2. Diárias de terceiros (~20%)</strong> — receita recorrente mensal, com ticket médio de R$ 155 mil/mês.
+                    Funciona como "aluguel da estrutura" e tende a ter margem alta se a ociosidade de pasto for aproveitada.<br><br>
+                    <strong>Conclusão:</strong> Existe receita — e significativa. O problema nunca foi falta de faturamento,
+                    mas sim a <strong>incapacidade de medir se o faturamento cobre os custos e gera lucro</strong>.
+                </div>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>Receita de venda de gado próprio NÃO aparece no sistema financeiro.</strong>
+                        Os R$ 2,15 Mi estimados de vendas em janeiro não foram encontrados como créditos no relatório de movimentação bancária.
+                        Possíveis motivos: pagamento direto ao proprietário em conta pessoal, pagamento a prazo ainda não vencido, ou
+                        simplesmente ausência de lançamento. <strong>Este é o item #1 a ser esclarecido com Renato.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 7: PREMISSAS E METODOLOGIA ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                📐 7. Premissas e Metodologia de Precificação
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="comment-box info">
+                    <span class="comment-label">ℹ️ Por que precificar a preço de mercado?</span>
+                    Toda saída de gado — seja venda para terceiro, transferência entre fazendas, ou descarte —
+                    deve ser precificada <strong>como se fosse uma venda a mercado</strong>. Esse é o único caminho para:<br>
+                    • Saber se a operação deu lucro ou prejuízo<br>
+                    • Comparar o desempenho com outras fazendas<br>
+                    • Identificar categorias que valem mais ou menos a pena criar<br>
+                    • Tomar decisões de compra, venda e retenção com base em dados reais
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Tabela de Referência Utilizada</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parâmetro</th>
+                                <th>Valor</th>
+                                <th>Fonte</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Indicador Boi Gordo CEPEA/B3 (SP) — Média Jan/2026</td>
+                                <td class="text-bold">R$ 319,00/@</td>
+                                <td>CEPEA/Esalq/USP</td>
+                            </tr>
+                            <tr>
+                                <td>Diferencial de base (SP → GO)</td>
+                                <td class="text-bold text-red">- R$ 22,00/@</td>
+                                <td>Média Scot Consultoria</td>
+                            </tr>
+                            <tr>
+                                <td>Boi Gordo Referência (GO)</td>
+                                <td class="text-bold">R$ 297,00/@</td>
+                                <td>Calculado</td>
+                            </tr>
+                            <tr>
+                                <td>Vaca Gorda Referência (GO)</td>
+                                <td class="text-bold">R$ 263,00/@</td>
+                                <td>CEPEA ~R$285 - R$22</td>
+                            </tr>
+                            <tr>
+                                <td>Novilha 24-36m (GO)</td>
+                                <td class="text-bold">R$ 273,00/@</td>
+                                <td>Estimativa entre vaca e boi</td>
+                            </tr>
+                            <tr>
+                                <td>Fêmea jovem 13-24m (GO)</td>
+                                <td class="text-bold">R$ 258,00/@</td>
+                                <td>Estimativa com deságio jovem</td>
+                            </tr>
+                            <tr>
+                                <td>Macho 13-24m (GO)</td>
+                                <td class="text-bold">R$ 283,00/@</td>
+                                <td>Estimativa garrote</td>
+                            </tr>
+                            <tr>
+                                <td>Rendimento de carcaça</td>
+                                <td class="text-bold">52%</td>
+                                <td>Padrão nelore/anelorado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 style="margin:20px 0 10px; color:var(--primary);">Peso Vivo Estimado por Idade (quando não há pesagem)</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Idade (meses)</th>
+                                <th class="text-right">Peso Vivo Est. (kg)</th>
+                                <th class="text-right">@ Estimadas</th>
+                                <th>Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>17-20</td><td class="text-right">350</td><td class="text-right">11,7</td><td>Garrote/Novilha jovem</td></tr>
+                            <tr><td>21-23</td><td class="text-right">400</td><td class="text-right">13,3</td><td>Animal em fase de engorda</td></tr>
+                            <tr><td>25-27</td><td class="text-right">450</td><td class="text-right">15,0</td><td>Novilha/Boi magro</td></tr>
+                            <tr><td>37</td><td class="text-right">536</td><td class="text-right">17,9</td><td>Peso real (lote Augusto)</td></tr>
+                            <tr><td>42-44</td><td class="text-right">500</td><td class="text-right">16,7</td><td>Vaca madura / descarte</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Limitações conhecidas desta estimativa:</strong><br>
+                        • Pesos estimados podem variar ±15% da realidade<br>
+                        • Preço real de venda pode ter sido maior ou menor que a referência CEPEA<br>
+                        • Vendas intrafamiliares (Renato/Cephora) provavelmente tiveram preço diferente do mercado<br>
+                        • Não considera bonificações, descontos ou deduções de frete/funrural<br>
+                        • A única forma de ter precisão é <strong>registrar o preço real em cada venda</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 8: LINHA DO TEMPO ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                📅 8. Linha do Tempo — Eventos Principais (Jan-Abr/2026)
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="t-date">01/01/2026</div>
+                        <div class="t-desc">Venda de <strong>98 fêmeas</strong> (22m) para Renato Martins</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">05/01/2026</div>
+                        <div class="t-desc">Venda de <strong>52 fêmeas</strong> (Kiko Castilho) + <strong>20 machos</strong> (Antônio Ricardo)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">06/01/2026</div>
+                        <div class="t-desc">Venda de <strong>6 machos</strong> (27m) para Maximum</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">07/01/2026</div>
+                        <div class="t-desc">Venda de <strong>44 fêmeas</strong> (26m) para Alceu Barbosa de Moraes</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">09/01/2026</div>
+                        <div class="t-desc">📤 Dia de maior movimentação: <strong>153 saídas</strong> (Urcesino, Renato, Celso Veiga, Charles) + 📥 <strong>31 compras</strong> (João Campanha)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">11/01/2026</div>
+                        <div class="t-desc">Venda de <strong>47 fêmeas</strong> (26m) para Novato</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">14/01/2026</div>
+                        <div class="t-desc">Venda de <strong>34 fêmeas</strong> (37m) para Augusto Carvalhais (com pesagem: média 536kg) + ☠️ 1 morte</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">15/01/2026</div>
+                        <div class="t-desc">📥 Compra de <strong>92 machos</strong> (Luiz Vieira: 42 + Renato: 50) — reposição para engorda</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">16/01/2026</div>
+                        <div class="t-desc">Vendas diversas: Alvaro (2M), Pedro Campanha (3M), Rogério Teles (1M), Elisandro Cadore (8M)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">21/01/2026</div>
+                        <div class="t-desc">📤 Venda massiva: <strong>91 fêmeas</strong> para Cephora Martins + 📥 Compra de <strong>58 fêmeas</strong> (Renato)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">22/01/2026</div>
+                        <div class="t-desc">📥 Compra de <strong>54 machos</strong> de Renato Martins</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">24/02/2026</div>
+                        <div class="t-desc">💰 Recebimento de diárias: Eldo Assis (R$ 214k) + Miguel Rodrigues (R$ 103k)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">08-24/03/2026</div>
+                        <div class="t-desc">💰 Recebimentos: J. Batista (R$ 70k), Antônio Ricardo (R$ 74k), J. Campanha (R$ 14k), Wilson (R$ 1k)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="t-date">06/04/2026</div>
+                        <div class="t-desc">💰 Recebimento diária: Jefferson Macedo Lisboa (R$ 68k)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 9: ALERTAS E GAPS ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                🚨 9. Alertas Críticos e Gaps de Informação
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="alert alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>1. ZERO preço registrado nas vendas de gado.</strong><br>
+                        548 cabeças vendidas sem valor unitário. Impossível calcular receita real, margem bruta ou rentabilidade por lote.
+                    </div>
+                </div>
+                <div class="alert alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>2. Receita de vendas não aparece no financeiro.</strong><br>
+                        Os ~R$ 2,15 Mi em vendas de janeiro não constam como crédito no sistema. Dinheiro pode ter ido para conta pessoal do proprietário,
+                        estar pendente de pagamento, ou simplesmente não ter sido lançado. Necessário esclarecer.
+                    </div>
+                </div>
+                <div class="alert alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>3. Sem preço de compra dos 235 animais adquiridos.</strong><br>
+                        As entradas possuem peso mas não têm preço/@ de aquisição. Sem custo de reposição, não se calcula ROI da engorda.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">🟡</span>
+                    <div>
+                        <strong>4. Dados de despesas de 2026 não disponíveis.</strong><br>
+                        Temos apenas o referencial de 2025. Sem despesas reais, não é possível montar o DRE (Demonstração de Resultado) nem calcular lucro/prejuízo.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">🟡</span>
+                    <div>
+                        <strong>5. Qtd de cabeças de terceiros por cliente desconhecida.</strong><br>
+                        Não sabemos quantas cabeças cada cliente de boitel tem na fazenda, impossibilitando cálculo de R$/cab/dia.
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">🟡</span>
+                    <div>
+                        <strong>6. Vendas intrafamiliares sem transparência de preço.</strong><br>
+                        Renato (proprietário) + Cephora Martins = 48,5% das vendas. Sem preço, pode haver transferência patrimonial mascarada.
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <span class="alert-icon">🔵</span>
+                    <div>
+                        <strong>7. Receita de venda de gado próprio existe mas não foi enviada.</strong><br>
+                        O proprietário informou que há receita de vendas, mas não houve tempo para levantamento. Item a ser coletado nas próximas etapas.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEÇÃO 10: PLANO DE AÇÃO ==================== -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                🎯 10. Plano de Ação — Próximos Passos Prioritários
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Ação</th>
+                                <th class="text-center">Prioridade</th>
+                                <th class="text-center">Prazo</th>
+                                <th>Responsável</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center text-bold">1</td>
+                                <td><strong>Levantar receita real de vendas de gado</strong> — notas fiscais, GTAs, extratos de pagamento</td>
+                                <td class="text-center"><span style="color:var(--danger);font-weight:700;">URGENTE</span></td>
+                                <td class="text-center">7 dias</td>
+                                <td>Renato / Contador</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">2</td>
+                                <td><strong>Levantar preço de compra</strong> dos 235 animais adquiridos (R$/@)</td>
+                                <td class="text-center"><span style="color:var(--danger);font-weight:700;">URGENTE</span></td>
+                                <td class="text-center">7 dias</td>
+                                <td>Renato / Contador</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">3</td>
+                                <td><strong>Obter extrato de despesas Jan-Abr/2026</strong> para montar DRE gerencial</td>
+                                <td class="text-center"><span style="color:var(--danger);font-weight:700;">URGENTE</span></td>
+                                <td class="text-center">7 dias</td>
+                                <td>Renato / Financeiro</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">4</td>
+                                <td><strong>Mapear cabeças de terceiros por cliente</strong> — qtd, data entrada, contrato, valor da diária</td>
+                                <td class="text-center"><span style="color:var(--warning);font-weight:700;">ALTA</span></td>
+                                <td class="text-center">15 dias</td>
+                                <td>Gerente fazenda</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">5</td>
+                                <td><strong>Implementar registro de preço em TODA venda</strong> — preço/@, pesagem, NF, GTA</td>
+                                <td class="text-center"><span style="color:var(--warning);font-weight:700;">ALTA</span></td>
+                                <td class="text-center">Imediato</td>
+                                <td>Gerente / Sistema</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">6</td>
+                                <td><strong>Esclarecer destino financeiro das vendas de janeiro</strong> — para qual conta foi o pagamento?</td>
+                                <td class="text-center"><span style="color:var(--warning);font-weight:700;">ALTA</span></td>
+                                <td class="text-center">7 dias</td>
+                                <td>Renato</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">7</td>
+                                <td><strong>Calcular custo por cabeça do boitel</strong> (ração, mão de obra, sanidade, estrutura)</td>
+                                <td class="text-center"><span style="color:var(--info);font-weight:700;">MÉDIA</span></td>
+                                <td class="text-center">30 dias</td>
+                                <td>Rural IN + Gerente</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">8</td>
+                                <td><strong>Montar DRE Gerencial completo</strong> com receitas reais + despesas reais</td>
+                                <td class="text-center"><span style="color:var(--info);font-weight:700;">MÉDIA</span></td>
+                                <td class="text-center">30 dias</td>
+                                <td>Rural IN</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">9</td>
+                                <td><strong>Definir KPIs mensais</strong> — custo/@, margem bruta, taxa de mortalidade, GPD, R$/cab/dia boitel</td>
+                                <td class="text-center"><span style="color:var(--info);font-weight:700;">MÉDIA</span></td>
+                                <td class="text-center">30 dias</td>
+                                <td>Rural IN</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center text-bold">10</td>
+                                <td><strong>Pesagem periódica do rebanho</strong> — implementar pesagem a cada 45-60 dias para controle de GPD</td>
+                                <td class="text-center"><span style="color:var(--text-light);font-weight:700;">NORMAL</span></td>
+                                <td class="text-center">60 dias</td>
+                                <td>Gerente fazenda</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="comment-box">
+                    <span class="comment-label">📋 Comentário Final</span>
+                    A Fazenda Toca da Onça tem <strong>escala, patrimônio e operação ativa</strong> — vendeu mais de R$ 2 milhões em gado
+                    em um único mês e recebe receita recorrente de boitel. O potencial é evidente.<br><br>
+                    No entanto, a <strong>gestão financeira não acompanhou o crescimento da operação</strong>. Sem preços nas vendas,
+                    sem DRE, sem custo por cabeça — é como pilotar um avião sem painel de instrumentos.
+                    O trabalho agora é <strong>construir esse painel</strong>, item por item, para que o Renato possa tomar
+                    decisões baseadas em números reais, e não em intuição.<br><br>
+                    <strong>Os próximos 30 dias são decisivos.</strong> Com os dados dos itens 1 a 3 do plano de ação,
+                    será possível entregar um DRE gerencial completo e responder à pergunta fundamental:
+                    <em>"A Fazenda Toca da Onça dá lucro?"</em>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <span class="brand">Rural IN</span> — Inteligência em Gestão Rural<br>
+        Relatório Analítico v2.0 · Fazenda Toca da Onça · Proprietário: Renato Martins<br>
+        Gerado em 13/04/2026 · Documento confidencial — uso restrito<br><br>
+        <em>Este relatório contém estimativas baseadas em dados públicos (CEPEA/B3) e informações fornecidas pela administração.
+        Os valores estimados de venda de gado NÃO representam valores reais faturados e servem exclusivamente como referência gerencial.</em>
+    </div>
+
+</div><!-- /main-content -->
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+    // === LOGIN ===
+    function handleLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById('username').value.trim().toLowerCase();
+        const pass = document.getElementById('password').value;
+
+        if (user === 'gestor' && pass === 'ruralin2026') {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('mainContent').classList.add('visible');
+            return false;
+        }
+
+        const errorEl = document.getElementById('loginError');
+        errorEl.classList.remove('show');
+        void errorEl.offsetWidth; // trigger reflow for animation
+        errorEl.classList.add('show');
+        return false;
+    }
+
+    // === TOGGLE SECTIONS ===
+    function toggleSection(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector('.toggle-icon');
+        body.classList.toggle('collapsed');
+        icon.classList.toggle('collapsed');
+    }
+
+    // === AUTO-EXPAND ALL ON LOAD ===
+    document.addEventListener('DOMContentLoaded', function() {
+        // All sections start expanded
+        document.querySelectorAll('.section-body').forEach(b => b.classList.remove('collapsed'));
+    });
+</script>
+
+</body>
+</html>
