@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posição B3 — Fazenda Toca da Onça | 28/04/2026 — Dia 23</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <style>
+        :root{--primary:#1a5c2a;--primary-light:#2d8a44;--primary-dark:#0f3d1a;--accent:#d4a017;--accent-light:#f0c950;--bg-dark:#0b1a0f;--bg-card:#12231a;--bg-card-alt:#162b1f;--text-primary:#e8f0eb;--text-secondary:#a3b8a9;--text-muted:#6b8570;--green:#22c55e;--green-bg:rgba(34,197,94,.12);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#eab308;--yellow-bg:rgba(234,179,8,.12);--blue:#3b82f6;--border:#1e3a28}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg-dark);color:var(--text-primary);line-height:1.6;min-height:100vh}.container{max-width:1100px;margin:0 auto;padding:20px}
+        .header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);border-radius:16px;padding:40px;margin-bottom:24px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08)}.header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(212,160,23,.15) 0%,transparent 70%);border-radius:50%}.header-content{position:relative;z-index:1}.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.4);color:var(--accent-light);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px}.header h1{font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px}.header h2{font-size:1.05rem;font-weight:400;color:rgba(255,255,255,.7);margin-bottom:20px}.header-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.header-info-item{background:rgba(0,0,0,.2);border-radius:10px;padding:12px 16px;border:1px solid rgba(255,255,255,.06)}.header-info-item .label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:2px}.header-info-item .value{font-size:.95rem;font-weight:600;color:#fff}
+        .section-title{display:flex;align-items:center;gap:12px;margin-bottom:20px;margin-top:8px}.section-title .icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}.section-title .icon.boi{background:linear-gradient(135deg,#1a5c2a,#2d8a44)}.section-title .icon.milho{background:linear-gradient(135deg,#d97706,#f59e0b)}.section-title .icon.collar{background:linear-gradient(135deg,#7c3aed,#a855f7)}.section-title .icon.tech{background:linear-gradient(135deg,#0891b2,#22d3ee)}.section-title .icon.fund{background:linear-gradient(135deg,#3b82f6,#60a5fa)}.section-title .icon.vis{background:linear-gradient(135deg,#6366f1,#818cf8)}.section-title .icon.gap{background:linear-gradient(135deg,#0891b2,#22d3ee)}.section-title h3{font-size:1.3rem;font-weight:700}.section-title h3 span{font-weight:400;color:var(--text-secondary);font-size:.9rem}
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+        .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px}.kpi-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}.kpi-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}.kpi-box.green::before{background:var(--green)}.kpi-box.red::before{background:var(--red)}.kpi-box.yellow::before{background:var(--yellow)}.kpi-box.blue::before{background:var(--blue)}.kpi-box.purple::before{background:#a855f7}.kpi-box.cyan::before{background:#22d3ee}.kpi-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:6px}.kpi-value{font-size:1.5rem;font-weight:800;letter-spacing:-.5px}.kpi-sub{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+        .table-wrapper{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:.85rem}thead th{background:var(--bg-card-alt);padding:12px 14px;text-align:center;font-weight:600;color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border)}tbody td{padding:11px 14px;border-bottom:1px solid rgba(30,58,40,.5);text-align:center}tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:rgba(45,138,68,.06)}
+        .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:.74rem;font-weight:600}.tag-green{background:var(--green-bg);color:var(--green)}.tag-red{background:var(--red-bg);color:var(--red)}.tag-yellow{background:var(--yellow-bg);color:var(--yellow)}.tag-blue{background:rgba(59,130,246,.12);color:var(--blue)}.tag-purple{background:rgba(168,85,247,.12);color:#a855f7}.tag-cyan{background:rgba(34,211,238,.12);color:#22d3ee}
+        .chart-container{position:relative;width:100%;margin:16px 0}.chart-container.large{height:400px}.chart-container.medium{height:340px}.chart-container.small{height:260px}
+        .highlight-box{border-radius:14px;padding:20px 24px;margin-bottom:20px;text-align:center;border:1px solid}.highlight-box.cyan{background:linear-gradient(135deg,rgba(8,145,178,.06),rgba(8,145,178,.02));border-color:rgba(8,145,178,.25)}.highlight-box.green{background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.02));border-color:rgba(34,197,94,.2)}.highlight-box.yellow{background:linear-gradient(135deg,rgba(234,179,8,.06),rgba(234,179,8,.02));border-color:rgba(234,179,8,.25)}.highlight-box.blue{background:linear-gradient(135deg,rgba(59,130,246,.06),rgba(59,130,246,.02));border-color:rgba(59,130,246,.25)}.highlight-box .hl-emoji{font-size:2rem;margin-bottom:8px}.highlight-box .hl-title{font-size:1rem;font-weight:700;margin-bottom:6px}.highlight-box .hl-text{font-size:.88rem;color:var(--text-secondary);line-height:1.7}
+        .rec-box{border-radius:12px;padding:20px 24px;margin:14px 0;border-left:4px solid}.rec-box.hold{background:var(--green-bg);border-color:var(--green)}.rec-box.warn{background:var(--yellow-bg);border-color:var(--yellow)}.rec-box.info{background:rgba(59,130,246,.08);border-color:var(--blue)}.rec-box.tech{background:rgba(34,211,238,.06);border-color:#22d3ee}.rec-box h4{font-size:.95rem;font-weight:700;margin-bottom:8px}.rec-box.hold h4{color:var(--green)}.rec-box.warn h4{color:var(--yellow)}.rec-box.info h4{color:var(--blue)}.rec-box.tech h4{color:#22d3ee}.rec-box p{font-size:.88rem;color:var(--text-secondary);line-height:1.7}
+        .alert-bar{border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;border:1px solid}.alert-bar.yellow{background:linear-gradient(135deg,rgba(234,179,8,.1),rgba(234,179,8,.03));border-color:rgba(234,179,8,.3)}.alert-bar.green{background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border-color:rgba(34,197,94,.3)}.alert-bar.red{background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(239,68,68,.03));border-color:rgba(239,68,68,.3)}.alert-bar.blue{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(59,130,246,.03));border-color:rgba(59,130,246,.3)}.alert-bar .alert-icon{font-size:1.5rem;flex-shrink:0}.alert-bar .alert-text{font-size:.88rem;color:var(--text-secondary);line-height:1.5}.alert-bar .alert-text strong{color:var(--text-primary)}
+        .philosophy-banner{background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:14px;padding:32px;text-align:center;margin:24px 0;border:1px solid rgba(255,255,255,.08)}.philosophy-banner .emoji{font-size:2.2rem;margin-bottom:12px}.philosophy-banner h4{font-size:1.1rem;color:var(--accent-light);margin-bottom:8px}.philosophy-banner p{color:rgba(255,255,255,.7);font-size:.92rem;max-width:700px;margin:0 auto;line-height:1.7}
+        .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--accent),var(--border),transparent);margin:32px 0}
+        .day-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:24px;font-size:.82rem;font-weight:700;letter-spacing:1px;margin-bottom:16px}.day-badge.green{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac}.day-badge.red{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5}.day-badge.yellow{background:rgba(234,179,8,.15);border:1px solid rgba(234,179,8,.4);color:#fde047}
+        .compare-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:20px 0}.compare-card{border-radius:14px;padding:18px;border:1px solid;text-align:center}.compare-card.d20{background:linear-gradient(135deg,rgba(107,133,112,.06),rgba(107,133,112,.02));border-color:rgba(107,133,112,.25)}.compare-card.d23{background:linear-gradient(135deg,rgba(234,179,8,.06),rgba(234,179,8,.02));border-color:rgba(234,179,8,.25)}.compare-card.fisico{background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.02));border-color:rgba(34,197,94,.25)}.compare-card h4{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;color:var(--text-muted)}.compare-card .cv{font-size:1.6rem;font-weight:800}.compare-card .csub{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+        .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.tech-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px}.tech-card h5{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}.tech-card .tc-list{display:flex;flex-direction:column;gap:8px}.tech-card .tc-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card-alt);border-radius:8px;font-size:.84rem}.tech-card .tc-item .tc-l{color:var(--text-secondary)}.tech-card .tc-item .tc-v{font-weight:700}
+        .footer{margin-top:32px;padding:32px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px}.footer-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}.footer-info h4{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:2px}.footer-info .ftitle{font-size:.82rem;color:var(--green);font-weight:600;margin-bottom:4px}.footer-info .fsubtitle{font-size:.8rem;color:var(--text-muted);margin-bottom:12px;line-height:1.6;font-style:italic}.footer-contact{display:flex;flex-direction:column;gap:6px}.footer-contact a,.footer-contact span{font-size:.84rem;color:var(--text-secondary);text-decoration:none;display:flex;align-items:center;gap:8px}.footer-contact a:hover{color:var(--green)}.footer-logo{text-align:right}.footer-logo .brand{font-size:1.8rem;font-weight:800;color:var(--primary-light);letter-spacing:-1px}.footer-logo .brand span{color:var(--accent)}.footer-logo .tagline{font-size:.72rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}.disclaimer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted);text-align:center;line-height:1.6}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.animate{animation:fadeInUp .5s ease-out forwards}.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+        @media(max-width:768px){.container{padding:12px}.header{padding:24px}.header h1{font-size:1.5rem}.compare-grid,.tech-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr;text-align:center}.footer-logo{text-align:center}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header animate">
+        <div class="header-content">
+            <div class="day-badge yellow">📊 DIA 23 — BGIU26 R$ 342,70 (▼ −0,90%) | Análise técnica e fundamentalista completa</div>
+            <div class="header-badge">🐂 Posição B3 — Fazenda Toca da Onça</div>
+            <h1>Informe de Mercado — 28/04/2026</h1>
+            <h2>Terça-feira | BGIU26 testando suporte | Cepea físico cai 5 pregões | Milho safrinha confirma queda mensal de 6,3% (CCMK26)</h2>
+            <div class="header-info">
+                <div class="header-info-item"><div class="label">BGIU26 (Set/26)</div><div class="value">R$ 342,70/@ <span style="color:#ef4444;font-size:.82rem">▼ −0,90%</span></div></div>
+                <div class="header-info-item"><div class="label">Cepea Físico SP (27/04)</div><div class="value">R$ 360,70/@ <span style="color:#ef4444;font-size:.82rem">▼ 5 pregões ▼</span></div></div>
+                <div class="header-info-item"><div class="label">Milho CCMU26</div><div class="value">R$ 71,85/sc <span style="color:#ef4444;font-size:.82rem">▼ −1,03% mês</span></div></div>
+                <div class="header-info-item"><div class="label">Dias até vencimento SET/26</div><div class="value">155 dias</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div class="alert-bar yellow animate delay-1">
+        <div class="alert-icon">📉</div>
+        <div class="alert-text">
+            <strong>BGIU26 fechou em R$ 342,70 (−0,90% no dia, −2,20% no mês).</strong> Acumulado da semana: −0,98%. No ano, ainda preserva +0,94%. Suporte importante em R$ 339,85 (mínima de 15/04) sendo testado. Próximo nível-chave abaixo: R$ 335 (PUT).
+        </div>
+    </div>
+
+    <div class="alert-bar yellow animate delay-1">
+        <div class="alert-icon">📊</div>
+        <div class="alert-text">
+            <strong>Cepea físico SP encadeou 5 quedas consecutivas:</strong> R$ 366 (20/04) → <strong>R$ 360,70 (27/04)</strong>. Acumulado: −R$ 5,30/@ (−1,45%). Globo Rural: <em>"piora das pastagens em GO/MG/sul de MG pressiona vendedores."</em>
+        </div>
+    </div>
+
+    <div class="alert-bar blue animate delay-1">
+        <div class="alert-icon">🌽</div>
+        <div class="alert-text">
+            <strong>Milho confirma reversão:</strong> CCMK26 (Mai/26) acumula <strong>−6,31% no mês</strong> e −8,45% no ano. Safrinha confirmada com chuvas regulares retira o prêmio climático. Boa notícia para confinador: relação Boi/Milho na melhor faixa do ano.
+        </div>
+    </div>
+
+    <!-- ======== POSIÇÃO ATUAL ======== -->
+    <div class="section-title animate delay-1"><div class="icon boi">🐂</div><h3>Posição BGIU26 — Setembro/2026 <span>| Cenário atual da operação</span></h3></div>
+
+    <div class="kpi-row animate delay-1">
+        <div class="kpi-box yellow">
+            <div class="kpi-label">BGIU26 Fechamento</div>
+            <div class="kpi-value" style="color:var(--yellow)">R$ 342,70</div>
+            <div class="kpi-sub">▼ −R$ 3,10 (−0,90%) | Sem.: −0,98%</div>
+        </div>
+        <div class="kpi-box red">
+            <div class="kpi-label">P&L vs Entrada (347)</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 4,30/@</div>
+            <div class="kpi-sub">−R$ 1.419/contrato</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Físico SP (Cepea)</div>
+            <div class="kpi-value" style="color:var(--green)">R$ 360,70</div>
+            <div class="kpi-sub">5 pregões ▼ | −R$ 5,30 do pico</div>
+        </div>
+        <div class="kpi-box cyan">
+            <div class="kpi-label">Gap Físico × Futuro</div>
+            <div class="kpi-value" style="color:#22d3ee">R$ 18,00</div>
+            <div class="kpi-sub">Convergência iniciada — saudável</div>
+        </div>
+    </div>
+
+    <!-- Comparativo curto -->
+    <div class="compare-grid animate delay-1">
+        <div class="compare-card d20">
+            <h4>📅 Quinta (23/04)</h4>
+            <div class="cv" style="color:var(--yellow)">R$ 340,95</div>
+            <div class="csub">Mín: 337,50 | Máx: 342,00</div>
+        </div>
+        <div class="compare-card d23">
+            <h4 style="color:var(--yellow)">📅 Hoje (28/04)</h4>
+            <div class="cv" style="color:var(--yellow)">R$ 342,70</div>
+            <div class="csub">Recuou no dia, mas acima da quinta</div>
+        </div>
+        <div class="compare-card fisico">
+            <h4 style="color:var(--green)">📊 Físico Cepea</h4>
+            <div class="cv" style="color:var(--green)">R$ 360,70</div>
+            <div class="csub">5 quedas seguidas | piora pastagens</div>
+        </div>
+    </div>
+
+    <!-- Evolução completa -->
+    <div class="card animate delay-2">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📊 Evolução BGIU26 — 23 Dias de Acompanhamento</h4>
+        <div class="chart-container medium"><canvas id="evolucaoChart"></canvas></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== ANÁLISE TÉCNICA BOI ======== -->
+    <div class="section-title animate delay-2"><div class="icon tech">📐</div><h3>Análise Técnica — BGIU26 <span>| Suportes, resistências e momentum</span></h3></div>
+
+    <div class="tech-grid animate delay-2">
+        <div class="tech-card">
+            <h5>🎯 Níveis de Suporte</h5>
+            <div class="tc-list">
+                <div class="tc-item"><span class="tc-l">S1 — Mínima recente</span><span class="tc-v" style="color:var(--yellow)">R$ 339,85</span></div>
+                <div class="tc-item"><span class="tc-l">S2 — Suporte psicológico</span><span class="tc-v" style="color:var(--yellow)">R$ 337,50</span></div>
+                <div class="tc-item"><span class="tc-l">S3 — Strike PUT (chave)</span><span class="tc-v" style="color:var(--red)">R$ 335,00</span></div>
+                <div class="tc-item"><span class="tc-l">S4 — Suporte forte</span><span class="tc-v" style="color:var(--red)">R$ 328,85</span></div>
+            </div>
+        </div>
+        <div class="tech-card">
+            <h5>🚧 Níveis de Resistência</h5>
+            <div class="tc-list">
+                <div class="tc-item"><span class="tc-l">R1 — Resistência imediata</span><span class="tc-v" style="color:var(--green)">R$ 345,00</span></div>
+                <div class="tc-item"><span class="tc-l">R2 — Entrada da posição</span><span class="tc-v" style="color:var(--green)">R$ 347,00</span></div>
+                <div class="tc-item"><span class="tc-l">R3 — Pivô médio</span><span class="tc-v" style="color:var(--green)">R$ 350,00</span></div>
+                <div class="tc-item"><span class="tc-l">R4 — Strike CALL</span><span class="tc-v" style="color:var(--accent)">R$ 355,00</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rec-box tech animate delay-2">
+        <h4>📐 Leitura Gráfica BGIU26 — Tendência de baixa de curto prazo, mas com sinais de exaustão</h4>
+        <p>
+            <strong>Tendência:</strong> O contrato encontra-se em <strong>tendência de baixa estabelecida desde 06/04</strong>, quando atingiu o pico de R$ 351,95. Desde então, formou uma sequência de máximas e mínimas descendentes, configurando um canal de baixa típico.<br><br>
+            <strong>Padrão Atual — Topo Duplo Ascendente Falhado:</strong> Em 22-23/04 o mercado tentou retomar a região dos R$ 342, mas falhou e voltou a recuar. Hoje fechou em R$ 342,70 — <strong>justamente na zona de teste</strong>. O movimento sugere acomodação na base do canal.<br><br>
+            <strong>Suporte de R$ 339,85:</strong> testado três vezes (15/04, 17/04, 24/04 estimado) e sempre defendido por compradores. Cada teste sem rompimento <strong>fortalece o suporte</strong>, mas também aumenta a probabilidade de rompimento se vier mais um teste. <em>Triplo fundo é um padrão arriscado.</em><br><br>
+            <strong>Volatilidade (faixa 52 sem.):</strong> R$ 328,85 (mín) — R$ 352,95 (máx). Estamos no <strong>terço inferior da faixa anual</strong>, sugerindo que o downside está mais contido do que o upside.<br><br>
+            <strong>Sinal técnico:</strong> <span class="tag tag-yellow">NEUTRO COM VIÉS DE BAIXA</span> no curto prazo. Reversão técnica só seria confirmada com fechamento acima de <strong>R$ 345 (rompimento da MM curta)</strong>. Ruptura abaixo de R$ 339,85 abre caminho para R$ 335.
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== ANÁLISE FUNDAMENTALISTA BOI ======== -->
+    <div class="section-title animate delay-2"><div class="icon fund">🌍</div><h3>Análise Fundamentalista — Boi Gordo <span>| O que move o preço</span></h3></div>
+
+    <div class="card animate delay-2">
+        <h4 style="font-size:.95rem;color:var(--text-primary);margin-bottom:16px">📊 Os 5 Drivers Fundamentais Atuais</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Driver</th><th>Status</th><th>Direção</th><th>Peso</th></tr></thead>
+                <tbody>
+                    <tr><td style="text-align:left"><strong>1. Início da safra</strong> (boi de pasto pronto)</td><td>Confirmado em GO, MS, MG</td><td><span class="tag tag-red">▼ Baixista</span></td><td>⭐⭐⭐⭐⭐</td></tr>
+                    <tr><td style="text-align:left"><strong>2. Cota chinesa esgotando</strong></td><td>Encerra meados de junho</td><td><span class="tag tag-red">▼ Baixista</span></td><td>⭐⭐⭐⭐</td></tr>
+                    <tr><td style="text-align:left"><strong>3. Pastagens — Norte/CO</strong></td><td>MT, PA, TO, RO com chuvas</td><td><span class="tag tag-green">▲ Altista</span></td><td>⭐⭐⭐</td></tr>
+                    <tr><td style="text-align:left"><strong>4. Pastagens — Sul</strong></td><td>GO, MG, sul SP com estresse</td><td><span class="tag tag-red">▼ Baixista</span></td><td>⭐⭐⭐⭐</td></tr>
+                    <tr><td style="text-align:left"><strong>5. Bezerro caro</strong> (oferta apertada)</td><td>Ágio de 39,1% sobre boi gordo</td><td><span class="tag tag-green">▲ Altista (médio prazo)</span></td><td>⭐⭐⭐⭐⭐</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="rec-box info animate delay-3">
+        <h4>🌍 Leitura Fundamentalista — Curto prazo baixista, médio prazo altista</h4>
+        <p>
+            <strong>O movimento atual é SAZONAL e ESPERADO.</strong> Abril-junho historicamente é período de pressão baixista por dois motivos clássicos:<br>
+            • <em>Boi de pasto pronto</em> (ciclo da chuva nov-mar produz arroba na seca abr-jun)<br>
+            • <em>Final da cota chinesa</em> (calendário comercial)<br><br>
+            <strong>📌 O que TEM acontecido conforme o esperado:</strong><br>
+            ✓ Físico cedendo (Cepea −1,45% em 5 pregões)<br>
+            ✓ Pastagens piorando em GO/MG (estresse hídrico de outono)<br>
+            ✓ Vendedores se mostrando mais flexíveis (Scot)<br><br>
+            <strong>📌 O que NÃO tem acontecido (e segura o mercado):</strong><br>
+            ✗ Pastagens no Norte/CO ainda boas — produtor pode reter<br>
+            ✗ Bezerro caro (ágio 39,1%) — reposição cara desincentiva venda agressiva<br>
+            ✗ Disponibilidade de animais prontos NÃO está abundante (Scot)<br><br>
+            <strong>📌 Olhando para SET/26 (nosso vencimento):</strong> setembro é tradicionalmente <strong>mês de virada</strong> — começa a entressafra, oferta encolhe, frigorífico precisa pagar mais. A curva de futuros já precifica isso (OUT/26 a R$ 352,55 — R$ 9,85 acima de SET).<br><br>
+            <strong style="color:var(--blue)">Conclusão fundamental: o pressão baixista é SAZONAL, não estrutural. O Collar nos protege durante a tempestade até a entressafra chegar.</strong>
+        </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== COLLAR ======== -->
+    <div class="section-title animate delay-3"><div class="icon collar">🔒</div><h3>Collar BGIU26 <span>| Estrutura íntegra — PUT a R$ 7,70 de distância</span></h3></div>
+
+    <div class="kpi-row animate delay-3">
+        <div class="kpi-box red">
+            <div class="kpi-label">Resultado Collar (se vencesse hoje)</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 4,95/@</div>
+            <div class="kpi-sub">−R$ 1.633,50/contrato</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Perda máxima possível</div>
+            <div class="kpi-value" style="color:var(--yellow)">−R$ 12,65/@</div>
+            <div class="kpi-sub">Piso travado: R$ 334,35 — imutável 🔒</div>
+        </div>
+        <div class="kpi-box yellow">
+            <div class="kpi-label">Distância PUT 335</div>
+            <div class="kpi-value" style="color:var(--yellow)">−R$ 7,70</div>
+            <div class="kpi-sub">−2,25% | Margem confortável</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Distância CALL 355</div>
+            <div class="kpi-value" style="color:var(--green)">+R$ 12,30</div>
+            <div class="kpi-sub">+3,59% | Folgada ✅</div>
+        </div>
+    </div>
+
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📋 Status das Pernas do Collar</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Perna</th><th>Tipo</th><th>Strike</th><th>Status</th><th>Distância</th></tr></thead>
+                <tbody>
+                    <tr><td>🟢 Futuro BGIU26</td><td>Comprado</td><td>R$ 347,00</td><td><span class="tag tag-red">Prejuízo −R$ 4,30/@</span></td><td>—</td></tr>
+                    <tr><td>🛡️ PUT 335</td><td>Comprada</td><td>R$ 335,00</td><td><span class="tag tag-yellow">OTM — Vigilante</span></td><td>−R$ 7,70 (−2,25%)</td></tr>
+                    <tr><td>🔒 CALL 355</td><td>Vendida</td><td>R$ 355,00</td><td><span class="tag tag-green">OTM — Folgada ✅</span></td><td>+R$ 12,30 (+3,59%)</td></tr>
+                    <tr style="background:rgba(212,160,23,.04)"><td colspan="2"><strong>Prêmio líquido</strong></td><td>—</td><td><span class="tag tag-yellow">−R$ 0,65/@ (pago)</span></td><td>−R$ 214,50/ctt</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Payoff -->
+    <div class="card animate delay-3">
+        <h4 style="font-size:.9rem;color:var(--text-secondary);margin-bottom:14px">📈 Resultado no Vencimento — Posição atual marcada</h4>
+        <div class="chart-container large"><canvas id="payoffChart"></canvas></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== MILHO — ANÁLISE COMPLETA ======== -->
+    <div class="section-title animate delay-3"><div class="icon milho">🌽</div><h3>Milho — Análise Completa <span>| Curva inteira em queda mensal</span></h3></div>
+
+    <div class="card animate delay-3">
+        <h4 style="font-size:.95rem;color:var(--text-primary);margin-bottom:16px">📊 Curva de Futuros do Milho B3 — Fechamento 28/04/2026</h4>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Contrato</th><th>Fech. 28/04</th><th>Var. Dia</th><th>Var. Sem.</th><th>Var. Mês</th><th>Var. Ano</th><th>Sinal</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>CCMK26</strong> (Mai/26)</td><td>R$ 68,20</td><td style="color:var(--red)">−1,04%</td><td style="color:var(--red)">−0,41%</td><td style="color:var(--red)"><strong>−6,31%</strong></td><td style="color:var(--red)"><strong>−8,45%</strong></td><td><span class="tag tag-red">Pressionado</span></td></tr>
+                    <tr style="background:rgba(168,85,247,.06)"><td><strong>CCMU26 🎯</strong> (Set/26)</td><td><strong>R$ 71,85</strong></td><td style="color:var(--red)">−0,24%</td><td style="color:var(--green)">+0,91%</td><td style="color:var(--red)">−1,03%</td><td style="color:var(--green)">+3,13%</td><td><span class="tag tag-purple">Crítico p/ confino</span></td></tr>
+                    <tr><td>CCMH27 (Mar/27)</td><td>R$ 75,45</td><td style="color:var(--red)">−0,46%</td><td style="color:var(--green)">+0,05%</td><td style="color:var(--red)">−2,01%</td><td style="color:var(--green)">+1,28%</td><td><span class="tag tag-yellow">Lateral</span></td></tr>
+                    <tr><td>CCMK27 (Mai/27)</td><td>R$ 73,46</td><td style="color:var(--yellow)">0,00%</td><td style="color:var(--red)">−0,19%</td><td style="color:var(--red)">−3,05%</td><td style="color:var(--red)">−3,23%</td><td><span class="tag tag-yellow">Estável</span></td></tr>
+                    <tr><td>CCMU27 (Set/27)</td><td>R$ 72,80</td><td style="color:var(--green)">+0,01%</td><td style="color:var(--green)">+0,41%</td><td style="color:var(--green)">+1,11%</td><td style="color:var(--green)"><strong>+6,28%</strong></td><td><span class="tag tag-green">Resistente</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="chart-container medium"><canvas id="curvaMilhoChart"></canvas></div>
+    </div>
+
+    <div class="rec-box tech animate delay-3">
+        <h4>📐 Análise Técnica — Milho em "carry" reverso</h4>
+        <p>
+            <strong>Estrutura da curva:</strong> A curva está em <strong>backwardation parcial</strong> (CCMK26 R$ 68,20 < CCMU26 R$ 71,85 < CCMH27 R$ 75,45). Isso indica que o mercado precifica:<br>
+            • Pressão imediata de oferta (safrinha vindo aí, contratos curtos pesando)<br>
+            • Recuperação no segundo semestre (entressafra de fim de ano, demanda de proteína)<br>
+            • Estabilidade em 2027 (precificação de safra 2026/27 ainda incerta)<br><br>
+            <strong>CCMK26 (vencimento próximo):</strong> destaque negativo com −6,31% no mês — vencimento em 15 dias está sofrendo pressão de entrega física da safra de verão e expectativa de safrinha boa. <strong>Mínima do mês.</strong><br><br>
+            <strong>CCMU26 (Set/26 — para confinamento):</strong> mostra resiliência relativa (+0,91% na semana, +3,13% no ano). Está descolando do contrato curto — sinal de que o mercado vê <strong>risco de oferta apertada na entressafra</strong>.<br><br>
+            <strong>CCMU27 (Set/27):</strong> +6,28% no ano — o mais resistente. O mercado precifica safra 2026/27 com prêmio. Possível indicação de incerteza estrutural sobre área plantada.
+        </p>
+    </div>
+
+    <div class="rec-box info animate delay-3">
+        <h4>🌍 Análise Fundamentalista — Milho: 4 forças em jogo</h4>
+        <p>
+            <strong>1. Safrinha (peso ⭐⭐⭐⭐⭐ — baixista no curto prazo):</strong><br>
+            Conab projeta safra 2025/26 robusta. Chuvas regulares em MT/MS confirmaram bom potencial. Cepea: <em>"vendedores demonstram maior flexibilidade".</em> A "nebulosidade climática" do início de abril foi DISSIPADA.<br><br>
+            <strong>2. Demanda interna (peso ⭐⭐⭐⭐ — neutro/altista):</strong><br>
+            Etanol de milho expandindo no CO. Avicultura/suinocultura demandam volume. Confinamento bovino com economicidade ATRAÇÃO recorde — quanto mais barato o milho, mais boi vai pra cocho.<br><br>
+            <strong>3. Exportações (peso ⭐⭐⭐ — incerto):</strong><br>
+            Brasil disputando China com EUA. USDA reporta 1,32 mi ton vendidas pelos EUA semana passada — concorrência. Dólar mais fraco reduz paridade de exportação brasileira.<br><br>
+            <strong>4. Estoques de passagem (peso ⭐⭐⭐⭐ — altista para CCMU26):</strong><br>
+            Estoques de passagem 2025/26 → 2026/27 tendem a ser apertados se demanda de etanol acelerar. Por isso CCMU26 e CCMU27 mostram resistência maior que CCMK26.<br><br>
+            <strong style="color:var(--blue)">Veredito: o curto prazo é baixista (CCMK26 confirmando). O médio prazo (CCMU26 — relevante para nós) tem mais sustentação. Para QUEM PRECISA COMPRAR milho, o momento atual é uma janela de oportunidade.</strong>
+        </p>
+    </div>
+
+    <!-- Relação Boi/Milho -->
+    <div class="highlight-box blue animate delay-4">
+        <div class="hl-emoji">⚖️</div>
+        <div class="hl-title" style="color:#3b82f6">Relação Boi/Milho — Janela de Confinamento</div>
+        <div class="hl-text">
+            Físico Cepea Boi: <strong>R$ 360,70/@</strong> | Milho ESALQ: ~R$ 71/sc<br>
+            <strong>Relação atual: ~5,1 sc/@ — patamar EXCELENTE para confinamento</strong><br><br>
+            Histórico recente: chegou a 6,5 sc/@ em jan/26 (péssimo para confinador). Hoje em 5,1 — melhoria de 21%.<br>
+            <strong>Tradução prática:</strong> com 5,1 sacas de milho consigo "pagar" 1 arroba de boi — janela favorável de margem para terminação em confinamento.<br><br>
+            <strong>📌 Decisão recomendada:</strong> se há intenção de confinar este ano, <strong>travar milho via futuro CCMU26 ou CCMH27</strong> agora pode capturar o fundo da correção. CCMK26 a R$ 68,20 também é referência atrativa para compra física imediata.
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ======== RESUMO FINAL ======== -->
+    <div class="section-title animate delay-4"><div class="icon vis">🎯</div><h3>Resumo e Recomendação <span>| Dia 23 — 28/04/2026</span></h3></div>
+
+    <div class="kpi-row animate delay-4">
+        <div class="kpi-box yellow">
+            <div class="kpi-label">BGIU26</div>
+            <div class="kpi-value" style="color:var(--yellow)">R$ 342,70</div>
+            <div class="kpi-sub">−R$ 4,30/@ vs entrada</div>
+        </div>
+        <div class="kpi-box red">
+            <div class="kpi-label">Collar P&L</div>
+            <div class="kpi-value" style="color:var(--red)">−R$ 4,95/@</div>
+            <div class="kpi-sub">−R$ 1.633,50/ctt | 39% do pior cenário</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Físico Cepea SP</div>
+            <div class="kpi-value" style="color:var(--green)">R$ 360,70</div>
+            <div class="kpi-sub">Em queda — gap 18,00 (em convergência)</div>
+        </div>
+        <div class="kpi-box green">
+            <div class="kpi-label">Recomendação</div>
+            <div class="kpi-value" style="color:var(--green)">MANTER 🛡️</div>
+            <div class="kpi-sub">+ Avaliar travar milho CCMU26</div>
+        </div>
+    </div>
+
+    <div class="rec-box hold animate delay-4">
+        <h4>✅ MANTER COLLAR + AVALIAR TRAVAR MILHO CCMU26</h4>
+        <p>
+            Pedro Henrique e Rogério:<br><br>
+            🛡️ <strong>BGIU26 fechou em R$ 342,70 — dentro da zona protegida do Collar.</strong> A PUT 335 está a R$ 7,70 (2,25%) — margem confortável. Não há ação a tomar na posição de boi.<br><br>
+            📐 <strong>Leitura técnica:</strong> Tendência de baixa de curto prazo, mas suporte de R$ 339,85 sendo defendido pela 3ª vez. Estamos na base do canal — tecnicamente, a probabilidade de respeitar o suporte no curto prazo é maior que rompê-lo. Se romper, PUT entra em ação imediata.<br><br>
+            🌍 <strong>Leitura fundamentalista:</strong> A pressão é SAZONAL (boi de pasto + cota chinesa esgotando) e ESPERADA. Não é deterioração estrutural. SET/26 é justamente o mês de virada para entressafra — a curva já precifica isso (OUT a R$ 352,55).<br><br>
+            🌽 <strong>OPORTUNIDADE NO MILHO — atenção máxima:</strong><br>
+            • CCMK26 (Mai/26): R$ 68,20 — mínima do mês, −6,31%<br>
+            • CCMU26 (Set/26): R$ 71,85 — momento de avaliar trava<br>
+            • Relação Boi/Milho em 5,1 sc/@ — confinamento atrativo<br>
+            • Safrinha confirmada — fundo do milho pode estar próximo<br><br>
+            <strong>Sugestão:</strong> se há plano de confinamento na fazenda, <strong>considerar travar 30-50% da necessidade de milho via CCMU26 agora</strong>. Captura a correção de safrinha e protege contra eventual virada (etanol/exportação).<br><br>
+            ⚡ <strong>Sobre a posição de boi:</strong> 155 dias até o vencimento. O Collar está fazendo o trabalho. A pressão é sazonal. Setembro é virada de ciclo. Resistir à tentação de ajustar.<br><br>
+            <strong style="color:var(--green)">Boi: defesa. Milho: ataque. Estratégias separadas para situações separadas. 🛡️🌽</strong>
+        </p>
+    </div>
+
+    <div class="rec-box info animate delay-4">
+        <h4>📌 Pontos de Atenção para os Próximos Dias</h4>
+        <p>
+            1️⃣ <strong>Suporte BGIU26 R$ 339,85:</strong> nível-chave. Defesa = bull case. Rompimento = teste da PUT<br>
+            2️⃣ <strong>Cepea físico:</strong> se quebrar R$ 360, próximo nível é R$ 358 (suporte sazonal de maio)<br>
+            3️⃣ <strong>Milho CCMU26:</strong> se romper R$ 71,50 (mínima recente), abre R$ 70<br>
+            4️⃣ <strong>Volume de abate:</strong> escala de frigorífico é o termômetro — monitorar<br>
+            5️⃣ <strong>Cota chinesa:</strong> qualquer notícia de renovação/ampliação = gatilho de alta forte<br>
+            6️⃣ <strong>Clima safrinha:</strong> chuva de maio fundamental para confirmar produtividade
+        </p>
+    </div>
+
+    <!-- FILOSOFIA -->
+    <div class="philosophy-banner animate delay-4">
+        <div class="emoji">🛡️🌽⚖️</div>
+        <h4>"Análise técnica diz ONDE estamos. Fundamentalista diz POR QUÊ. Collar diz QUANTO podemos perder."</h4>
+        <p>
+            <strong style="color:var(--accent-light)">Onde estamos (técnico):</strong> base do canal de baixa, suporte de R$ 339,85 sendo testado pela 3ª vez.<br>
+            <strong style="color:var(--accent-light)">Por que (fundamental):</strong> sazonalidade clássica de safra + cota chinesa esgotando + pastagens piorando.<br>
+            <strong style="color:var(--accent-light)">Quanto podemos perder (Collar):</strong> máximo −R$ 12,65/@. Atualmente em −R$ 4,95.<br><br>
+            E sobre o milho: <strong style="color:var(--accent-light)">−6,31% no mês no CCMK26</strong> não é só um número.<br>
+            É a confirmação de que a safrinha vingou. É a melhor relação Boi/Milho do ano.<br>
+            É uma janela de oportunidade que não se abre sempre.<br><br>
+            <strong style="color:var(--accent-light)">Boi protegido. Milho como oportunidade. 155 dias para o vencimento. 🛡️🌽⏳</strong>
+        </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer animate delay-4">
+        <div class="footer-grid">
+            <div class="footer-info">
+                <h4>Dr. Sidney Souza</h4>
+                <div class="ftitle">Economista Agrícola · Estrategista Econômico do Produtor</div>
+                <div class="fsubtitle">Especialista em economia da fazenda e gestão de risco no agro<br>Transformamos dados da fazenda em decisões econômicas</div>
+                <div class="footer-contact">
+                    <a href="mailto:sidneyagro@gmail.com">📧 sidneyagro@gmail.com</a>
+                    <span>📱 (64) 9 9226-6886</span>
+                    <a href="https://instagram.com/ruralin.ai" target="_blank">📸 @ruralin.ai</a>
+                </div>
+            </div>
+            <div class="footer-logo"><div class="brand">rural<span>in</span>.ai</div><div class="tagline">Inteligência para o agro</div></div>
+        </div>
+        <div class="disclaimer">
+            Análise técnica e fundamentalista com fins educativos e estratégicos. Decisões de negociação são responsabilidade do investidor. Dados B3 fornecidos pelo home broker do cliente. Demais fontes: Cepea/Esalq, Scot Consultoria, Safras & Mercado, Globo Rural, Conab — 28/04/2026.
+        </div>
+    </div>
+</div>
+
+<script>
+Chart.defaults.color='#a3b8a9';Chart.defaults.borderColor='rgba(30,58,40,.4)';Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+const ENTRY=347,PUT=335,CALL=355,PREMIUM=0.65;
+function calcResult(p){let f=p-ENTRY,o=0;if(p<=PUT)o=PUT-p;if(p>=CALL)o=-(p-CALL);return f+o-PREMIUM;}
+
+// EVOLUÇÃO 23 dias
+const evoLabels=['28/03','30/03','31/03','01/04','02/04','06/04','07/04','08/04','09/04','10/04','13/04','14/04','15/04','16/04','17/04','20/04','22/04','23/04','24/04','27/04','28/04'];
+const evoData=[347.00,352.00,350.80,350.50,349.95,351.95,349.70,345.80,346.50,345.15,342.00,341.50,339.85,340.20,340.00,339.50,341.50,340.95,342.50,343.45,342.70];
+new Chart(document.getElementById('evolucaoChart').getContext('2d'),{type:'line',data:{labels:evoLabels,datasets:[{label:'BGIU26',data:evoData,borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.06)',borderWidth:3,fill:true,tension:.3,pointRadius:6,pointBackgroundColor:evoData.map(v=>v>=347?'#22c55e':v>=340?'#eab308':'#ef4444')},{label:'Entrada 347',data:Array(21).fill(347),borderColor:'rgba(107,133,112,.4)',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false},{label:'CALL 355',data:Array(21).fill(355),borderColor:'rgba(234,179,8,.3)',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false},{label:'🛡️ PUT 335',data:Array(21).fill(335),borderColor:'#ef4444',borderWidth:2,borderDash:[4,4],pointRadius:0,fill:false},{label:'Suporte 339,85',data:Array(21).fill(339.85),borderColor:'rgba(234,179,8,.3)',borderWidth:1.5,borderDash:[2,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:8,font:{size:9}}}},scales:{y:{min:332,max:358,grid:{color:'rgba(30,58,40,.3)'}},x:{grid:{display:false},ticks:{font:{size:8}}}}}});
+
+// CURVA MILHO
+new Chart(document.getElementById('curvaMilhoChart').getContext('2d'),{type:'line',data:{labels:['Mai/26\nCCMK26','Set/26\nCCMU26','Mar/27\nCCMH27','Mai/27\nCCMK27','Set/27\nCCMU27'],datasets:[{label:'Fechamento 28/04 (R$/sc)',data:[68.20,71.85,75.45,73.46,72.80],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.08)',borderWidth:3,fill:true,tension:.3,pointRadius:[6,10,6,6,6],pointBackgroundColor:['#f59e0b','#a855f7','#f59e0b','#f59e0b','#f59e0b']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>`R$ ${i.raw.toFixed(2)}/sc`}}},scales:{y:{min:65,max:78,grid:{color:'rgba(30,58,40,.3)'},ticks:{callback:v=>'R$ '+v}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+
+// PAYOFF
+const ppL=[],ppD=[],ppZ=[];for(let p=310;p<=380;p+=.5){ppL.push(p);ppD.push(calcResult(p));ppZ.push(0);}
+new Chart(document.getElementById('payoffChart').getContext('2d'),{type:'line',data:{labels:ppL,datasets:[{label:'Resultado Collar',data:ppD,borderColor:'#a855f7',backgroundColor:ctx=>ctx.raw>=0?'rgba(34,197,94,.1)':'rgba(239,68,68,.08)',borderWidth:3,fill:true,tension:0,pointRadius:0},{label:'Zero',data:ppZ,borderColor:'rgba(255,255,255,.1)',borderWidth:1,borderDash:[5,5],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#12231a',borderColor:'#1e3a28',borderWidth:1,callbacks:{title:i=>`Boi: R$ ${Number(i[0].label).toFixed(2)}/@`,label:i=>{if(i.datasetIndex===0){const v=i.raw;return`${v>=0?'+':''}R$ ${v.toFixed(2)}/@ | ${v>=0?'+':''}R$ ${(v*330).toFixed(2)}/ctt`;}}}},annotation:{annotations:{put:{type:'line',xMin:50,xMax:50,borderColor:'#ef4444',borderWidth:2.5,borderDash:[6,3],label:{display:true,content:'🛡️ PUT 335',position:'start',backgroundColor:'rgba(239,68,68,.85)',font:{size:11,weight:'bold'}}},call:{type:'line',xMin:90,xMax:90,borderColor:'#eab308',borderWidth:2,borderDash:[6,3],label:{display:true,content:'CALL 355',position:'start',backgroundColor:'rgba(234,179,8,.8)',font:{size:10}}},entry:{type:'line',xMin:74,xMax:74,borderColor:'#6b8570',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Entrada 347',position:'end',backgroundColor:'rgba(107,133,112,.7)',font:{size:10}}},today:{type:'line',xMin:65.4,xMax:65.4,borderColor:'#a855f7',borderWidth:3,label:{display:true,content:'📍 HOJE 342,70',position:'end',backgroundColor:'rgba(168,85,247,.9)',font:{size:12,weight:'bold'}}}}}},scales:{x:{title:{display:true,text:'Preço no Vencimento (R$/@)',color:'#6b8570'},ticks:{callback:(v,i)=>(i%10===0)?ppL[i]:'',maxRotation:0},grid:{display:false}},y:{title:{display:true,text:'Resultado (R$/@)',color:'#6b8570'},grid:{color:'rgba(30,58,40,.3)'}}}}});
+</script>
+</body>
+</html>
