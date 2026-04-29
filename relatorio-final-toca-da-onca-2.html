@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Final de Hedge v3.3 - Faz. Toca da Onça | Ruralin.AI</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #0a1f0a 0%, #1a3a1a 100%);
+    color: #e8e8e8;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container { max-width: 1400px; margin: 0 auto; }
+
+.header {
+    background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
+    padding: 30px;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 4px solid #f4c430;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.header h1 {
+    font-size: 2.2em;
+    color: #f4c430;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.header .subtitle {
+    font-size: 1.1em;
+    color: #d4e8c4;
+    font-style: italic;
+}
+
+.header .badge-final {
+    display: inline-block;
+    background: #e53935;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.header .badge-urgente {
+    display: inline-block;
+    background: #ff1744;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-left: 10px;
+    box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
+    animation: pulse 1.2s infinite;
+}
+
+.client-info {
+    background: rgba(0,0,0,0.3);
+    padding: 15px 20px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f4c430;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.client-info div { font-size: 0.95em; }
+.client-info strong { color: #f4c430; }
+
+.section {
+    background: #1c2e1c;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 10px;
+    border-left: 4px solid #4a7c2c;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.section h2 {
+    color: #f4c430;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a7c2c;
+    font-size: 1.6em;
+}
+
+.section h3 {
+    color: #a8d168;
+    margin: 20px 0 10px 0;
+    font-size: 1.3em;
+}
+
+.section h4 {
+    color: #d4e8c4;
+    margin: 15px 0 8px 0;
+    font-size: 1.1em;
+}
+
+.alert-box {
+    background: linear-gradient(135deg, #5c2c0a 0%, #8b3a0a 100%);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #ff8c00;
+    margin: 15px 0;
+}
+
+.critical-box {
+    background: linear-gradient(135deg, #5c0a0a 0%, #8b1a1a 100%);
+    padding: 18px 22px;
+    border-radius: 8px;
+    border-left: 5px solid #e53935;
+    margin: 15px 0;
+    box-shadow: 0 0 20px rgba(229, 57, 53, 0.3);
+}
+
+.urgent-box {
+    background: linear-gradient(135deg, #7c0000 0%, #b71c1c 100%);
+    padding: 22px 26px;
+    border-radius: 10px;
+    border: 3px solid #ff1744;
+    margin: 20px 0;
+    box-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 20px rgba(255, 23, 68, 0.4); }
+    to { box-shadow: 0 0 35px rgba(255, 23, 68, 0.7); }
+}
+
+.urgent-box h3 {
+    color: #ff8a80;
+    border: none;
+    padding: 0;
+    margin-bottom: 12px;
+    font-size: 1.4em;
+}
+
+.info-box {
+    background: linear-gradient(135deg, #0a3a5c 0%, #155a8a 100%);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #4a90e2;
+    margin: 15px 0;
+}
+
+.success-box {
+    background: linear-gradient(135deg, #0a5c2c 0%, #1a8a3a 100%);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #4ae290;
+    margin: 15px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: #0f1f0f;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th {
+    background: #2d5016;
+    color: #f4c430;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #f4c430;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #2d4016;
+}
+
+tr:hover { background: rgba(74, 124, 44, 0.2); }
+tr:nth-child(even) { background: rgba(0,0,0,0.2); }
+
+.price-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.price-item {
+    background: linear-gradient(135deg, #1a3a1a 0%, #2d5016 100%);
+    padding: 18px;
+    border-radius: 10px;
+    border: 2px solid #4a7c2c;
+    text-align: center;
+}
+
+.price-item.target {
+    border-color: #f4c430;
+    box-shadow: 0 0 15px rgba(244, 196, 48, 0.4);
+}
+
+.price-item.danger {
+    border-color: #e53935;
+    box-shadow: 0 0 15px rgba(229, 57, 53, 0.4);
+}
+
+.price-item.critical {
+    border-color: #ff1744;
+    box-shadow: 0 0 25px rgba(255, 23, 68, 0.6);
+    background: linear-gradient(135deg, #3a0a0a 0%, #5c1a1a 100%);
+}
+
+.price-item .label {
+    color: #a8d168;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.price-item .value {
+    color: #f4c430;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.price-item.critical .value { color: #ff8a80; }
+
+.price-item .unit {
+    color: #d4e8c4;
+    font-size: 0.85em;
+}
+
+.price-item .change {
+    color: #e53935;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.kpi-card {
+    background: linear-gradient(135deg, #0f1f0f 0%, #1a3a1a 100%);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid;
+    text-align: center;
+}
+
+.kpi-card.green { border-left-color: #4ae290; }
+.kpi-card.yellow { border-left-color: #f4c430; }
+.kpi-card.red { border-left-color: #e53935; }
+.kpi-card.blue { border-left-color: #4a90e2; }
+
+.kpi-card .kpi-label {
+    color: #a8d168;
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.kpi-card .kpi-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.kpi-card.green .kpi-value { color: #4ae290; }
+.kpi-card.yellow .kpi-value { color: #f4c430; }
+.kpi-card.red .kpi-value { color: #e53935; }
+.kpi-card.blue .kpi-value { color: #4a90e2; }
+
+.kpi-card .kpi-detail {
+    color: #d4e8c4;
+    font-size: 0.85em;
+}
+
+.positive { color: #4ae290; font-weight: bold; }
+.negative { color: #e53935; font-weight: bold; }
+.neutral { color: #f4c430; font-weight: bold; }
+
+.cost-breakdown {
+    background: #0f1f0f;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.cost-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #2d4016;
+}
+
+.cost-line.total {
+    border-top: 2px solid #f4c430;
+    border-bottom: none;
+    margin-top: 10px;
+    padding-top: 12px;
+    font-weight: bold;
+    color: #f4c430;
+    font-size: 1.1em;
+}
+
+.matrix-table { overflow-x: auto; }
+.matrix-table table { min-width: 700px; }
+
+.matrix-table .cell-best { background: rgba(74, 226, 144, 0.3); color: #4ae290; font-weight: bold; }
+.matrix-table .cell-good { background: rgba(168, 209, 104, 0.2); color: #a8d168; }
+.matrix-table .cell-neutral { background: rgba(244, 196, 48, 0.2); color: #f4c430; }
+.matrix-table .cell-warning { background: rgba(255, 140, 0, 0.2); color: #ff8c00; }
+.matrix-table .cell-danger { background: rgba(229, 57, 53, 0.3); color: #e53935; font-weight: bold; }
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 20px 0;
+}
+
+.timeline:before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #4a7c2c;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 12px 0 12px 20px;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 18px;
+    width: 16px;
+    height: 16px;
+    background: #f4c430;
+    border-radius: 50%;
+    border: 3px solid #1c2e1c;
+}
+
+.timeline-item h4 { color: #f4c430; margin-bottom: 5px; }
+
+.recommendation-box {
+    background: linear-gradient(135deg, #2d1a5c 0%, #4a2c8a 100%);
+    padding: 25px;
+    border-radius: 10px;
+    border: 3px solid #f4c430;
+    margin: 20px 0;
+    box-shadow: 0 0 30px rgba(244, 196, 48, 0.3);
+}
+
+.recommendation-box h2 {
+    color: #f4c430;
+    border-bottom: 2px solid #f4c430;
+    margin-bottom: 15px;
+}
+
+.dual-recommendation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.dual-card {
+    background: rgba(0,0,0,0.4);
+    padding: 22px;
+    border-radius: 10px;
+    border-left: 5px solid;
+}
+
+.dual-card.conservador {
+    border-left-color: #4ae290;
+    background: linear-gradient(135deg, rgba(10, 92, 44, 0.4) 0%, rgba(26, 138, 58, 0.3) 100%);
+}
+
+.dual-card.equilibrado {
+    border-left-color: #6ab7ff;
+    background: linear-gradient(135deg, rgba(10, 58, 92, 0.4) 0%, rgba(21, 90, 138, 0.3) 100%);
+}
+
+.dual-card h3 {
+    border: none;
+    color: inherit;
+    margin: 0 0 12px 0;
+}
+
+.dual-card.conservador h3 { color: #4ae290; }
+.dual-card.equilibrado h3 { color: #6ab7ff; }
+
+.fundamentos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.fundamento-card {
+    background: rgba(229, 57, 53, 0.12);
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 4px solid #e53935;
+}
+
+.fundamento-card h4 {
+    color: #ff8a80;
+    margin-bottom: 8px;
+    font-size: 1.05em;
+}
+
+.fundamento-card p {
+    font-size: 0.9em;
+    color: #e8e8e8;
+}
+
+.fundamento-card .source {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8em;
+    color: #a8d168;
+    font-style: italic;
+}
+
+.footer {
+    background: linear-gradient(135deg, #1a3a1a 0%, #2d5016 100%);
+    padding: 30px;
+    border-radius: 0 0 12px 12px;
+    border-top: 4px solid #f4c430;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.footer .credentials {
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.footer h3 { color: #f4c430; font-size: 1.4em; margin-bottom: 10px; }
+
+.footer .name {
+    font-size: 1.3em;
+    color: #f4c430;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.footer .role { color: #d4e8c4; font-style: italic; margin: 5px 0; }
+
+.footer .contact {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #4a7c2c;
+}
+
+.footer .contact a {
+    color: #f4c430;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.disclaimer {
+    background: rgba(255, 140, 0, 0.1);
+    border: 1px solid #ff8c00;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 0.85em;
+    color: #ffcc99;
+}
+
+.highlight-row {
+    background: rgba(244, 196, 48, 0.15) !important;
+    border-left: 4px solid #f4c430;
+}
+
+.dilema-box {
+    background: linear-gradient(135deg, #4a3a0a 0%, #6a5a1a 100%);
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 5px solid #f4c430;
+    margin: 15px 0;
+}
+
+.market-update {
+    background: linear-gradient(135deg, #5c0a3a 0%, #8b1a5a 100%);
+    padding: 18px 22px;
+    border-radius: 8px;
+    border-left: 5px solid #ff4081;
+    margin: 15px 0;
+    box-shadow: 0 0 20px rgba(255, 64, 129, 0.3);
+}
+
+.market-update strong { color: #ff80ab; }
+
+.note-footer {
+    background: rgba(74, 144, 226, 0.1);
+    border-left: 3px solid #4a90e2;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    font-size: 0.85em;
+    color: #a8c8e8;
+    font-style: italic;
+}
+
+.queda-timeline {
+    background: #0f1f0f;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border: 2px solid #e53935;
+}
+
+.queda-timeline table th {
+    background: #5c0a0a;
+}
+
+@media (max-width: 768px) {
+    .header h1 { font-size: 1.5em; }
+    .price-item .value { font-size: 1.4em; }
+    .dual-recommendation { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>🐂 Relatório Final de Hedge — Confinamento</h1>
+    <div class="subtitle">Análise estratégica com cotações em tempo real e fundamentos atualizados</div>
+    <div>
+        <span class="badge-final">📌 RELATÓRIO v3.3 — ATUALIZAÇÃO INTRADAY</span>
+        <span class="badge-urgente">🚨 BGIN26 EM QUEDA: R$ 333,55</span>
+    </div>
+    <div class="client-info">
+        <div><strong>📋 Cliente:</strong> Faz. Toca da Onça</div>
+        <div><strong>📍 Município:</strong> Aporé - GO</div>
+        <div><strong>👨‍💼 Gestor:</strong> Rogério Teles</div>
+        <div><strong>📅 Data/Hora:</strong> 29/04/2026 — 13h40</div>
+        <div><strong>🐂 Lote:</strong> 41 cabeças</div>
+        <div><strong>⏱️ Duração:</strong> 85 dias (até ~22/07/2026)</div>
+    </div>
+</div>
+
+<!-- ALERTA URGENTE INTRADAY -->
+<div class="section">
+    <div class="urgent-box">
+        <h3>🚨 ALERTA INTRADAY — QUEDA ACELERADA NO BGIN26</h3>
+        <p style="font-size: 1.05em; line-height: 1.8;">
+            Nas últimas horas, o futuro <strong>BGIN26 despencou de R$ 337,00 para R$ 333,55/@</strong> (-1,02% no dia, candle de hora com forte volume vendedor). O movimento <strong>NÃO é ruído técnico</strong> — é resposta a 4 fatores fundamentais que se materializaram simultaneamente nesta semana.
+        </p>
+        <p style="font-size: 1.05em; line-height: 1.8; margin-top: 12px;">
+            <strong>💸 Impacto direto no lote:</strong> a janela de hedge se deteriorou em <strong>R$ 2.277</strong> (sobre 660@) em apenas algumas horas. A margem do lote caiu de 5,4% para <strong>4,3%</strong>.
+        </p>
+        <p style="font-size: 1.05em; line-height: 1.8; margin-top: 12px; color: #ffcdd2;">
+            ⚡ <strong>Recomendação reforçada:</strong> executar o hedge AINDA HOJE. Cada R$ 1/@ que o futuro recua = R$ 660 a menos no bolso do produtor.
+        </p>
+    </div>
+
+    <h3>📉 Cronologia da Queda (últimos 15 dias)</h3>
+    <div class="queda-timeline">
+        <table>
+            <tr>
+                <th>Data</th>
+                <th>BGIN26</th>
+                <th>Variação</th>
+                <th>Evento Gatilho</th>
+            </tr>
+            <tr>
+                <td>14/04/2026</td>
+                <td>~R$ 365,00</td>
+                <td class="positive">Pico</td>
+                <td>Frenesi exportação China</td>
+            </tr>
+            <tr>
+                <td>23/04/2026</td>
+                <td>R$ 350,00</td>
+                <td class="negative">-4,1%</td>
+                <td>Primeira queda física em SP/Barretos</td>
+            </tr>
+            <tr>
+                <td>27/04/2026</td>
+                <td>R$ 342,00</td>
+                <td class="negative">-2,3%</td>
+                <td>Quedas em 7 praças (GO e MG incluídos)</td>
+            </tr>
+            <tr>
+                <td>28/04/2026</td>
+                <td>R$ 337,00</td>
+                <td class="negative">-1,5%</td>
+                <td>Frigoríficos sinalizando escalas alongadas</td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>29/04/2026 (agora)</strong></td>
+                <td><strong>R$ 333,55</strong></td>
+                <td class="negative"><strong>-1,02%</strong></td>
+                <td><strong>Queda intraday — saída dos compradores</strong></td>
+            </tr>
+        </table>
+        <p style="margin-top: 12px; color: #ff8a80; font-weight: bold; text-align: center; font-size: 1.05em;">
+            📊 Queda acumulada em 15 dias: <strong>-R$ 31,45/@ (-8,6%)</strong>
+        </p>
+    </div>
+</div>
+
+<!-- FUNDAMENTOS DA QUEDA -->
+<div class="section">
+    <h2>🔍 Fundamentos por Trás da Queda — 4 Vetores Convergentes</h2>
+
+    <p style="margin-bottom: 15px;">Pesquisa em fontes especializadas (Scot Consultoria, Safras & Mercado, Agrifatto, Globo Rural, Abiec) confirma que a queda do BGIN26 é resposta fundamentalista a <strong>4 fatores simultâneos</strong>:</p>
+
+    <div class="fundamentos-grid">
+        <div class="fundamento-card">
+            <h4>1️⃣ Frigoríficos com escalas alongadas</h4>
+            <p>"Frigoríficos passaram a sinalizar para um posicionamento mais confortável das escalas de abate, testando níveis mais baixos de cotações." Plantas em <strong>SP, GO e RO</strong> já saíram das compras.</p>
+            <span class="source">📰 Globo Rural / Scot Consultoria — 24/04 e 28/04</span>
+        </div>
+
+        <div class="fundamento-card">
+            <h4>2️⃣ Cota chinesa próxima do esgotamento</h4>
+            <p>"O Brasil deve preencher até a primeira semana de maio toda a cota de exportação para a China." A cota de 1,1 mi t com tarifa de 12% acaba; <strong>fora da cota = 55%</strong>. Sem motor chinês no jul/26.</p>
+            <span class="source">📰 Roberto Perosa (Abiec) — 09/04</span>
+        </div>
+
+        <div class="fundamento-card">
+            <h4>3️⃣ Ponta vendedora antecipando vendas</h4>
+            <p>"Oferta de boiadas aumentou, reflexo de uma ponta vendedora mais atenta, precavida e aproveitando os bons preços vigentes." Efeito manada acelera a queda.</p>
+            <span class="source">📰 Scot Consultoria — 24/04</span>
+        </div>
+
+        <div class="fundamento-card">
+            <h4>4️⃣ Estresse hídrico em GO/MG</h4>
+            <p>"Estresse hídrico já compromete a qualidade das forragens em GO e MG, podendo forçar abate antecipado." <strong>Afeta diretamente Aporé/GO!</strong> Pecuaristas vizinhos sendo forçados a vender.</p>
+            <span class="source">📰 Agrifatto / Portal DBO — 28/04</span>
+        </div>
+    </div>
+
+    <div class="critical-box">
+        <strong>📌 Síntese fundamental:</strong> os 4 vetores trabalham <strong>na mesma direção (baixa)</strong> e atuam <strong>justamente no horizonte de abate deste lote (jul/26)</strong>. Não há gatilho fundamental visível para reversão antes do abate. O cenário <strong>se deteriorou substancialmente</strong> em relação ao relatório enviado pela manhã.
+    </div>
+</div>
+
+<!-- 1. DADOS REAIS DO LOTE -->
+<div class="section">
+    <h2>📋 1. Dados Reais do Lote</h2>
+
+    <table>
+        <tr><th colspan="3">🐂 Composição do Lote</th></tr>
+        <tr><td>Cabeças confinadas</td><td><strong>41</strong></td><td>cab</td></tr>
+        <tr><td>Peso médio entrada</td><td><strong>11,54</strong></td><td>@/cab</td></tr>
+        <tr><td>Peso médio saída (estimado)</td><td><strong>17,98</strong></td><td>@/cab</td></tr>
+        <tr><td>Ganho de peso por cabeça</td><td><strong>6,44</strong></td><td>@/cab</td></tr>
+        <tr><td>Massa total entrada</td><td><strong>473,14</strong></td><td>@</td></tr>
+        <tr><td>Massa total saída</td><td><strong>737,18</strong></td><td>@</td></tr>
+        <tr><td>Arrobas produzidas</td><td><strong>264,04</strong></td><td>@</td></tr>
+
+        <tr><th colspan="3">💰 Estrutura de Custos (confirmada pelo cliente)</th></tr>
+        <tr><td>Custo @ entrada (frete e comissão inclusos)</td><td><strong>R$ 365,98</strong></td><td>/@</td></tr>
+        <tr><td>Custo de confinamento por cabeça <em>(diária fechada — milho incluso)</em></td><td><strong>R$ 1.528,30</strong></td><td>/cab</td></tr>
+        <tr><td>Período do confinamento</td><td><strong>85</strong></td><td>dias</td></tr>
+        <tr><td>Diária equivalente</td><td><strong>R$ 17,98</strong></td><td>/cab/dia</td></tr>
+    </table>
+
+    <div class="info-box">
+        <strong>📌 Importante:</strong> O custo de confinamento está fechado em diária com o <strong>Confinamento Toca da Onça</strong>, <strong>incluindo o milho</strong>. O cliente <strong>NÃO precisa fazer hedge de milho</strong> — esse risco já está coberto contratualmente.
+    </div>
+</div>
+
+<!-- 2. ECONÔMICO -->
+<div class="section">
+    <h2>💵 2. Estrutura Econômica da Operação</h2>
+
+    <h3>📊 Composição do Custo Total</h3>
+    <div class="cost-breakdown">
+        <div class="cost-line">
+            <span>🐂 Compra do magro (473,14 @ × R$ 365,98)</span>
+            <span><strong>R$ 173.158,87</strong></span>
+        </div>
+        <div class="cost-line">
+            <span>🌽 Confinamento — diária fechada (41 cab × R$ 1.528,30)</span>
+            <span><strong>R$ 62.660,30</strong></span>
+        </div>
+        <div class="cost-line total">
+            <span>💼 CUSTO TOTAL DO LOTE</span>
+            <span>R$ 235.819,17</span>
+        </div>
+    </div>
+
+    <h3>🎯 Indicadores-Chave (KPIs) — Atualizados ao preço atual</h3>
+    <div class="kpi-grid">
+        <div class="kpi-card blue">
+            <div class="kpi-label">Custo Total</div>
+            <div class="kpi-value">R$ 235,8 mil</div>
+            <div class="kpi-detail">Investimento total</div>
+        </div>
+        <div class="kpi-card yellow">
+            <div class="kpi-label">Break-even</div>
+            <div class="kpi-value">R$ 319,89</div>
+            <div class="kpi-detail">Preço de equilíbrio</div>
+        </div>
+        <div class="kpi-card red">
+            <div class="kpi-label">Folga até BE</div>
+            <div class="kpi-value">R$ 13,66/@</div>
+            <div class="kpi-detail">Era R$ 17,11 ontem (-20%)</div>
+        </div>
+        <div class="kpi-card red">
+            <div class="kpi-label">Margem Atual (R$ 333,55)</div>
+            <div class="kpi-value">4,3%</div>
+            <div class="kpi-detail">Era 5,4% ontem (-1,1pp)</div>
+        </div>
+    </div>
+
+    <div class="critical-box">
+        <strong>⚠️ Margem crítica em queda livre:</strong> A folga até o break-even encolheu de R$ 17,11/@ (ontem) para apenas <strong>R$ 13,66/@ (agora)</strong> — perda de 20% do colchão de segurança em poucas horas. O lucro bruto travável caiu de R$ 12,6 mil para <strong>R$ 9,7 mil</strong>.
+    </div>
+</div>
+
+<!-- 3. COTAÇÕES ATUALIZADAS -->
+<div class="section">
+    <h2>📊 3. Cotações de Mercado — Tempo Real (29/04/2026, 13h40)</h2>
+
+    <h3>🐂 Boi Gordo Físico e Futuros (B3)</h3>
+    <div class="price-card">
+        <div class="price-item">
+            <div class="label">Físico SP (Agrifatto)</div>
+            <div class="value">R$ 355,00</div>
+            <div class="unit">/@ - boi comum prazo</div>
+        </div>
+        <div class="price-item critical">
+            <div class="label">⭐ BGIN26 (Jul/26) — REF</div>
+            <div class="value">R$ 333,55</div>
+            <div class="unit">/@ - <strong>VENCIMENTO ALVO</strong></div>
+            <div class="change">▼▼ -R$ 3,45 vs ontem (-1,02%)</div>
+        </div>
+        <div class="price-item">
+            <div class="label">BGIQ26 (Ago/26)</div>
+            <div class="value">R$ 339,50</div>
+            <div class="unit">/@ - alternativa</div>
+        </div>
+        <div class="price-item">
+            <div class="label">BGIU26 (Set/26)</div>
+            <div class="value">R$ 342,00</div>
+            <div class="unit">/@ - vencimento</div>
+        </div>
+    </div>
+
+    <h3>🔐 Opções de Boi Gordo (PUTs) — Cotações da Mesa (atualizadas)</h3>
+    <div class="price-card">
+        <div class="price-item target">
+            <div class="label">PUT BGIN26 strike R$ 340</div>
+            <div class="value">R$ 14,80</div>
+            <div class="unit">/@ — ITM (proteção alta)</div>
+            <div class="change">▲ Prêmio subiu (volatilidade)</div>
+        </div>
+        <div class="price-item target">
+            <div class="label">PUT BGIN26 strike R$ 330</div>
+            <div class="value">R$ 9,20</div>
+            <div class="unit">/@ — Próx. ATM (ref. atual)</div>
+            <div class="change">▲ Prêmio subiu (queda do futuro)</div>
+        </div>
+    </div>
+
+    <div class="alert-box">
+        <strong>⚠️ Atenção sobre prêmios:</strong> com a queda do futuro, os prêmios das PUTs <strong>subiram</strong>. A PUT R$ 330 saiu de R$ 7,50 (ontem) para R$ 9,20 — encareceu 22,7%. Isso é característico em mercados em queda: a proteção fica <strong>mais cara</strong> justo quando se torna mais necessária. <strong>Quanto mais o cliente esperar, pior fica o custo da PUT.</strong>
+    </div>
+</div>
+
+<!-- 4. ESPECIFICAÇÕES B3 -->
+<div class="section">
+    <h2>📦 4. Especificação do Contrato BGI — B3</h2>
+    <table>
+        <tr><th>Item</th><th>Especificação</th></tr>
+        <tr><td>Código de negociação</td><td><strong>BGI</strong> (Boi Gordo)</td></tr>
+        <tr><td>Tamanho do contrato</td><td><strong>330 arrobas líquidas</strong> (contrato cheio)</td></tr>
+        <tr><td>Cotação</td><td>R$ por arroba líquida</td></tr>
+        <tr><td>Liquidação</td><td>Financeira</td></tr>
+        <tr><td>Vencimento</td><td>Último dia útil do mês</td></tr>
+        <tr><td>Margem de garantia (mesa)</td><td><strong>R$ 6.500/contrato</strong></td></tr>
+    </table>
+
+    <h3>🎲 Decisão sobre número de contratos</h3>
+    <div class="dilema-box">
+        <strong>⚖️ Massa do lote (737,18@) vs contrato cheio (330@):</strong><br><br>
+        • <strong>2 contratos</strong> = 660@ cobertas → <span class="positive">89,5% de cobertura</span> (sub-hedge de 77,18@)<br>
+        • <strong>3 contratos</strong> = 990@ → <span class="negative">over-hedge — vira especulação</span><br><br>
+        <strong>📐 Decisão:</strong> operar com <strong>2 contratos</strong>, deixando 77,18@ expostas (~10,5% do lote = 4,3 cabeças não hedgeadas).
+    </div>
+</div>
+
+<!-- 5. ESTRATÉGIAS ATUALIZADAS -->
+<div class="section">
+    <h2>⚖️ 5. As Três Estratégias — Recalculadas para R$ 333,55</h2>
+
+    <h3>🅰️ Estratégia A — VENDA de Futuros (Hedge Clássico)</h3>
+    <table>
+        <tr><th>Item</th><th>Detalhe</th></tr>
+        <tr class="highlight-row"><td><strong>Operação</strong></td><td>🔻 VENDER 2 contratos BGIN26</td></tr>
+        <tr><td>Preço de venda</td><td><strong>R$ 333,55/@</strong> (atual)</td></tr>
+        <tr><td>Cobertura</td><td>660 @ (89,5% do lote)</td></tr>
+        <tr><td>Valor financeiro travado</td><td>R$ 220.143,00</td></tr>
+        <tr><td>Lucro físico travado</td><td class="positive">+R$ 9.697 (sobre as 660@)</td></tr>
+        <tr><td>💼 Margem de garantia (corretora)</td><td><strong>R$ 13.000</strong> (R$ 6.500 × 2)</td></tr>
+        <tr><td>🏦 Corretagem + tarifas</td><td>~R$ 40-75</td></tr>
+        <tr><td>💸 <strong>Custo direto da operação</strong></td><td><strong>~R$ 75</strong></td></tr>
+        <tr><td>💼 <strong>Capital total (margem)</strong></td><td><strong>R$ 13.000</strong> (caução que retorna)</td></tr>
+    </table>
+    <div class="note-footer">
+        💡 <strong>Recomendação adicional:</strong> manter <strong>reserva de caixa de ~R$ 22.500</strong> para cobrir eventuais ajustes diários adversos. Não é exigência da corretora.
+    </div>
+
+    <h3>🅱️ Estratégia B — COMPRA de PUT R$ 330 (próximo ATM)</h3>
+    <table>
+        <tr><th>Item</th><th>Detalhe</th></tr>
+        <tr class="highlight-row"><td><strong>Operação</strong></td><td>📥 COMPRAR 2 PUTs BGIN26 strike R$ 330</td></tr>
+        <tr><td>Prêmio</td><td><strong>R$ 9,20/@</strong> (subiu 22,7% vs ontem)</td></tr>
+        <tr><td>Cobertura</td><td>660 @ (89,5% do lote)</td></tr>
+        <tr><td>Strike</td><td>R$ 330/@ — protege break-even (R$ 319,89)</td></tr>
+        <tr><td>💸 <strong>Custo total do prêmio</strong></td><td><strong>R$ 6.072,00</strong> (9,20 × 330 × 2)</td></tr>
+        <tr><td>💼 Margem</td><td><strong>R$ 0</strong></td></tr>
+        <tr><td>📉 Ajuste diário</td><td><strong>Não há</strong></td></tr>
+        <tr><td>💼 <strong>Capital total</strong></td><td><strong>~R$ 6.100</strong></td></tr>
+        <tr><td>🚀 Upside</td><td>Preserva totalmente</td></tr>
+    </table>
+
+    <h3>🅲️ Estratégia C — COMPRA de PUT R$ 340 (ITM)</h3>
+    <table>
+        <tr><th>Item</th><th>Detalhe</th></tr>
+        <tr class="highlight-row"><td><strong>Operação</strong></td><td>📥 COMPRAR 2 PUTs BGIN26 strike R$ 340</td></tr>
+        <tr><td>Prêmio</td><td><strong>R$ 14,80/@</strong> (subiu 21,3%)</td></tr>
+        <tr><td>💸 <strong>Custo total do prêmio</strong></td><td><strong>R$ 9.768,00</strong></td></tr>
+        <tr><td>💼 Capital total</td><td>~R$ 9.800</td></tr>
+        <tr><td>⚠️ Análise crítica</td><td class="negative">Prêmio caro consome maior parte do upside — dominada pela B</td></tr>
+    </table>
+</div>
+
+<!-- 6. SIMULAÇÃO ATUALIZADA -->
+<div class="section">
+    <h2>📊 6. Simulação Comparativa — Recalculada com Preços Atuais</h2>
+
+    <p style="margin-bottom: 15px;">Resultado líquido em cada cenário de preço de abate, considerando: futuro a R$ 333,55, PUT R$ 330 a R$ 9,20, PUT R$ 340 a R$ 14,80.</p>
+
+    <div class="matrix-table">
+        <table>
+            <tr>
+                <th>Cenário Boi @</th>
+                <th>SEM Hedge</th>
+                <th>🅰️ Futuro R$ 333,55</th>
+                <th>🅱️ PUT R$ 330</th>
+                <th>🅲️ PUT R$ 340</th>
+            </tr>
+            <tr>
+                <td><strong>R$ 370</strong> 🚀</td>
+                <td class="cell-best">+R$ 36.938</td>
+                <td class="cell-warning">+R$ 12.929</td>
+                <td class="cell-best">+R$ 30.866</td>
+                <td class="cell-good">+R$ 27.170</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 360</strong> 📈</td>
+                <td class="cell-best">+R$ 29.566</td>
+                <td class="cell-neutral">+R$ 12.197</td>
+                <td class="cell-good">+R$ 23.494</td>
+                <td class="cell-good">+R$ 19.798</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 350</strong> ↗️</td>
+                <td class="cell-good">+R$ 22.194</td>
+                <td class="cell-neutral">+R$ 11.464</td>
+                <td class="cell-good">+R$ 16.122</td>
+                <td class="cell-neutral">+R$ 12.426</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 342</strong> ➡️</td>
+                <td class="cell-good">+R$ 16.337</td>
+                <td class="cell-neutral">+R$ 10.879</td>
+                <td class="cell-neutral">+R$ 10.265</td>
+                <td class="cell-warning">+R$ 6.569</td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>R$ 333,55</strong> ⭐<br><small>ATUAL</small></td>
+                <td class="cell-warning">+R$ 10.105</td>
+                <td class="cell-neutral">+R$ 9.697</td>
+                <td class="cell-warning">+R$ 4.033</td>
+                <td class="cell-warning">+R$ 337</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 330</strong> ↘️</td>
+                <td class="cell-warning">+R$ 7.450</td>
+                <td class="cell-neutral">+R$ 9.439</td>
+                <td class="cell-warning">+R$ 1.378</td>
+                <td class="cell-warning">+R$ 2.282</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 319,89</strong> ⚠️<br><small>Break-even</small></td>
+                <td class="cell-warning">R$ 0</td>
+                <td class="cell-neutral">+R$ 8.694</td>
+                <td class="cell-warning">+R$ 561</td>
+                <td class="cell-warning">+R$ 1.491</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 310</strong> 📉</td>
+                <td class="cell-danger">-R$ 7.293</td>
+                <td class="cell-neutral">+R$ 7.998</td>
+                <td class="cell-warning">+R$ 5.935</td>
+                <td class="cell-warning">+R$ 771</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 295</strong> 🆘</td>
+                <td class="cell-danger">-R$ 18.351</td>
+                <td class="cell-neutral">+R$ 6.840</td>
+                <td class="cell-warning">+R$ 4.827</td>
+                <td class="cell-warning">-R$ 387</td>
+            </tr>
+            <tr>
+                <td><strong>R$ 280</strong> 💥</td>
+                <td class="cell-danger">-R$ 29.409</td>
+                <td class="cell-neutral">+R$ 5.682</td>
+                <td class="cell-warning">+R$ 3.669</td>
+                <td class="cell-warning">-R$ 1.545</td>
+            </tr>
+        </table>
+    </div>
+
+    <h3>📐 Volatilidade do Resultado (atualizada)</h3>
+    <div class="matrix-table">
+        <table>
+            <tr>
+                <th>Estratégia</th>
+                <th>Lucro Mínimo</th>
+                <th>Lucro Máximo</th>
+                <th>Amplitude</th>
+                <th>Perfil de Risco</th>
+            </tr>
+            <tr>
+                <td><strong>SEM Hedge</strong></td>
+                <td class="negative">-R$ 29.409</td>
+                <td class="positive">+R$ 36.938</td>
+                <td>R$ 66.347</td>
+                <td class="negative">🔴 Inaceitável</td>
+            </tr>
+            <tr style="background: rgba(74, 226, 144, 0.1);">
+                <td><strong>🅰️ Futuro R$ 333,55</strong></td>
+                <td class="positive">+R$ 5.682</td>
+                <td class="positive">+R$ 12.929</td>
+                <td><strong>R$ 7.247</strong></td>
+                <td class="positive">🟢 Mínimo (estável)</td>
+            </tr>
+            <tr style="background: rgba(106, 183, 255, 0.1);">
+                <td><strong>🅱️ PUT R$ 330</strong></td>
+                <td class="positive">+R$ 561</td>
+                <td class="positive">+R$ 30.866</td>
+                <td>R$ 30.305</td>
+                <td class="neutral">🔵 Médio (com upside)</td>
+            </tr>
+            <tr>
+                <td><strong>🅲️ PUT R$ 340</strong></td>
+                <td class="negative">-R$ 1.545</td>
+                <td class="positive">+R$ 27.170</td>
+                <td>R$ 28.715</td>
+                <td class="negative">🟡 Cara (pode dar prejuízo)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="success-box">
+        <strong>🎯 Conclusão Quantitativa:</strong><br>
+        • <strong>Estratégia A (Futuro)</strong> — vencedora em <strong>estabilidade</strong>: lucro entre R$ 5,7 e R$ 12,9 mil em qualquer cenário.<br>
+        • <strong>Estratégia B (PUT 330)</strong> — preserva upside (até R$ 30,9 mil), mas <strong>lucro mínimo caiu para R$ 561</strong> (era R$ 1.683 ontem) por causa do prêmio mais caro.<br>
+        • <strong>Estratégia C (PUT 340)</strong> — agora <strong>pode dar prejuízo de R$ 1.545</strong> em catástrofe! Definitivamente <strong>não recomendada</strong>.
+    </div>
+</div>
+
+<!-- 7. ANÁLISE FUNDAMENTALISTA -->
+<div class="section">
+    <h2>🔍 7. Análise de Mercado — Atualizada (Abr/2026)</h2>
+
+    <h4>🌍 Balanço de Forças no Mercado</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 15px 0;">
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border-top: 4px solid #4ae290;">
+            <h4 style="color: #4ae290;">📈 Fatores de Alta (enfraquecidos)</h4>
+            <ul style="list-style: none; padding: 0; font-size: 0.9em;">
+                <li style="padding: 4px 0;">🌏 Exportações para China <strong>(esgotando!)</strong></li>
+                <li style="padding: 4px 0;">🐂 Oferta restrita de terminados (perdendo força)</li>
+                <li style="padding: 4px 0;">💵 Câmbio competitivo (mantido)</li>
+            </ul>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border-top: 4px solid #e53935;">
+            <h4 style="color: #e53935;">📉 Fatores de Baixa (DOMINANTES)</h4>
+            <ul style="list-style: none; padding: 0; font-size: 0.9em;">
+                <li style="padding: 4px 0;">🌾 Início da safra de boi de pasto (mai-ago)</li>
+                <li style="padding: 4px 0;">🇨🇳 <strong>Cota China esgotando em mai-jun</strong></li>
+                <li style="padding: 4px 0;">📊 Recuo de 8,6% nos futuros em 15 dias</li>
+                <li style="padding: 4px 0;">🏭 <strong>Frigoríficos com escalas alongadas</strong></li>
+                <li style="padding: 4px 0;">💧 <strong>Estresse hídrico em GO/MG</strong></li>
+                <li style="padding: 4px 0;">🐃 Ponta vendedora antecipando vendas</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="critical-box">
+        <strong>📌 Síntese Técnica + Fundamentalista (atualizada):</strong> O balanço pendeu fortemente para <strong>baixa</strong>. Os 6 fatores baixistas <strong>todos atuam no horizonte jul/26</strong>, enquanto os 3 fatores de alta perderam força ou estão se esgotando. A queda de R$ 365 (14/04) para R$ 333,55 (29/04) <strong>confirma a tese</strong>. Não há gatilho fundamental visível para reversão antes do abate.
+    </div>
+</div>
+
+<!-- 8. RECOMENDAÇÃO FINAL -->
+<div class="recommendation-box">
+    <h2>🎯 8. Recomendação Estratégica Final — REFORÇADA</h2>
+
+    <p style="font-size: 1.1em; margin-bottom: 15px;">
+        Com a deterioração intraday do cenário (futuro recuando para R$ 333,55, prêmios das PUTs subindo), a recomendação <strong>se torna ainda mais clara</strong>:
+    </p>
+
+    <div class="dual-recommendation">
+        <div class="dual-card conservador">
+            <h3>🟢 PERFIL CONSERVADOR<br>🅰️ VENDA de 2 Futuros BGIN26</h3>
+            <p style="margin: 10px 0;"><strong>Para quem prioriza:</strong> garantia de margem, eliminação de incerteza.</p>
+            <table style="margin: 10px 0;">
+                <tr><td>💵 Custo direto</td><td><strong>~R$ 75</strong></td></tr>
+                <tr><td>💼 Capital (margem)</td><td><strong>R$ 13.000</strong></td></tr>
+                <tr><td>📊 Lucro garantido</td><td class="positive"><strong>R$ 5,7 a 12,9 mil</strong></td></tr>
+                <tr><td>📉 Ajuste diário</td><td>SIM (exige caixa)</td></tr>
+                <tr><td>🚀 Upside</td><td class="negative">Limitado a R$ 12,9 mil</td></tr>
+            </table>
+            <p style="font-style: italic; color: #a8d168;">✅ Indicada agora — trava a margem antes que piore mais.</p>
+            <p style="font-size: 0.82em; color: #d4e8c4; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(168,209,104,0.3);">
+                💡 <em>Recomenda-se reserva de ~R$ 22.500 para ajustes diários (boa prática).</em>
+            </p>
+        </div>
+
+        <div class="dual-card equilibrado">
+            <h3>🔵 PERFIL EQUILIBRADO<br>🅱️ COMPRA de 2 PUTs R$ 330</h3>
+            <p style="margin: 10px 0;"><strong>Para quem prioriza:</strong> proteção contra catástrofe + upside.</p>
+            <table style="margin: 10px 0;">
+                <tr><td>💵 Custo direto</td><td><strong>R$ 6.072</strong> ▲</td></tr>
+                <tr><td>💼 Capital total</td><td><strong>~R$ 6.100</strong></td></tr>
+                <tr><td>📊 Lucro mínimo</td><td class="neutral"><strong>R$ 561</strong> (catástrofe)</td></tr>
+                <tr><td>📉 Ajuste diário</td><td class="positive">NÃO HÁ</td></tr>
+                <tr><td>🚀 Upside</td><td class="positive">Até R$ 30,9 mil</td></tr>
+            </table>
+            <p style="font-style: italic; color: #6ab7ff;">✅ Alternativa, mas o prêmio encareceu 22,7% — janela se fechando.</p>
+        </div>
+    </div>
+
+    <h3 style="color: #f4c430;">💡 Recomendação Técnica Principal: Estratégia A (Futuro)</h3>
+    <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px; border-left: 5px solid #4ae290;">
+        <p style="font-size: 1.05em; line-height: 1.8;">
+            Com <strong>break-even em R$ 319,89</strong>, futuro a <strong>R$ 333,55</strong> e <strong>6 fatores fundamentalistas baixistas dominantes</strong>, a estratégia de <strong>VENDA de 2 contratos BGIN26 a R$ 333,55/@</strong> é a recomendação técnica principal — <strong>com urgência</strong>.
+        </p>
+        <p style="font-size: 1.05em; line-height: 1.8; margin-top: 12px;">
+            <strong>Justificativa reforçada:</strong> a queda intraday de -R$ 3,45/@ em poucas horas é resposta direta a fundamentos que <strong>não vão melhorar</strong> nos próximos 85 dias (cota China esgotando, safra de pasto entrando, estresse hídrico em GO). Travar agora <strong>R$ 9,7 mil de lucro garantido</strong> é financeiramente correto.
+        </p>
+        <p style="font-size: 1.05em; line-height: 1.8; margin-top: 12px;">
+            <strong>Custo de oportunidade da espera:</strong> a cada R$ 1/@ de queda adicional = R$ 660 a menos no resultado. Se o BGIN26 cair para R$ 325 nas próximas semanas (cenário plausível), a perda chega a R$ 5.643.
+        </p>
+        <p style="font-size: 1.05em; line-height: 1.8; margin-top: 12px;">
+            <strong>NÃO recomendada:</strong> a PUT R$ 340 agora pode dar <strong>prejuízo de R$ 1.545</strong> em catástrofe — está dominada pela PUT R$ 330 em todos os cenários relevantes.
+        </p>
+    </div>
+</div>
+
+<!-- 9. QUADRO RESUMO -->
+<div class="section">
+    <h2>📋 9. Quadro-Resumo das Alternativas (Atualizado)</h2>
+    <div class="matrix-table">
+        <table>
+            <tr>
+                <th>Opção</th>
+                <th>Estratégia</th>
+                <th>Custo Direto</th>
+                <th>Capital</th>
+                <th>Faixa de Lucro</th>
+                <th>Recomendação</th>
+            </tr>
+            <tr style="background: rgba(74, 226, 144, 0.15);">
+                <td><strong>🅰️</strong></td>
+                <td>VENDA 2 Futuros BGIN26 a R$ 333,55</td>
+                <td>~R$ 75</td>
+                <td>R$ 13.000 *</td>
+                <td class="positive">R$ 5,7 a 12,9 mil</td>
+                <td class="positive">🟢 PRINCIPAL ⚡</td>
+            </tr>
+            <tr style="background: rgba(106, 183, 255, 0.15);">
+                <td><strong>🅱️</strong></td>
+                <td>COMPRA 2 PUTs strike R$ 330</td>
+                <td>R$ 6.072</td>
+                <td>R$ 6.100</td>
+                <td class="positive">R$ 0,6 a 30,9 mil</td>
+                <td class="neutral">🔵 ALTERNATIVA</td>
+            </tr>
+            <tr>
+                <td><strong>🅲️</strong></td>
+                <td>COMPRA 2 PUTs strike R$ 340</td>
+                <td>R$ 9.768</td>
+                <td>R$ 9.800</td>
+                <td>-R$ 1,5 a R$ 27,2 mil</td>
+                <td class="negative">🔴 NÃO recomendada</td>
+            </tr>
+            <tr style="background: rgba(229, 57, 53, 0.15);">
+                <td><strong>D</strong></td>
+                <td>Sem hedge (especulação)</td>
+                <td>R$ 0</td>
+                <td>R$ 0</td>
+                <td class="negative">-R$ 29 a +R$ 37 mil</td>
+                <td class="negative">🔴 NÃO recomendada</td>
+            </tr>
+        </table>
+    </div>
+    <p style="font-size: 0.85em; color: #a8c8e8; font-style: italic; margin-top: 8px;">
+        * Margem de garantia exigida pela corretora (caução, retorna no encerramento). Reserva adicional de caixa ~R$ 22.500 recomendada para ajustes — não obrigatória.
+    </p>
+</div>
+
+<!-- 10. CRONOGRAMA -->
+<div class="section">
+    <h2>📅 10. Cronograma de Execução</h2>
+    <div class="timeline">
+        <div class="timeline-item">
+            <h4>🚨 D+0 — 29/04/2026 (HOJE — URGENTE)</h4>
+            <p>Decisão final entre Estratégia A (Futuro a R$ 333,55) ou B (PUT R$ 330). <strong>Janela se fechando rapidamente</strong> — cada hora de espera tem custo real.</p>
+        </div>
+        <div class="timeline-item">
+            <h4>D+1 a D+7</h4>
+            <p>Acompanhamento intensivo: ajustes diários (futuro) ou monitoramento da PUT.</p>
+        </div>
+        <div class="timeline-item">
+            <h4>D+30 — 29/05/2026</h4>
+            <p>Pesagem do lote, revisão de evolução de peso, ajuste de hedge se houver desvio.</p>
+        </div>
+        <div class="timeline-item">
+            <h4>D+60 — 28/06/2026</h4>
+            <p>Confirmação de previsão de abate, programação com frigorífico.</p>
+        </div>
+        <div class="timeline-item">
+            <h4>D+85 — 22/07/2026 (abate previsto)</h4>
+            <p>Abate efetivo, encerramento do hedge, liquidação física.</p>
+        </div>
+    </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+    <strong>⚠️ Disclaimer Técnico:</strong> Relatório elaborado em 29/04/2026 às 13h40 com cotação intraday do BGIN26 em R$ 333,55. Os prêmios das PUTs (R$ 14,80 strike 340 / R$ 9,20 strike 330) são referências da mesa atualizadas após a queda — confirmar valores definitivos no momento da execução. As fontes consultadas para análise fundamentalista incluem Scot Consultoria, Safras & Mercado, Agrifatto, Globo Rural, Portal DBO e Abiec. Operações em mercado futuro envolvem alavancagem e podem resultar em chamadas de margem. Esta análise não constitui recomendação de investimento financeiro, mas sim consultoria especializada em gestão de risco agropecuário.
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="credentials">
+        <h3>📊 Análise e Construção</h3>
+        <div class="name">Dr. Sidney Souza</div>
+        <div class="role">Economista e Adm. Agrícola — Estrategista Econômico do Produtor</div>
+        <div class="role">Especialista em economia da fazenda e gestão de risco no agro</div>
+        <div style="margin-top: 12px; color: #f4c430; font-style: italic;">
+            "Transformamos dados da fazenda em decisões econômicas"
+        </div>
+        <div class="contact">
+            📧 <a href="mailto:sidneyagro@gmail.com">sidneyagro@gmail.com</a> |
+            📱 <a href="tel:+5564992266886">(64) 9 9226-6886</a> |
+            🌐 <a href="https://instagram.com/ruralin.ai">@ruralin.ai</a>
+        </div>
+    </div>
+    <div style="color: #a8d168; font-size: 0.85em; margin-top: 15px;">
+        Relatório v3.3 — 29/04/2026 13h40 — Atualização intraday com fundamentos<br>
+        © Ruralin.AI — Todos os direitos reservados
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>
