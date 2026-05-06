@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo Executivo | Faz. Toca da Onça</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f5f0; color: #333; line-height: 1.6; }
+.header-page { background: linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 100%); color: #fff; padding: 30px 20px; text-align: center; }
+.header-page h1 { font-size: 2rem; margin-bottom: 10px; }
+.nav { background: #2d5a2d; padding: 10px 20px; text-align: center; }
+.nav a { color: #fff; text-decoration: none; margin: 0 15px; padding: 5px 10px; border-radius: 5px; transition: background 0.3s; }
+.nav a:hover { background: rgba(255,255,255,0.2); }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+.section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.section h2 { color: #2d5a2d; border-bottom: 3px solid #2d5a2d; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; }
+.section h3 { color: #1a3a1a; margin: 20px 0 10px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95rem; }
+th { background: #2d5a2d; color: #fff; padding: 12px; text-align: left; }
+td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; }
+tr:nth-child(even) { background: #f9f9f5; }
+tr:hover { background: #e8f0e8; }
+.green { color: #2d7a2d; font-weight: bold; }
+.red { color: #c62828; font-weight: bold; }
+.yellow { color: #e69900; font-weight: bold; }
+.right { text-align: right; }
+.center { text-align: center; }
+.box-alerta { padding: 15px; border-left: 5px solid; border-radius: 5px; margin: 15px 0; }
+.box-alerta.crit { background: #ffebee; border-color: #c62828; }
+.box-alerta.warn { background: #fff8e1; border-color: #f9a825; }
+.box-alerta.ok { background: #e8f5e9; border-color: #2d7a2d; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+.kpi-card { background: linear-gradient(135deg, #2d5a2d 0%, #4a7a4a 100%); color: #fff; padding: 20px; border-radius: 10px; text-align: center; }
+.kpi-card .num { font-size: 2rem; font-weight: bold; }
+.kpi-card .lbl { font-size: 0.9rem; opacity: 0.9; margin-top: 5px; }
+.bar-chart { margin: 20px 0; }
+.bar-row { display: flex; align-items: center; margin: 8px 0; gap: 10px; }
+.bar-label { width: 130px; font-size: 0.9rem; }
+.bar-track { flex: 1; background: #e8e8e0; height: 30px; border-radius: 5px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, #2d5a2d, #4a7a4a); display: flex; align-items: center; padding-left: 10px; color: #fff; font-size: 0.85rem; font-weight: bold; }
+.bar-value { width: 130px; text-align: right; font-size: 0.9rem; font-weight: bold; }
+footer { text-align: center; padding: 30px; color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="header-page">
+<h1>📊 Resumo Executivo</h1>
+<p>Comparativo Financeiro 2025 vs 2026 — Faz. Toca da Onça</p>
+</div>
+<div class="nav">
+<a href="00_index.html">🏠 Início</a>
+<a href="01_resumo_executivo.html">📊 Resumo</a>
+<a href="02_analise_gado.html">🐂 Gado</a>
+<a href="03_dashboard_caixa.html">💰 Caixa</a>
+<a href="04_simulador_cortes.html">🎮 Simulador</a>
+<a href="05_outliers.html">⚠️ Outliers</a>
+<a href="06_recomendacoes.html">🎯 Recomendações</a>
+</div>
+
+<div class="container">
+
+<div class="section">
+<h2>🎯 Indicadores Principais</h2>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="num">R$ 4,93M</div><div class="lbl">Realizado Jan-Abr/2026</div></div>
+<div class="kpi-card"><div class="num">R$ 3,84M</div><div class="lbl">Realizado Jan-Abr/2025</div></div>
+<div class="kpi-card"><div class="num">+28,5%</div><div class="lbl">Variação Q1+Abril</div></div>
+<div class="kpi-card"><div class="num">R$ 17,04M</div><div class="lbl">Projeção total 2026</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>📅 Comparativo Mensal Jan-Abril</h2>
+<table>
+<thead><tr><th>Mês</th><th class="right">2025</th><th class="right">2026</th><th class="right">Δ R$</th><th class="right">Δ %</th></tr></thead>
+<tbody>
+<tr><td>Janeiro</td><td class="right">R$ 873.450</td><td class="right">R$ 1.524.860</td><td class="right red">+R$ 651.410</td><td class="right red">+74,6%</td></tr>
+<tr><td>Fevereiro</td><td class="right">R$ 956.180</td><td class="right">R$ 1.073.420</td><td class="right yellow">+R$ 117.240</td><td class="right yellow">+12,3%</td></tr>
+<tr><td>Março</td><td class="right">R$ 884.220</td><td class="right">R$ 1.135.690</td><td class="right red">+R$ 251.470</td><td class="right red">+28,4%</td></tr>
+<tr><td>Abril</td><td class="right">R$ 1.124.380</td><td class="right">R$ 1.198.340</td><td class="right green">+R$ 73.960</td><td class="right green">+6,6%</td></tr>
+<tr style="font-weight:bold; background:#e8f0e8;"><td>TOTAL</td><td class="right">R$ 3.838.230</td><td class="right">R$ 4.932.310</td><td class="right red">+R$ 1.094.080</td><td class="right red">+28,5%</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🏷️ Top Categorias 2026 (Jan-Abril)</h2>
+<div class="bar-chart">
+<div class="bar-row"><div class="bar-label">5 - Insumos</div><div class="bar-track"><div class="bar-fill" style="width:100%">36,2%</div></div><div class="bar-value">R$ 1.785.420</div></div>
+<div class="bar-row"><div class="bar-label">19 - Gado</div><div class="bar-track"><div class="bar-fill" style="width:41%">14,8%</div></div><div class="bar-value">R$ 730.241</div></div>
+<div class="bar-row"><div class="bar-label">1 - Investimentos</div><div class="bar-track"><div class="bar-fill" style="width:38%">13,8%</div></div><div class="bar-value">R$ 678.890</div></div>
+<div class="bar-row"><div class="bar-label">6 - Serv. Terceiros</div><div class="bar-track"><div class="bar-fill" style="width:17%">6,3%</div></div><div class="bar-value">R$ 312.180</div></div>
+<div class="bar-row"><div class="bar-label">4 - Combustíveis</div><div class="bar-track"><div class="bar-fill" style="width:12%">4,4%</div></div><div class="bar-value">R$ 219.140</div></div>
+<div class="bar-row"><div class="bar-label">3 - Folha</div><div class="bar-track"><div class="bar-fill" style="width:12%">4,3%</div></div><div class="bar-value">R$ 213.560</div></div>
+<div class="bar-row"><div class="bar-label">7 - Arrendamento</div><div class="bar-track"><div class="bar-fill" style="width:10%">3,6%</div></div><div class="bar-value">R$ 175.500</div></div>
+<div class="bar-row"><div class="bar-label">10 - Manutenção</div><div class="bar-track"><div class="bar-fill" style="width:9%">3,4%</div></div><div class="bar-value">R$ 165.380</div></div>
+<div class="bar-row"><div class="bar-label">18 - Fretes</div><div class="bar-track"><div class="bar-fill" style="width:8%">2,8%</div></div><div class="bar-value">R$ 138.660</div></div>
+<div class="bar-row"><div class="bar-label">16 - Impostos</div><div class="bar-track"><div class="bar-fill" style="width:5%">2,0%</div></div><div class="bar-value">R$ 98.220</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>📋 Variação por Categoria (Jan-Abril 2025 vs 2026)</h2>
+<table>
+<thead><tr><th>Categoria</th><th class="right">2025</th><th class="right">2026</th><th class="right">Δ %</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>5 - Insumos</td><td class="right">R$ 1.385.620</td><td class="right">R$ 1.785.420</td><td class="right red">+28,9%</td><td>Compras antecipadas</td></tr>
+<tr><td>19 - Gado</td><td class="right">R$ 110.136</td><td class="right">R$ 730.241</td><td class="right red">+562,9%</td><td>Reposição agressiva</td></tr>
+<tr><td>1 - Investimentos</td><td class="right">R$ 642.890</td><td class="right">R$ 678.890</td><td class="right green">+5,6%</td><td>Estável</td></tr>
+<tr><td>3 - Folha</td><td class="right">R$ 178.260</td><td class="right">R$ 213.560</td><td class="right yellow">+19,8%</td><td>Dissídio + 13° atrasado</td></tr>
+<tr><td>6 - Serviços</td><td class="right">R$ 248.190</td><td class="right">R$ 312.180</td><td class="right red">+25,8%</td><td>Mais diaristas</td></tr>
+<tr><td>4 - Combustíveis</td><td class="right">R$ 268.450</td><td class="right">R$ 219.140</td><td class="right green">-18,4%</td><td>✅ Redução real</td></tr>
+<tr><td>10 - Manutenção</td><td class="right">R$ 152.840</td><td class="right">R$ 165.380</td><td class="right yellow">+8,2%</td><td>Inflação</td></tr>
+<tr><td>18 - Fretes</td><td class="right">R$ 78.230</td><td class="right">R$ 138.660</td><td class="right red">+77,2%</td><td>Frete Piauí + casca</td></tr>
+<tr><td>7 - Arrendamento</td><td class="right">R$ 75.000</td><td class="right">R$ 175.500</td><td class="right red">+134,0%</td><td>Reajuste + Palestina</td></tr>
+<tr><td>16 - Impostos</td><td class="right">R$ 62.380</td><td class="right">R$ 98.220</td><td class="right red">+57,5%</td><td>FGTS + retroativos</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🚨 Diagnóstico do Salto de 28,5%</h2>
+
+<div class="box-alerta crit">
+<h3>Janeiro/2026 (+74,6%) — Mês Atípico</h3>
+<ul style="margin-left:20px; margin-top:10px;">
+<li>🐂 <b>Bezerras Pedro Lourenço Montes:</b> R$ 453.400</li>
+<li>🐂 <b>Compras gado Gabriella + Antonio Ricardo:</b> R$ 213.784</li>
+<li>🌽 <b>Milho Pedro Lourenço:</b> R$ 140.280</li>
+<li>🌱 <b>Sementes Mirassol:</b> R$ 70.000</li>
+<li>💸 <b>FGTS Lucas atrasado (2 anos):</b> R$ 9.939</li>
+</ul>
+</div>
+
+<div class="box-alerta crit">
+<h3>Março/2026 (+28,4%)</h3>
+<ul style="margin-left:20px; margin-top:10px;">
+<li>🌽 <b>Milho Pedro Lourenço:</b> R$ 600.000 (compra concentrada)</li>
+<li>🚛 <b>Conserto caminhões acidentes:</b> R$ 41.700</li>
+</ul>
+</div>
+
+<div class="box-alerta ok">
+<h3>💡 Insight Crítico</h3>
+<p>O salto de 2026 vem <b>fortemente de COMPRAS DE GADO + MILHO ANTECIPADO</b>, não de aumento operacional regular. Excluindo esses eventos extraordinários (R$ 1,1M), a "inflação real operacional" foi de <b>+9,2%</b> — mais próximo do esperado.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>📈 Projeção Total 2026</h2>
+<table>
+<thead><tr><th>Período</th><th class="right">Valor</th></tr></thead>
+<tbody>
+<tr><td>Jan-Abr 2026 (real)</td><td class="right">R$ 4.932.310</td></tr>
+<tr><td>Mai-Dez 2026 (projeção base +10%)</td><td class="right">R$ 12.110.320</td></tr>
+<tr style="font-weight:bold; background:#e8f0e8;"><td>TOTAL ANO 2026 PROJETADO</td><td class="right">R$ 17.042.630</td></tr>
+<tr><td>2025 (real)</td><td class="right">R$ 13.847.612</td></tr>
+<tr style="font-weight:bold; background:#fff4e0;"><td>Variação anual prevista</td><td class="right red">+23,1%</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+<footer>Faz. Toca da Onça | Aporé-GO | Pedro Henrique e Rogério Teles | Maio/2026</footer>
+</body>
+</html>

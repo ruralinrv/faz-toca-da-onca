@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Gado | Faz. Toca da Onça</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f5f0; color: #333; line-height: 1.6; }
+.header-page { background: linear-gradient(135deg, #5a3a1a 0%, #8a5a2d 100%); color: #fff; padding: 30px 20px; text-align: center; }
+.header-page h1 { font-size: 2rem; margin-bottom: 10px; }
+.nav { background: #2d5a2d; padding: 10px 20px; text-align: center; }
+.nav a { color: #fff; text-decoration: none; margin: 0 15px; padding: 5px 10px; border-radius: 5px; }
+.nav a:hover { background: rgba(255,255,255,0.2); }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+.section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.section h2 { color: #8a5a2d; border-bottom: 3px solid #8a5a2d; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; }
+.section h3 { color: #5a3a1a; margin: 20px 0 10px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.95rem; }
+th { background: #8a5a2d; color: #fff; padding: 12px; text-align: left; }
+td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; }
+tr:nth-child(even) { background: #faf6f0; }
+tr:hover { background: #f0e8d8; }
+.right { text-align: right; }
+.green { color: #2d7a2d; font-weight: bold; }
+.red { color: #c62828; font-weight: bold; }
+.yellow { color: #e69900; font-weight: bold; }
+.box-alerta { padding: 15px; border-left: 5px solid; border-radius: 5px; margin: 15px 0; }
+.box-alerta.crit { background: #ffebee; border-color: #c62828; }
+.box-alerta.warn { background: #fff8e1; border-color: #f9a825; }
+.box-alerta.ok { background: #e8f5e9; border-color: #2d7a2d; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+.kpi-card { background: linear-gradient(135deg, #8a5a2d 0%, #b07a3d 100%); color: #fff; padding: 20px; border-radius: 10px; text-align: center; }
+.kpi-card .num { font-size: 1.8rem; font-weight: bold; }
+.kpi-card .lbl { font-size: 0.85rem; opacity: 0.9; margin-top: 5px; }
+.curve-chart { margin: 20px 0; }
+.curve-row { display: flex; align-items: center; margin: 6px 0; gap: 10px; }
+.curve-label { width: 100px; font-size: 0.9rem; }
+.curve-track { flex: 1; background: #f0e8d8; height: 28px; border-radius: 5px; overflow: hidden; }
+.curve-fill { height: 100%; background: linear-gradient(90deg, #8a5a2d, #b07a3d); display: flex; align-items: center; padding-left: 10px; color: #fff; font-size: 0.85rem; font-weight: bold; }
+.curve-value { width: 130px; text-align: right; font-size: 0.9rem; font-weight: bold; }
+footer { text-align: center; padding: 30px; color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="header-page">
+<h1>🐂 Análise Dedicada de Gado</h1>
+<p>Operação Pecuária — Faz. Toca da Onça</p>
+</div>
+<div class="nav">
+<a href="00_index.html">🏠 Início</a>
+<a href="01_resumo_executivo.html">📊 Resumo</a>
+<a href="02_analise_gado.html">🐂 Gado</a>
+<a href="03_dashboard_caixa.html">💰 Caixa</a>
+<a href="04_simulador_cortes.html">🎮 Simulador</a>
+<a href="05_outliers.html">⚠️ Outliers</a>
+<a href="06_recomendacoes.html">🎯 Recomendações</a>
+</div>
+<div class="container">
+
+<div class="section">
+<h2>🎯 Visão Consolidada</h2>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="num">R$ 2,14M</div><div class="lbl">Total Gado 2025</div></div>
+<div class="kpi-card"><div class="num">R$ 730k</div><div class="lbl">Jan-Abr 2026</div></div>
+<div class="kpi-card"><div class="num">+562,9%</div><div class="lbl">Variação Q1+Abr</div></div>
+<div class="kpi-card"><div class="num">R$ 81k</div><div class="lbl">Ticket médio 2026</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>📅 Sazonalidade 2025 — Curva Mensal</h2>
+<div class="curve-chart">
+<div class="curve-row"><div class="curve-label">Jan-Abr</div><div class="curve-track"><div class="curve-fill" style="width:0%">0,0%</div></div><div class="curve-value">R$ 0</div></div>
+<div class="curve-row"><div class="curve-label">Maio</div><div class="curve-track"><div class="curve-fill" style="width:6%">1,6%</div></div><div class="curve-value">R$ 34.282</div></div>
+<div class="curve-row"><div class="curve-label">Junho</div><div class="curve-track"><div class="curve-fill" style="width:27%">6,8%</div></div><div class="curve-value">R$ 146.112</div></div>
+<div class="curve-row"><div class="curve-label">Julho 🔥</div><div class="curve-track"><div class="curve-fill" style="width:100%">24,7%</div></div><div class="curve-value">R$ 528.450</div></div>
+<div class="curve-row"><div class="curve-label">Agosto</div><div class="curve-track"><div class="curve-fill" style="width:44%">10,9%</div></div><div class="curve-value">R$ 233.393</div></div>
+<div class="curve-row"><div class="curve-label">Setembro</div><div class="curve-track"><div class="curve-fill" style="width:71%">17,7%</div></div><div class="curve-value">R$ 378.549</div></div>
+<div class="curve-row"><div class="curve-label">Outubro</div><div class="curve-track"><div class="curve-fill" style="width:30%">7,4%</div></div><div class="curve-value">R$ 157.908</div></div>
+<div class="curve-row"><div class="curve-label">Novembro</div><div class="curve-track"><div class="curve-fill" style="width:57%">14,2%</div></div><div class="curve-value">R$ 304.566</div></div>
+<div class="curve-row"><div class="curve-label">Dezembro</div><div class="curve-track"><div class="curve-fill" style="width:67%">16,8%</div></div><div class="curve-value">R$ 359.121</div></div>
+</div>
+<div class="box-alerta ok">
+<p><b>Padrão histórico:</b> Janela quente Jul-Dez (91,7% do volume). Janela fria Jan-Abr (≈ 0%).</p>
+</div>
+</div>
+
+<div class="section">
+<h2>🆕 Mudança de Comportamento em 2026</h2>
+<table>
+<thead><tr><th>Mês 2026</th><th class="right">Valor</th><th>Lançamentos principais</th></tr></thead>
+<tbody>
+<tr><td><b>Janeiro</b></td><td class="right red">R$ 667.391</td><td>Pedro Lourenço (R$ 453.400) + Gabriella Sapia (R$ 176.792) + Antonio Ricardo (R$ 36.991)</td></tr>
+<tr><td>Fevereiro</td><td class="right">R$ 0</td><td>—</td></tr>
+<tr><td><b>Março</b></td><td class="right yellow">R$ 239.630</td><td>Cheque (R$ 239.630)</td></tr>
+<tr><td>Abril</td><td class="right">R$ 0</td><td>—</td></tr>
+<tr style="font-weight:bold; background:#f0e8d8;"><td>TOTAL Q1+Abr</td><td class="right">R$ 730.241</td><td>9 transações</td></tr>
+</tbody>
+</table>
+<div class="box-alerta crit">
+<h3>🚨 Diagnóstico</h3>
+<p>2026 antecipou drasticamente as compras: o que historicamente seria feito a partir de julho, foi feito em <b>janeiro e março</b>. Possíveis causas:</p>
+<ol style="margin-left:25px; margin-top:10px;">
+<li>Estratégia de compra antecipada (preço melhor)</li>
+<li>Mudança de fornecedor (Pedro Lourenço Montes virou principal)</li>
+<li>Capital empatado em ativo biológico</li>
+<li>Expansão de plantel</li>
+</ol>
+</div>
+</div>
+
+<div class="section">
+<h2>🏆 Top 10 Fornecedores de Gado</h2>
+<table>
+<thead><tr><th>#</th><th>Fornecedor</th><th class="right">Valor</th><th>Origem</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Pedro Lourenço Montes</td><td class="right">R$ 453.400</td><td>Bezerras (Jan/26)</td></tr>
+<tr><td>2</td><td>Cheque nº 11</td><td class="right">R$ 387.777</td><td>Jul/25 (não identificado)</td></tr>
+<tr><td>3</td><td>Valdemar Cabral Vieira</td><td class="right">R$ 318.550</td><td>Set/25</td></tr>
+<tr><td>4</td><td>Umberto Fernando de Carvalho</td><td class="right">R$ 233.000</td><td>Mai/25</td></tr>
+<tr><td>5</td><td>Elisandro Cadore</td><td class="right">R$ 231.136</td><td>Dez/25</td></tr>
+<tr><td>6</td><td>Maria Inês</td><td class="right">R$ 221.560</td><td>Dez/25 (2x)</td></tr>
+<tr><td>7</td><td>Miguel Rodrigues Moraes</td><td class="right">R$ 214.838</td><td>Dez/25</td></tr>
+<tr><td>8</td><td>Gabriella Sapia Castilho</td><td class="right">R$ 176.792</td><td>Jan/26</td></tr>
+<tr><td>9</td><td>Antonio Ricardo Ferreira Filho</td><td class="right">R$ 170.255</td><td>Nov/25 + Jan/26</td></tr>
+<tr><td>10</td><td>Pedro Henrique Novaes Provinciali</td><td class="right">R$ 150.000</td><td>Ago/25</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>💰 Análise de Comissões</h2>
+<table>
+<thead><tr><th>Indicador</th><th class="right">2025</th><th class="right">2026 (Q1+Abr)</th></tr></thead>
+<tbody>
+<tr><td>Total comissões pagas</td><td class="right">R$ 33.736</td><td class="right">R$ 33.500</td></tr>
+<tr><td>Total compra de gado</td><td class="right">R$ 2.142.380</td><td class="right">R$ 730.241</td></tr>
+<tr style="font-weight:bold;"><td>Taxa de comissão</td><td class="right green">1,57%</td><td class="right red">4,59%</td></tr>
+</tbody>
+</table>
+<div class="box-alerta crit">
+<h3>⚠️ ALERTA: Taxa de comissão TRIPLICOU em 2026</h3>
+<p>Renegociar percentuais com <b>Alvaro</b> (R$ 17k) e <b>Batata</b> (R$ 13.250). Meta: voltar a <b>1,5–2,0%</b>.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>🚛 Custos Logísticos sobre Gado</h2>
+<table>
+<thead><tr><th>Período</th><th class="right">Frete Gado</th><th class="right">% sobre Gado</th><th class="right">Frete + Comissão</th></tr></thead>
+<tbody>
+<tr><td>2025 (ano)</td><td class="right">R$ 95.520</td><td class="right">4,46%</td><td class="right">6,03%</td></tr>
+<tr><td>2026 (Q1+Abr)</td><td class="right">R$ 41.330</td><td class="right">5,66%</td><td class="right red">10,25%</td></tr>
+</tbody>
+</table>
+<div class="box-alerta warn">
+<p><b>Custo logístico/intermediação relativo cresceu +70%</b> entre os períodos. Foco urgente em renegociação.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>🎯 Projeção Mai-Dez 2026</h2>
+<table>
+<thead><tr><th>Cenário</th><th class="right">Total Gado 2026</th><th>Estratégia</th></tr></thead>
+<tbody>
+<tr><td class="red">🔴 Pessimista (mantém ritmo)</td><td class="right">R$ 3,13M</td><td>Expansão grande de plantel</td></tr>
+<tr style="background:#fff4e0; font-weight:bold;"><td class="yellow">🟡 Base (corrigido) ⭐</td><td class="right">R$ 2,28M</td><td>Compras antecipadas reduzem 2º semestre</td></tr>
+<tr><td class="green">🟢 Otimista (foco terminação)</td><td class="right">R$ 1,93M</td><td>Reduzir compras, ciclo eficiente</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>📊 KPIs para Implementar</h2>
+<table>
+<thead><tr><th>Indicador</th><th>Cálculo</th><th>Meta</th></tr></thead>
+<tbody>
+<tr><td>Custo de aquisição/cabeça</td><td>Total gado ÷ nº cabeças</td><td>Reduzir 5%/ano</td></tr>
+<tr><td>Taxa de comissão</td><td>Comissão ÷ Valor gado</td><td>&lt; 2%</td></tr>
+<tr><td>Taxa de frete</td><td>Frete ÷ Valor gado</td><td>&lt; 4%</td></tr>
+<tr><td>Dias em confinamento</td><td>Data abate − Data entrada</td><td>90-120 dias</td></tr>
+<tr><td>GMD (Ganho Médio Diário)</td><td>(Peso saída − entrada) ÷ dias</td><td>&gt; 1,4 kg/dia</td></tr>
+<tr><td>Custo da @ produzida</td><td>Custo total ÷ @ produzida</td><td>Acompanhar mensal</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+<footer>Faz. Toca da Onça | Aporé-GO | Pedro Henrique e Rogério Teles | Maio/2026</footer>
+</body>
+</html>

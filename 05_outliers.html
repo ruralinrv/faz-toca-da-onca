@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outliers e Reclassificações | Faz. Toca da Onça</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f5f0; color: #333; line-height: 1.6; }
+.header-page { background: linear-gradient(135deg, #5a3a1a 0%, #c62828 100%); color: #fff; padding: 30px 20px; text-align: center; }
+.header-page h1 { font-size: 2rem; margin-bottom: 10px; }
+.nav { background: #2d5a2d; padding: 10px 20px; text-align: center; }
+.nav a { color: #fff; text-decoration: none; margin: 0 15px; padding: 5px 10px; border-radius: 5px; }
+.nav a:hover { background: rgba(255,255,255,0.2); }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+.section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.section h2 { color: #c62828; border-bottom: 3px solid #c62828; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; }
+.section h3 { color: #5a1a1a; margin: 20px 0 10px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.92rem; }
+th { background: #c62828; color: #fff; padding: 10px; text-align: left; }
+td { padding: 8px 10px; border-bottom: 1px solid #e0e0e0; }
+tr:nth-child(even) { background: #fff8f8; }
+tr:hover { background: #ffe8e8; }
+.right { text-align: right; }
+.center { text-align: center; }
+.errado { color: #c62828; font-weight: bold; }
+.correto { color: #2d7a2d; font-weight: bold; }
+.box-alerta { padding: 15px; border-left: 5px solid; border-radius: 5px; margin: 15px 0; }
+.box-alerta.crit { background: #ffebee; border-color: #c62828; }
+.box-alerta.warn { background: #fff8e1; border-color: #f9a825; }
+.box-alerta.ok { background: #e8f5e9; border-color: #2d7a2d; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+.kpi-card { background: linear-gradient(135deg, #c62828 0%, #e74c3c 100%); color: #fff; padding: 20px; border-radius: 10px; text-align: center; }
+.kpi-card .num { font-size: 1.8rem; font-weight: bold; }
+.kpi-card .lbl { font-size: 0.85rem; opacity: 0.9; margin-top: 5px; }
+footer { text-align: center; padding: 30px; color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="header-page">
+<h1>⚠️ Outliers e Reclassificações</h1>
+<p>Auditoria de Lançamentos e Padronização — Faz. Toca da Onça</p>
+</div>
+<div class="nav">
+<a href="00_index.html">🏠 Início</a>
+<a href="01_resumo_executivo.html">📊 Resumo</a>
+<a href="02_analise_gado.html">🐂 Gado</a>
+<a href="03_dashboard_caixa.html">💰 Caixa</a>
+<a href="04_simulador_cortes.html">🎮 Simulador</a>
+<a href="05_outliers.html">⚠️ Outliers</a>
+<a href="06_recomendacoes.html">🎯 Recomendações</a>
+</div>
+<div class="container">
+
+<div class="section">
+<h2>🎯 Resumo da Auditoria</h2>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="num">10</div><div class="lbl">Grupos de inconsistência</div></div>
+<div class="kpi-card"><div class="num">R$ 131k+</div><div class="lbl">Investimentos mal classificados</div></div>
+<div class="kpi-card"><div class="num">R$ 175k</div><div class="lbl">Risco trabalhista (José Wilson)</div></div>
+<div class="kpi-card"><div class="num">2</div><div class="lbl">Lançamentos sem CDG</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 1 — Energia classificada como Cozinha</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Atual</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>05/02/25</td><td>PGTO LUCAS</td><td class="right">R$ 2.500</td><td class="errado">2 - Energia ❌</td><td class="correto">3 - Folha ✅</td></tr>
+<tr><td>05/02/25</td><td>LUCAS CESTA</td><td class="right">R$ 210</td><td class="errado">2 - Energia ❌</td><td class="correto">3 ou 8 ✅</td></tr>
+<tr><td>05/03/26</td><td>LUCAS CESTA</td><td class="right">R$ 210</td><td class="errado">2 - Energia ❌</td><td class="correto">8 - Cozinha ✅</td></tr>
+<tr><td>27/04/26</td><td>ENERGIA SITIO</td><td class="right">R$ 441,74</td><td class="errado">8 - Cozinha ❌</td><td class="correto">2 - Energia ✅</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 2 — Insumos como Combustível</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Atual</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>11/03/25</td><td>+FARELOS (Casca soja)</td><td class="right">R$ 23.912</td><td class="errado">4 - Combustível ❌</td><td class="correto">5 - Insumos ✅</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 3 — Investimentos com CDG errado</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Atual</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>06/02/25</td><td>ARRENDAMENTO PALESTINA</td><td class="right">R$ 7.000</td><td class="errado">10 - Manutenção ❌</td><td class="correto">7 - Arrendamento ✅</td></tr>
+<tr><td>09/01/25</td><td>ARRENDAMENTO SITIO CURY</td><td class="right">R$ 7.000</td><td class="errado">8 - Cozinha ❌</td><td class="correto">7 - Arrendamento ✅</td></tr>
+<tr><td>08/03/26</td><td>HUGUESNET (Internet)</td><td class="right">R$ 251</td><td class="errado">7 - Arrendamento ❌</td><td class="correto">9 - Internet ✅</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 4 — Folha como Cozinha</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Atual</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>03/04/25</td><td>CANDIDA SANTOS RIBEIRO</td><td class="right">R$ 1.260,35</td><td class="errado">3 - Folha ❌</td><td class="correto">8 - Cozinha ✅</td></tr>
+<tr><td>06/05/25</td><td>CANDIDA SANTOS RIBEIRO</td><td class="right">R$ 1.050</td><td class="errado">3 - Folha ❌</td><td class="correto">8 - Cozinha ✅</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 5 — Serviços classificados como Imposto</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Atual</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>20/06/25</td><td>JOSE WILSON</td><td class="right">R$ 9.480</td><td class="errado">16 - Imposto ❌</td><td class="correto">6 - Serviços ✅</td></tr>
+<tr><td>21/07/25</td><td>HMW SST</td><td class="right">R$ 150</td><td class="errado">16 - Imposto ❌</td><td class="correto">6 - Serviços ✅</td></tr>
+<tr><td>16/03/26</td><td>HMW SST</td><td class="right">R$ 200</td><td class="errado">16 - Imposto ❌</td><td class="correto">6 - Serviços ✅</td></tr>
+<tr><td>19/03/26</td><td>HMW SST (2x)</td><td class="right">R$ 200</td><td class="errado">16 - Imposto ❌</td><td class="correto">6 - Serviços ✅</td></tr>
+<tr><td>20/04/26</td><td>HMW SST</td><td class="right">R$ 100</td><td class="errado">16 - Imposto ❌</td><td class="correto">6 - Serviços ✅</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 6 — Investimentos como Manutenção</h2>
+<div class="box-alerta crit"><b>💸 Total mal classificado: R$ 131.860,80</b></div>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>CDG Correto</th></tr></thead>
+<tbody>
+<tr><td>02/10/25</td><td>CLEISON ELGER (Implemento)</td><td class="right">R$ 55.000</td><td class="correto">1 - Investimentos</td></tr>
+<tr><td>19/08/25</td><td>ANTONIO CARLOS DE LAU (Trator)</td><td class="right">R$ 20.000</td><td class="correto">1 - Investimentos</td></tr>
+<tr><td>29/07/25</td><td>ANTONIO CARLOS DE LAU (Trator)</td><td class="right">R$ 20.000</td><td class="correto">1 - Investimentos</td></tr>
+<tr><td>18/06/25</td><td>CERCA VO IVA</td><td class="right">R$ 17.088</td><td class="correto">1 - Investimentos</td></tr>
+<tr><td>12/05/25</td><td>FILGUEIRA (Materiais)</td><td class="right">R$ 10.772,80</td><td class="correto">1 - Investimentos</td></tr>
+<tr><td>10/09/25</td><td>BAHIA MECÂNICA (PA Michigan)</td><td class="right">R$ 9.000</td><td class="correto">10 - Manutenção</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🔴 GRUPO 8 — Lançamentos SEM CDG</h2>
+<table>
+<thead><tr><th>Data</th><th>Fornecedor</th><th class="right">Valor</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>09/02/26</td><td>FELIPE SANTIAGO RIBEIRO</td><td class="right">R$ 5.552</td><td class="errado">CDG vazio ❌</td></tr>
+<tr><td>09/02/26</td><td>FELIPE SANTIAGO RIBEIRO</td><td class="right">R$ 5.552</td><td class="errado">CDG vazio ❌</td></tr>
+<tr style="font-weight:bold;"><td colspan="2">TOTAL</td><td class="right">R$ 11.104</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🟡 GRUPO 10 — Pagamentos a Pessoas Físicas (Risco Trabalhista)</h2>
+<table>
+<thead><tr><th>Pessoa</th><th class="right">2025</th><th class="right">2026 (Q1+Abr)</th><th class="right">Total</th><th>Risco</th></tr></thead>
+<tbody>
+<tr><td>Espirro</td><td class="right">R$ 9.450</td><td class="right">R$ 5.000</td><td class="right">R$ 14.450</td><td>Médio</td></tr>
+<tr><td>Thiago</td><td class="right">R$ 9.300</td><td class="right">R$ 11.640</td><td class="right">R$ 20.940</td><td>Médio</td></tr>
+<tr><td>Jaba</td><td class="right">R$ 12.420</td><td class="right">R$ 9.500</td><td class="right">R$ 21.920</td><td>Formalizou ✅</td></tr>
+<tr><td>Orlando</td><td class="right">R$ 16.380</td><td class="right">R$ 9.510</td><td class="right">R$ 25.890</td><td>Médio</td></tr>
+<tr><td>Wilson</td><td class="right">R$ 17.275</td><td class="right">—</td><td class="right">R$ 17.275</td><td>Baixo</td></tr>
+<tr><td>Selmo</td><td class="right">R$ 14.825</td><td class="right">R$ 5.025</td><td class="right">R$ 19.850</td><td>Médio</td></tr>
+<tr><td>Alexon</td><td class="right">R$ 41.940</td><td class="right">R$ 50.500</td><td class="right">R$ 92.440</td><td class="errado">ALTO ⚠️</td></tr>
+<tr style="background:#ffe8e8; font-weight:bold;"><td>JOSÉ WILSON</td><td class="right">R$ 87.300</td><td class="right">R$ 88.080</td><td class="right">R$ 175.380</td><td class="errado">CRÍTICO 🚨</td></tr>
+<tr><td>Isaías</td><td class="right">R$ 41.500</td><td class="right">R$ 40.500</td><td class="right">R$ 82.000</td><td class="errado">ALTO ⚠️</td></tr>
+</tbody>
+</table>
+<div class="box-alerta crit">
+<h3>🚨 ALERTA CRÍTICO</h3>
+<p>JOSÉ WILSON recebeu <b>R$ 175.380</b> entre 2025 e Q1+Abr/2026. Em fiscalização trabalhista pode ser caracterizado como <b>vínculo empregatício</b>. Avaliar urgente formalização (PJ ou CLT).</p>
+</div>
+</div>
+
+<div class="section">
+<h2>📊 Impacto das Reclassificações</h2>
+<table>
+<thead><tr><th>Categoria</th><th class="right">Variação reportada</th><th class="right">Variação corrigida estimada</th></tr></thead>
+<tbody>
+<tr><td>1 - Investimentos</td><td class="right">+5,6%</td><td class="right correto">+11% a +15% ⬆️</td></tr>
+<tr><td>10 - Manutenção</td><td class="right">+8,2%</td><td class="right correto">0% a +3% ⬇️</td></tr>
+<tr><td>16 - Impostos</td><td class="right">+57,5%</td><td class="right correto">+45% ⬇️</td></tr>
+<tr><td>9 - Internet</td><td class="right">—</td><td class="right">Mais transparente</td></tr>
+<tr><td>7 - Arrendamento</td><td class="right">+134%</td><td class="right">Confirmado (sem alteração)</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>✅ Padrão Recomendado de Classificação</h2>
+<table>
+<thead><tr><th>Termo no fornecedor</th><th>CDG correto</th></tr></thead>
+<tbody>
+<tr><td>PGTO, FOLHA, ACERTO, FÉRIAS, RECISÃO, 13°</td><td class="correto">3 - Folha</td></tr>
+<tr><td>ARRENDAMENTO</td><td class="correto">7 - Arrendamento</td></tr>
+<tr><td>DIÁRIA, ESPIRRO, JABA, ORLANDO, WILSON, SELMO, THIAGO, ALEXON, ISAIAS, JOSÉ WILSON</td><td class="correto">6 - Serviços Terceiros</td></tr>
+<tr><td>ENERGIA, CELCOIN (Igreen)</td><td class="correto">2 - Energia</td></tr>
+<tr><td>HUGUESNET, STARLINK</td><td class="correto">9 - Internet</td></tr>
+<tr><td>FGTS, RECEITA FEDERAL, DARE, IPVA, ITR, ITBI, INCRA</td><td class="correto">16 - Impostos</td></tr>
+<tr><td>LOUIS DREYFUS, +FARELOS, BREJEIRO, NEOMILLE, CARGILL (Probeef), SÃO MARTINHO, MILHÃO, BARROS</td><td class="correto">5 - Insumos</td></tr>
+<tr><td>HMW SST, BN SISTEMAS, WS APORÉ, ESCRITÓRIO LIDER</td><td class="correto">6 - Serviços Terceiros</td></tr>
+<tr><td>Compra de máquinas, equipamentos, construção, sítio, sementes (&gt; R$ 1.000)</td><td class="correto">1 - Investimentos</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+<footer>Faz. Toca da Onça | Aporé-GO | Pedro Henrique e Rogério Teles | Maio/2026</footer>
+</body>
+</html>

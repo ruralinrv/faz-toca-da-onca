@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recomendações | Faz. Toca da Onça</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f5f0; color: #333; line-height: 1.6; }
+.header-page { background: linear-gradient(135deg, #1a3a1a 0%, #2d7a2d 100%); color: #fff; padding: 30px 20px; text-align: center; }
+.header-page h1 { font-size: 2rem; margin-bottom: 10px; }
+.nav { background: #2d5a2d; padding: 10px 20px; text-align: center; }
+.nav a { color: #fff; text-decoration: none; margin: 0 15px; padding: 5px 10px; border-radius: 5px; }
+.nav a:hover { background: rgba(255,255,255,0.2); }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+.section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.section h2 { color: #2d7a2d; border-bottom: 3px solid #2d7a2d; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.5rem; }
+.section h3 { color: #1a3a1a; margin: 20px 0 10px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.92rem; }
+th { background: #2d7a2d; color: #fff; padding: 10px; text-align: left; }
+td { padding: 8px 10px; border-bottom: 1px solid #e0e0e0; }
+tr:nth-child(even) { background: #f5faf5; }
+tr:hover { background: #e8f5e8; }
+.right { text-align: right; }
+.center { text-align: center; }
+.box-alerta { padding: 15px; border-left: 5px solid; border-radius: 5px; margin: 15px 0; }
+.box-alerta.crit { background: #ffebee; border-color: #c62828; }
+.box-alerta.warn { background: #fff8e1; border-color: #f9a825; }
+.box-alerta.ok { background: #e8f5e9; border-color: #2d7a2d; }
+.priority { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; color: #fff; }
+.p-alta { background: #c62828; }
+.p-media { background: #f9a825; }
+.p-baixa { background: #2d7a2d; }
+.timeline { border-left: 4px solid #2d7a2d; padding-left: 20px; margin: 20px 0; }
+.timeline-item { margin-bottom: 25px; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: -28px; top: 5px; width: 12px; height: 12px; background: #2d7a2d; border-radius: 50%; }
+.timeline-item h4 { color: #2d7a2d; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+.kpi-card { background: linear-gradient(135deg, #2d7a2d 0%, #4a9a4a 100%); color: #fff; padding: 20px; border-radius: 10px; text-align: center; }
+.kpi-card .num { font-size: 1.6rem; font-weight: bold; }
+.kpi-card .lbl { font-size: 0.85rem; opacity: 0.9; margin-top: 5px; }
+.checklist { background: #f5faf5; padding: 20px; border-radius: 8px; margin: 15px 0; }
+.checklist h4 { margin-bottom: 10px; color: #2d7a2d; }
+.checklist ul { list-style: none; }
+.checklist li { padding: 8px 0; border-bottom: 1px dashed #c0d8c0; }
+.checklist li::before { content: '☐ '; color: #2d7a2d; font-weight: bold; margin-right: 10px; }
+footer { text-align: center; padding: 30px; color: #666; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<div class="header-page">
+<h1>🎯 Recomendações & KPIs</h1>
+<p>Plano de Ação 90 dias — Faz. Toca da Onça</p>
+</div>
+<div class="nav">
+<a href="00_index.html">🏠 Início</a>
+<a href="01_resumo_executivo.html">📊 Resumo</a>
+<a href="02_analise_gado.html">🐂 Gado</a>
+<a href="03_dashboard_caixa.html">💰 Caixa</a>
+<a href="04_simulador_cortes.html">🎮 Simulador</a>
+<a href="05_outliers.html">⚠️ Outliers</a>
+<a href="06_recomendacoes.html">🎯 Recomendações</a>
+</div>
+<div class="container">
+
+<div class="section">
+<h2>🎯 Resumo Estratégico</h2>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="num">R$ 1,05M</div><div class="lbl">Economia recomendada</div></div>
+<div class="kpi-card"><div class="num">8,7%</div><div class="lbl">Redução do total</div></div>
+<div class="kpi-card"><div class="num">90 dias</div><div class="lbl">Prazo implementação</div></div>
+<div class="kpi-card"><div class="num">R$ 2,5M</div><div class="lbl">Reserva ideal de caixa</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>🔥 Pontos de Atenção Crítica</h2>
+
+<div class="box-alerta crit">
+<h3>🐂 Gado virou alavanca</h3>
+<p>Jan/26 sozinho consumiu R$ 730k em compras vs R$ 110k no Q1+Abr/2025 inteiro. Se a estratégia é expansão, ótimo; se é só reposição, <b>rever ritmo</b>.</p>
+</div>
+
+<div class="box-alerta crit">
+<h3>🌽 Milho concentrado</h3>
+<p>R$ 600k em uma única compra (Mar/26 — Pedro Lourenço). Risco de capital empatado em estoque. Verificar política de estocagem e custo de oportunidade.</p>
+</div>
+
+<div class="box-alerta warn">
+<h3>🏠 Arrendamento +28% (Toca)</h3>
+<p>Contrato passou de R$ 30k → R$ 38,5k. Já é fato. Impacto anual: <b>+R$ 102k</b>.</p>
+</div>
+
+<div class="box-alerta crit">
+<h3>👥 Folha "fora do livro"</h3>
+<p>Muitos pagamentos via "diárias" (Espirro, Jaba, Thiago, Orlando, José Wilson, Alexon) — soma alta. Avaliar formalização vs risco trabalhista crescente.</p>
+</div>
+
+<div class="box-alerta ok">
+<h3>⛽ Combustível -18%</h3>
+<p>ÚNICA boa notícia significativa. Investigar e replicar a prática que gerou economia.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>📋 Plano de Implementação 90 dias</h2>
+<div class="timeline">
+
+<div class="timeline-item">
+<h4>📅 MAIO/2026 — Mês 1: Fundação</h4>
+<table>
+<tr><th>Ação</th><th class="center">Prioridade</th><th class="right">Economia esperada</th></tr>
+<tr><td>Renegociar comissões gado (taxa 2%)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 23.875</td></tr>
+<tr><td>Fechar contrato com posto parceiro (volume)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 43.120</td></tr>
+<tr><td>Negociar contrato anual frete top 3</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 48.420</td></tr>
+<tr><td>Iniciar auditoria trabalhista (José Wilson, Alexon, Isaías)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">Sem $ direto</td></tr>
+<tr><td>Construir reserva caixa (meta R$ 2,5M)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">—</td></tr>
+<tr style="font-weight:bold; background:#e8f5e8;"><td>SUBTOTAL MÊS 1</td><td class="center">—</td><td class="right">R$ 115.415</td></tr>
+</table>
+</div>
+
+<div class="timeline-item">
+<h4>📅 JUNHO/2026 — Mês 2: Estruturação</h4>
+<table>
+<tr><th>Ação</th><th class="center">Prioridade</th><th class="right">Economia esperada</th></tr>
+<tr><td>Travar contratos milho/casca Jul-Dez (barter ou compra antecipada)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 121.821</td></tr>
+<tr><td>Adiar capex sítio não-prioritário</td><td class="center"><span class="priority p-media">MÉDIA</span></td><td class="right">R$ 130.420</td></tr>
+<tr><td>Formalizar José Wilson e Alexon (PJ ou CLT)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 35.120</td></tr>
+<tr><td>Aplicar reclassificações na base 2025/2026</td><td class="center"><span class="priority p-media">MÉDIA</span></td><td class="right">Precisão dados</td></tr>
+<tr style="font-weight:bold; background:#e8f5e8;"><td>SUBTOTAL MÊS 2</td><td class="center">—</td><td class="right">R$ 287.361</td></tr>
+</table>
+</div>
+
+<div class="timeline-item">
+<h4>📅 JULHO/2026 — Mês 3: Disciplina + Pico</h4>
+<table>
+<tr><th>Ação</th><th class="center">Prioridade</th><th class="right">Economia esperada</th></tr>
+<tr><td>Implementar telemetria de frota</td><td class="center"><span class="priority p-media">MÉDIA</span></td><td class="right">R$ 25.000</td></tr>
+<tr><td>Auditoria de diárias (Espirro, Thiago, Orlando)</td><td class="center"><span class="priority p-media">MÉDIA</span></td><td class="right">R$ 35.120</td></tr>
+<tr><td>Manutenção preventiva organizada</td><td class="center"><span class="priority p-baixa">BAIXA</span></td><td class="right">R$ 25.440</td></tr>
+<tr><td>Executar Pico de Gado com reserva consolidada</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">—</td></tr>
+<tr style="font-weight:bold; background:#e8f5e8;"><td>SUBTOTAL MÊS 3</td><td class="center">—</td><td class="right">R$ 85.560</td></tr>
+</table>
+</div>
+
+<div class="timeline-item">
+<h4>📅 AGO-DEZ/2026 — Manutenção e Otimização</h4>
+<table>
+<tr><th>Ação</th><th class="center">Prioridade</th><th class="right">Economia esperada</th></tr>
+<tr><td>Manter disciplina + medir KPIs mensais</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">R$ 568.629</td></tr>
+<tr><td>Provisionar 13° mensalmente (1/12)</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">—</td></tr>
+<tr><td>Reuniões mensais de fluxo de caixa</td><td class="center"><span class="priority p-alta">ALTA</span></td><td class="right">—</td></tr>
+<tr style="font-weight:bold; background:#e8f5e8;"><td>SUBTOTAL Ago-Dez</td><td class="center">—</td><td class="right">R$ 568.629</td></tr>
+</table>
+</div>
+</div>
+
+<div class="box-alerta ok">
+<h3>💰 ECONOMIA TOTAL ESTIMADA: R$ 1.056.965</h3>
+</div>
+</div>
+
+<div class="section">
+<h2>📊 KPIs para Monitoramento Mensal</h2>
+
+<h3>🎯 KPIs Operacionais</h3>
+<table>
+<thead><tr><th>Indicador</th><th class="right">Meta 2026</th><th>Como medir</th></tr></thead>
+<tbody>
+<tr><td>Gasto médio mensal</td><td class="right">&lt; R$ 1.515.000</td><td>Total ÷ 8 meses</td></tr>
+<tr><td>Insumos como % do total</td><td class="right">&lt; 35%</td><td>Manter eficiência</td></tr>
+<tr><td>Combustível mensal</td><td class="right">&lt; R$ 55.000</td><td>Continuar redução</td></tr>
+<tr><td>Custo gado/@ posta</td><td class="right">Acompanhar</td><td>Calcular semanalmente</td></tr>
+<tr><td>Comissão sobre gado</td><td class="right">&lt; 2%</td><td>Renegociar</td></tr>
+<tr><td>Frete sobre gado</td><td class="right">&lt; 4%</td><td>Renegociar</td></tr>
+</tbody>
+</table>
+
+<h3>💰 KPIs Financeiros</h3>
+<table>
+<thead><tr><th>Indicador</th><th class="right">Meta</th></tr></thead>
+<tbody>
+<tr><td>Reserva de caixa</td><td class="right">R$ 2,5M</td></tr>
+<tr><td>Prazo médio fornecedores</td><td class="right">&gt; 30 dias</td></tr>
+<tr><td>Capital empatado em gado vivo</td><td class="right">&lt; R$ 1,5M</td></tr>
+<tr><td>Investimento sítio (capex anual)</td><td class="right">&lt; R$ 350k</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>📅 Estrutura de Governança Mensal</h2>
+<div class="checklist">
+<h4>Reunião Mensal de Fluxo de Caixa (1º dia útil)</h4>
+<ul>
+<li>Realizado vs Projetado do mês anterior (% de desvio)</li>
+<li>Variações por categoria (verde/amarelo/vermelho)</li>
+<li>Top 5 maiores gastos do mês</li>
+<li>Caixa atual vs necessidade do mês corrente</li>
+<li>Pré-aviso dos próximos 2 meses</li>
+<li>Decisões: cortes, antecipações, renegociações</li>
+</ul>
+</div>
+
+<div class="checklist">
+<h4>Checklist Semanal</h4>
+<ul>
+<li>Folha paga (data correta)</li>
+<li>Arrendamento Toca (R$ 38,5k)</li>
+<li>Cargill (Probeef)</li>
+<li>São Martinho (DDG)</li>
+<li>Louis Dreyfus (Casca de Soja)</li>
+<li>Receita Federal (DARFs)</li>
+<li>FGTS (GFD)</li>
+<li>Energia (vencimento)</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>🚨 Ações de Risco — Auditoria Trabalhista</h2>
+<table>
+<thead><tr><th>Pessoa</th><th class="right">Total recebido</th><th>Recomendação</th><th class="center">Prioridade</th></tr></thead>
+<tbody>
+<tr><td><b>JOSÉ WILSON</b></td><td class="right">R$ 175.380</td><td>Formalizar PJ ou CLT IMEDIATAMENTE</td><td class="center"><span class="priority p-alta">CRÍTICA</span></td></tr>
+<tr><td>ALEXON</td><td class="right">R$ 92.440</td><td>Avaliar PJ (carpinteiro/cerqueiro)</td><td class="center"><span class="priority p-alta">ALTA</span></td></tr>
+<tr><td>ISAÍAS</td><td class="right">R$ 82.000</td><td>Avaliar PJ (pedreiro)</td><td class="center"><span class="priority p-alta">ALTA</span></td></tr>
+<tr><td>ORLANDO</td><td class="right">R$ 25.890</td><td>Manter como diarista (eventual)</td><td class="center"><span class="priority p-media">MÉDIA</span></td></tr>
+<tr><td>THIAGO</td><td class="right">R$ 20.940</td><td>Manter como diarista (eventual)</td><td class="center"><span class="priority p-media">MÉDIA</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>🎯 Visão de Longo Prazo (2027+)</h2>
+<div class="box-alerta ok">
+<h3>📈 Caminho de crescimento sustentável</h3>
+<ol style="margin-left:25px; margin-top:10px;">
+<li><b>Estabilizar 2026</b> dentro do orçamento corrigido (R$ 17M total)</li>
+<li><b>Implementar KPIs operacionais</b> de eficiência (custo/@, GMD, dias confinamento)</li>
+<li><b>Profissionalizar gestão financeira</b> com reuniões mensais e dashboards</li>
+<li><b>Diversificar fornecedores</b> de insumos e gado (reduzir dependência)</li>
+<li><b>Avaliar verticalização</b> (frota própria? ração própria? abate?)</li>
+<li><b>Planejamento tributário</b> com o escritório contábil</li>
+<li><b>Sucessão e governança</b> familiar (Pedro Henrique + Rogério Teles)</li>
+</ol>
+</div>
+</div>
+
+<div class="section">
+<h2>📞 Próximos Passos Imediatos</h2>
+<div class="box-alerta warn">
+<ol style="margin-left:25px;">
+<li><b>Esta semana:</b> Apresentar o relatório aos gestores</li>
+<li><b>Próxima semana:</b> Reunião com escritório contábil sobre reclassificações</li>
+<li><b>Em 15 dias:</b> Decisão sobre Pacote de Cortes (recomendado: Pacote 2)</li>
+<li><b>Em 30 dias:</b> Iniciar auditoria trabalhista com advogado</li>
+<li><b>Em 60 dias:</b> Travar contratos de insumos para Jul-Dez</li>
+<li><b>Em 90 dias:</b> Primeira revisão de resultados do plano</li>
+</ol>
+</div>
+</div>
+
+</div>
+<footer>
+<p><b>Faz. Toca da Onça</b> | Aporé-GO | Pedro Henrique e Rogério Teles | Maio/2026</p>
+<p style="margin-top:10px; opacity:0.7;">Documento confidencial — uso interno</p>
+</footer>
+</body>
+</html>
