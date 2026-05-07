@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Relatório Financeiro - Fazenda Toca da Onça | Jan-Abr 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+    background: #f4f6f9;
+    color: #2c3e50;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #1e5631 0%, #2d8659 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    font-size: 1.1em;
+    opacity: 0.95;
+    font-weight: 300;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-top: 15px;
+    font-size: 0.9em;
+  }
+  section {
+    padding: 35px 40px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  h2 {
+    color: #1e5631;
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #d4af37;
+    display: inline-block;
+  }
+  h3 {
+    color: #2d8659;
+    margin: 20px 0 12px;
+    font-size: 1.2em;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .kpi {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #1e5631;
+    padding: 18px;
+    border-radius: 8px;
+  }
+  .kpi.warning { border-left-color: #e67e22; }
+  .kpi.danger { border-left-color: #c0392b; }
+  .kpi.success { border-left-color: #27ae60; }
+  .kpi .label {
+    font-size: 0.85em;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kpi .value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1e5631;
+    margin-top: 5px;
+  }
+  .kpi .delta {
+    font-size: 0.85em;
+    margin-top: 4px;
+  }
+  .delta.up { color: #c0392b; }
+  .delta.down { color: #27ae60; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.92em;
+  }
+  th {
+    background: #1e5631;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  tr:nth-child(even) td { background: #f8f9fa; }
+  tr:hover td { background: #e8f5e9; }
+  .text-right { text-align: right; }
+  .chart-container {
+    position: relative;
+    height: 400px;
+    margin: 20px 0;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .chart-row { grid-template-columns: 1fr; }
+    section { padding: 20px; }
+  }
+  .alert {
+    background: #fff3cd;
+    border-left: 4px solid #f39c12;
+    padding: 15px 20px;
+    margin: 15px 0;
+    border-radius: 6px;
+  }
+  .alert.danger {
+    background: #f8d7da;
+    border-left-color: #c0392b;
+  }
+  .alert.success {
+    background: #d4edda;
+    border-left-color: #27ae60;
+  }
+  .alert ul { padding-left: 20px; margin-top: 8px; }
+  .alert li { margin-bottom: 6px; }
+  .recommendation {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  .recommendation .num {
+    background: #1e5631;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .recommendation .ruralin-tag {
+    display: inline-block;
+    background: #d4af37;
+    color: #1e5631;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.82em;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+  .conclusion {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 5px solid #1e5631;
+  }
+  .status-badge {
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  footer {
+    background: linear-gradient(135deg, #1e5631 0%, #14401f 100%);
+    color: white;
+    padding: 35px 40px;
+    text-align: center;
+  }
+  footer .author-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #d4af37;
+    margin-bottom: 5px;
+  }
+  footer .author-title {
+    font-size: 1em;
+    opacity: 0.95;
+    margin: 4px 0;
+  }
+  footer .author-tagline {
+    font-style: italic;
+    opacity: 0.85;
+    margin: 12px 0;
+    font-size: 0.95em;
+  }
+  footer .contact {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.95em;
+  }
+  footer .contact span {
+    margin: 0 12px;
+    display: inline-block;
+  }
+  .highlight { color: #d4af37; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>📊 Relatório Financeiro Estratégico</h1>
+    <div class="subtitle">Fazenda Toca da Onça | Gestão: Pedro Henrique &amp; Rogério Teles</div>
+    <div class="badge">Período: Janeiro a Abril de 2026</div>
+  </header>
+
+  <!-- VISÃO GERAL -->
+  <section>
+    <h2>1. Visão Geral – Evolução Mensal</h2>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Janeiro</div><div class="value">R$ 1,83 MM</div></div>
+      <div class="kpi success"><div class="label">Fevereiro</div><div class="value">R$ 1,22 MM</div><div class="delta down">▼ 33,3%</div></div>
+      <div class="kpi success"><div class="label">Março</div><div class="value">R$ 1,06 MM</div><div class="delta down">▼ 13,4%</div></div>
+      <div class="kpi success"><div class="label">Abril</div><div class="value">R$ 1,03 MM</div><div class="delta down">▼ 2,6%</div></div>
+      <div class="kpi" style="border-left-color:#d4af37"><div class="label">Total Acumulado</div><div class="value">R$ 5,14 MM</div></div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="chartMensal"></canvas>
+    </div>
+
+    <div class="alert success">
+      📉 <strong>Tendência positiva:</strong> redução total de <strong>43,7%</strong> entre janeiro e abril, indicando maturação operacional após o ciclo inicial de investimentos pesados.
+    </div>
+  </section>
+
+  <!-- ANÁLISE ABRIL -->
+  <section>
+    <h2>2. 🔍 Análise Detalhada – Abril/2026</h2>
+
+    <div class="chart-row">
+      <div class="chart-container">
+        <canvas id="chartCategoriasAbril"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="chartLocalAbril"></canvas>
+      </div>
+    </div>
+
+    <h3>Top 10 Fornecedores – Abril</h3>
+    <table>
+      <thead><tr><th>Fornecedor</th><th class="text-right">Valor (R$)</th></tr></thead>
+      <tbody>
+        <tr><td>SÃO MARTINHO (DDG)</td><td class="text-right">113.198,60</td></tr>
+        <tr><td>LOUIS DREYFUS (Casca de Soja)</td><td class="text-right">111.777,60</td></tr>
+        <tr><td>CARGILL ALIMENTOS</td><td class="text-right">88.289,28</td></tr>
+        <tr><td>AUTO POSTO APORÉ</td><td class="text-right">88.219,63</td></tr>
+        <tr><td>BARROS COMÉRCIO (Germem de Milho)</td><td class="text-right">45.704,70</td></tr>
+        <tr><td>ARRENDAMENTO TOCA</td><td class="text-right">38.500,00</td></tr>
+        <tr><td>VALDEMAR TOLENTINO (Fretes)</td><td class="text-right">33.000,00</td></tr>
+        <tr><td>R L SERVIÇOS (Fretes)</td><td class="text-right">27.760,00</td></tr>
+        <tr><td>PROFARM PRODUTOS</td><td class="text-right">20.908,50</td></tr>
+        <tr><td>SERGIO PEREIRA DIAS</td><td class="text-right">14.777,50</td></tr>
+      </tbody>
+    </table>
+
+    <div class="alert">
+      🎯 <strong>Concentração crítica:</strong> 92,3% dos custos de abril recaem sobre o <strong>Confinamento Toca</strong> – característica natural da operação intensiva.
+    </div>
+  </section>
+
+  <!-- HISTÓRICO -->
+  <section>
+    <h2>3. 📈 Histórico Acumulado – Jan a Abr</h2>
+
+    <div class="chart-container">
+      <canvas id="chartCategoriasAcum"></canvas>
+    </div>
+
+    <h3>Evolução por Categoria-Chave (R$ mil)</h3>
+    <div class="chart-container">
+      <canvas id="chartEvolucao"></canvas>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Categoria</th><th class="text-right">Acumulado (R$)</th><th class="text-right">% Total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>INSUMOS</strong></td><td class="text-right">1.787.864,49</td><td class="text-right">34,8%</td></tr>
+        <tr><td><strong>GADO (compras)</strong></td><td class="text-right">790.083,83</td><td class="text-right">15,4%</td></tr>
+        <tr><td><strong>INVESTIMENTOS</strong></td><td class="text-right">716.348,18</td><td class="text-right">13,9%</td></tr>
+        <tr><td>COMBUSTÍVEIS</td><td class="text-right">354.314,48</td><td class="text-right">6,9%</td></tr>
+        <tr><td>FOLHA DE PAGAMENTOS</td><td class="text-right">264.601,15</td><td class="text-right">5,1%</td></tr>
+        <tr><td>SERVIÇOS DE TERCEIROS</td><td class="text-right">224.318,80</td><td class="text-right">4,4%</td></tr>
+        <tr><td>ALUGUEL/ARRENDAMENTO</td><td class="text-right">220.351,00</td><td class="text-right">4,3%</td></tr>
+        <tr><td>FRETES</td><td class="text-right">159.196,00</td><td class="text-right">3,1%</td></tr>
+        <tr><td>MANUTENÇÃO</td><td class="text-right">138.756,87</td><td class="text-right">2,7%</td></tr>
+        <tr><td>IMPOSTOS</td><td class="text-right">80.829,00</td><td class="text-right">1,6%</td></tr>
+        <tr><td>COMISSÕES</td><td class="text-right">41.749,06</td><td class="text-right">0,8%</td></tr>
+        <tr><td>MEDICAÇÕES</td><td class="text-right">39.711,02</td><td class="text-right">0,8%</td></tr>
+        <tr><td>COZINHA/ALIMENTAÇÃO</td><td class="text-right">31.518,79</td><td class="text-right">0,6%</td></tr>
+        <tr><td>ENERGIA ELÉTRICA</td><td class="text-right">30.118,87</td><td class="text-right">0,6%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- INDICADORES -->
+  <section>
+    <h2>4. 💰 Indicadores Financeiros</h2>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Ticket Médio Diário (Abr)</div><div class="value">R$ 34.359</div></div>
+      <div class="kpi"><div class="label">Custo Médio Mensal</div><div class="value">R$ 1,28 MM</div></div>
+      <div class="kpi"><div class="label">Peso de Insumos (CTP)</div><div class="value">34,8%</div></div>
+      <div class="kpi success"><div class="label">Folha + Terceiros</div><div class="value">9,5%</div></div>
+      <div class="kpi success"><div class="label">Manutenção / Total</div><div class="value">2,7%</div></div>
+      <div class="kpi warning"><div class="label">Investimentos / Total</div><div class="value">13,9%</div></div>
+      <div class="kpi"><div class="label">Custos Fixos Mensais</div><div class="value">~R$ 90 k</div></div>
+    </div>
+  </section>
+
+  <!-- ALERTAS - SEÇÃO 5 CORRIGIDA -->
+  <section>
+    <h2>5. 🚨 Pontos de Atenção – Abril</h2>
+    <div class="alert danger">
+      <strong>Alertas críticos:</strong>
+      <ul>
+        <li><strong>Folha saltou para R$ 76 k</strong> (vs. R$ 36 k em março) – efeito de acertos rescisórios não provisionados (Orlando + Thiago + FGTS retroativos R$ 11.325).</li>
+        <li><strong>Passivo trabalhista oculto?</strong> FGTS Lucas R$ 9,9 k (jan) e FGTS Thiago/Orlando R$ 11,3 k (abr) — depósitos não realizados em exercícios anteriores?</li>
+        <li><strong>Combustível +38% vs. março</strong> (R$ 88 k em abril) — necessário auditar movimentação e abastecimento.</li>
+        <li><strong>CAPEX ainda elevado</strong> no 4º mês (R$ 138 k) — definir cronograma de encerramento.</li>
+        <li><strong>Lançamentos sem código analítico</strong> (ex: Felipe Santiago R$ 5.552 x2 em fev) — falha de classificação?</li>
+      </ul>
+    </div>
+
+    <h2 style="margin-top:25px">✅ Pontos Positivos</h2>
+    <div class="alert success">
+      <ul>
+        <li>📉 Queda consistente do desembolso mensal (-43,7%).</li>
+        <li>🐂 Compra de gado concentrada em momentos estratégicos (jan/mar).</li>
+        <li>🔧 Manutenção sob controle (2,7% do total — saudável &lt;5%).</li>
+        <li>📋 Padronização analítica bem estabelecida.</li>
+        <li>🤝 Pagamentos a fornecedores estratégicos regulares — preserva crédito.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RECOMENDAÇÕES - SEÇÃO 6 CORRIGIDA -->
+  <section>
+    <h2>6. 🎯 Recomendações Estratégicas</h2>
+
+    <div class="recommendation">
+      <div class="num">1</div>
+      <div><strong>Provisão mensal de FGTS + 13º + férias</strong> (~R$ 8 a 10 k/mês), evitando impactos pontuais e relevantes no fluxo de caixa por acertos não programados.</div>
+    </div>
+
+    <div class="recommendation">
+      <div class="num">2</div>
+      <div>
+        <strong>Implantar orçamento mensal por categoria</strong> com teto e alerta para variações superiores a 15%, permitindo controle preventivo de desvios.
+        <br><span class="ruralin-tag">🚀 Será implementada uma ferramenta orçamentária para 2027 pela Rural IN</span>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <div class="num">3</div>
+      <div><strong>Auditar consumo de combustível</strong>, com controle de KM rodado e abastecimento individualizado por veículo, identificando eventuais desvios ou sobrecarga operacional.</div>
+    </div>
+
+    <div class="recommendation">
+      <div class="num">4</div>
+      <div>
+        <strong>Negociar contrato anual</strong> com Cargill, LDC e São Martinho — o volume movimentado garante poder de barganha para descontos, prazos diferenciados e prioridade de entrega.
+        <br><em style="color:#5a6c5d; font-size:0.93em;">↳ Possibilidade adicional de avaliação: estudar cenários comparativos de contratos x compras spot ao longo do ano.</em>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <div class="num">5</div>
+      <div>
+        <strong>Mapear margem de contribuição por @ produzida</strong> vs. custo total operacional, traduzindo o esforço financeiro em rentabilidade real por animal.
+        <br><span class="ruralin-tag">⚙️ Indicador em construção pelo novo sistema Rural IN — este e outros indicadores de gestão econômica</span>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <div class="num">6</div>
+      <div><strong>Regularizar lançamentos sem CDG</strong> e padronizar a classificação retroativa das despesas, garantindo integridade dos relatórios analíticos futuros.</div>
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section>
+    <h2>7. 📌 Conclusão Executiva</h2>
+    <div class="conclusion">
+      <p>A gestão dos srs. <strong>Pedro Henrique e Rogério Teles</strong> apresenta uma curva de profissionalização e controle financeiro <strong>positiva</strong>, com redução progressiva de desembolso mensal e estrutura analítica bem implementada.</p>
+      <br>
+      <p>O 1º quadrimestre de 2026 totalizou <strong>R$ 5,14 milhões</strong> em pagamentos, dos quais aproximadamente <strong>65% concentrados em INSUMOS, GADO e INVESTIMENTOS</strong> — perfil característico e saudável para uma operação de confinamento em fase de estruturação.</p>
+      <br>
+      <p>Os principais pontos de melhoria estão na <strong>gestão do passivo trabalhista</strong> e na <strong>previsibilidade orçamentária</strong> — ambos solucionáveis com a implantação de provisões mensais e orçamento setorial.</p>
+      <div class="status-badge">🟢 OPERAÇÃO EM EVOLUÇÃO POSITIVA</div>
+    </div>
+  </section>
+
+  <!-- CREDENCIAIS -->
+  <footer>
+    <div style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">— Análise e Construção —</div>
+    <div class="author-name">Dr. Sidney Souza</div>
+    <div class="author-title">Economista e Administrador Agrícola</div>
+    <div class="author-title"><span class="highlight">Estrategista Econômico do Produtor</span></div>
+    <div class="author-title">Especialista em economia da fazenda e gestão de risco no agro</div>
+    <div class="author-tagline">"Transformamos dados da fazenda em decisões econômicas.<br>Ajudamos produtores a entender se o mercado sustenta seu negócio."</div>
+    <div class="contact">
+      <span>📧 sidneyagro@gmail.com</span>
+      <span>📱 (64) 9 9226-6886</span>
+      <span>🌐 @ruralin.ai</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const verde = '#1e5631';
+  const verdeClaro = '#2d8659';
+  const dourado = '#d4af37';
+  const cores = ['#1e5631','#2d8659','#d4af37','#e67e22','#3498db','#9b59b6','#16a085','#c0392b','#7f8c8d','#f39c12','#27ae60','#34495e','#e74c3c','#1abc9c'];
+
+  new Chart(document.getElementById('chartMensal'), {
+    type: 'bar',
+    data: {
+      labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
+      datasets: [{
+        label: 'Desembolso Total (R$)',
+        data: [1832181.57, 1222392.76, 1058792.82, 1030789.87],
+        backgroundColor: [verde, verdeClaro, verdeClaro, dourado],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Evolução Mensal de Desembolsos (R$)', font: { size: 16 } },
+        legend: { display: false }
+      },
+      scales: {
+        y: { ticks: { callback: v => 'R$ ' + (v/1000000).toFixed(2) + ' MM' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartCategoriasAbril'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Insumos','Investimentos','Combustíveis','Folha Pagto','Fretes','Serv. Terceiros','Arrendamento','Manutenção','Outros'],
+      datasets: [{
+        data: [322770.86, 138391.21, 88219.63, 76408.69, 56150, 53999.16, 46351, 28523.75, 39975.57],
+        backgroundColor: cores
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Distribuição por Categoria - Abril', font: { size: 15 } },
+        legend: { position: 'right', labels: { font: { size: 11 } } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartLocalAbril'), {
+    type: 'pie',
+    data: {
+      labels: ['Confinamento Toca (92,3%)','Faz+Conf (1,1%)','Palestina (0,7%)','Vô Iva Faz (0,5%)','Faz. Toca (0,1%)','Sítio Paraíso (0,1%)'],
+      datasets: [{
+        data: [951789.46, 11778.91, 7000, 4890.07, 1000, 678.74],
+        backgroundColor: cores
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Distribuição por Local - Abril', font: { size: 15 } },
+        legend: { position: 'right', labels: { font: { size: 11 } } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartCategoriasAcum'), {
+    type: 'bar',
+    data: {
+      labels: ['Insumos','Gado','Investimentos','Combustíveis','Folha Pagto','Serv. Terceiros','Arrendamento','Fretes','Manutenção','Impostos'],
+      datasets: [{
+        label: 'Acumulado Jan-Abr (R$)',
+        data: [1787864.49, 790083.83, 716348.18, 354314.48, 264601.15, 224318.80, 220351, 159196, 138756.87, 80829],
+        backgroundColor: verde,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Top Categorias - Acumulado Jan a Abr (R$)', font: { size: 16 } },
+        legend: { display: false }
+      },
+      scales: {
+        x: { ticks: { callback: v => 'R$ ' + (v/1000).toFixed(0) + ' k' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartEvolucao'), {
+    type: 'line',
+    data: {
+      labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
+      datasets: [
+        { label: 'Insumos', data: [463, 770, 232, 323], borderColor: verde, tension: 0.3, fill: false },
+        { label: 'Investimentos', data: [167, 209, 201, 138], borderColor: dourado, tension: 0.3, fill: false },
+        { label: 'Combustíveis', data: [75, 39, 64, 88], borderColor: '#e67e22', tension: 0.3, fill: false },
+        { label: 'Folha Pagto', data: [35, 53, 36, 76], borderColor: '#3498db', tension: 0.3, fill: false },
+        { label: 'Fretes', data: [10, 44, 28, 56], borderColor: '#9b59b6', tension: 0.3, fill: false },
+        { label: 'Manutenção', data: [22, 25, 64, 28], borderColor: '#c0392b', tension: 0.3, fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Evolução das Principais Categorias (R$ mil)', font: { size: 16 } }
+      },
+      scales: {
+        y: { ticks: { callback: v => 'R$ ' + v + ' k' } }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

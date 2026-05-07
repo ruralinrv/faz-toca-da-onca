@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard 2025 - Fazenda Toca da Onça</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f6f9;color:#2c3e50;padding:20px}
+  .container{max-width:1280px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden}
+  header{background:linear-gradient(135deg,#1e5631,#2d8659);color:#fff;padding:40px;text-align:center}
+  header h1{font-size:2.2em;margin-bottom:10px}
+  header .badge{display:inline-block;background:rgba(255,255,255,.2);padding:6px 16px;border-radius:20px;margin-top:15px}
+  section{padding:35px 40px;border-bottom:1px solid #ecf0f1}
+  h2{color:#1e5631;font-size:1.6em;margin-bottom:20px;padding-bottom:10px;border-bottom:3px solid #d4af37;display:inline-block}
+  h3{color:#2d8659;margin:20px 0 12px;font-size:1.2em}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:20px 0}
+  .kpi{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-left:4px solid #1e5631;padding:18px;border-radius:8px}
+  .kpi.warn{border-left-color:#e67e22}.kpi.danger{border-left-color:#c0392b}.kpi.success{border-left-color:#27ae60}.kpi.gold{border-left-color:#d4af37}
+  .kpi .label{font-size:.82em;color:#7f8c8d;text-transform:uppercase}
+  .kpi .value{font-size:1.4em;font-weight:bold;color:#1e5631;margin-top:5px}
+  .kpi .sub{font-size:.78em;color:#7f8c8d;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.92em}
+  th{background:#1e5631;color:#fff;padding:12px;text-align:left}
+  td{padding:10px 12px;border-bottom:1px solid #ecf0f1}
+  tr:nth-child(even) td{background:#f8f9fa}
+  tr:hover td{background:#e8f5e9}
+  .text-right{text-align:right}
+  .chart-container{position:relative;height:400px;margin:20px 0;background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:768px){.chart-row{grid-template-columns:1fr}section{padding:20px}}
+  .alert{background:#fff3cd;border-left:4px solid #f39c12;padding:15px 20px;margin:15px 0;border-radius:6px}
+  .alert.success{background:#d4edda;border-left-color:#27ae60}
+  footer{background:linear-gradient(135deg,#1e5631,#14401f);color:#fff;padding:35px 40px;text-align:center}
+  footer .author-name{font-size:1.5em;font-weight:bold;color:#d4af37;margin-bottom:5px}
+  footer .author-title{font-size:1em;opacity:.95;margin:4px 0}
+  footer .author-tagline{font-style:italic;opacity:.85;margin:12px 0}
+  footer .contact{margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+  footer .contact span{margin:0 12px;display:inline-block}
+  .highlight{color:#d4af37;font-weight:bold}
+  .nav-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0;padding:15px;background:#f8f9fa;border-radius:8px}
+  .nav-pills a{background:#1e5631;color:#fff;padding:8px 16px;border-radius:20px;text-decoration:none;font-size:.9em;font-weight:600}
+  .nav-pills a:hover{background:#2d8659}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>📊 Dashboard Operacional Anual 2025</h1>
+    <div class="subtitle">Fazenda Toca da Onça | Gestão Anterior</div>
+    <div class="badge">Janeiro a Dezembro de 2025 | Relatório 1 de 4</div>
+  </header>
+
+  <div class="nav-pills">
+    <a href="#resumo">Resumo</a>
+    <a href="#mensal">Evolução Mensal</a>
+    <a href="#categorias">Categorias</a>
+    <a href="#sazonalidade">Sazonalidade</a>
+    <a href="#fornecedores">Fornecedores</a>
+  </div>
+
+  <section id="resumo">
+    <h2>1. 📌 Resumo Executivo 2025</h2>
+    <div class="kpi-grid">
+      <div class="kpi gold"><div class="label">Total Pago no Ano</div><div class="value">R$ 15,40 MM</div></div>
+      <div class="kpi"><div class="label">Média Mensal</div><div class="value">R$ 1,28 MM</div></div>
+      <div class="kpi success"><div class="label">Menor Mês</div><div class="value">R$ 651 k</div><div class="sub">Março/25</div></div>
+      <div class="kpi danger"><div class="label">Maior Mês</div><div class="value">R$ 2,40 MM</div><div class="sub">Dezembro/25</div></div>
+      <div class="kpi"><div class="label">Mediana Mensal</div><div class="value">R$ 1,25 MM</div></div>
+      <div class="kpi warn"><div class="label">Volatilidade</div><div class="value">29,8%</div><div class="sub">Coef. variação</div></div>
+    </div>
+  </section>
+
+  <section id="mensal">
+    <h2>2. 📈 Evolução Mensal 2025</h2>
+    <div class="chart-container"><canvas id="chartMensal2025"></canvas></div>
+    <table>
+      <thead><tr><th>Mês</th><th class="text-right">Total (R$)</th><th class="text-right">% sobre Ano</th><th class="text-right">Variação</th></tr></thead>
+      <tbody>
+        <tr><td>Janeiro</td><td class="text-right">1.214.580,12</td><td class="text-right">7,9%</td><td class="text-right">–</td></tr>
+        <tr><td>Fevereiro</td><td class="text-right">824.367,08</td><td class="text-right">5,3%</td><td class="text-right" style="color:#27ae60">▼ 32,1%</td></tr>
+        <tr><td>Março</td><td class="text-right">651.244,30</td><td class="text-right">4,2%</td><td class="text-right" style="color:#27ae60">▼ 21,0%</td></tr>
+        <tr><td>Abril</td><td class="text-right">1.197.836,55</td><td class="text-right">7,8%</td><td class="text-right" style="color:#c0392b">▲ 83,9%</td></tr>
+        <tr><td>Maio</td><td class="text-right">1.314.617,32</td><td class="text-right">8,5%</td><td class="text-right" style="color:#c0392b">▲ 9,7%</td></tr>
+        <tr><td>Junho</td><td class="text-right">1.054.221,18</td><td class="text-right">6,8%</td><td class="text-right" style="color:#27ae60">▼ 19,8%</td></tr>
+        <tr><td>Julho</td><td class="text-right">1.515.078,66</td><td class="text-right">9,8%</td><td class="text-right" style="color:#c0392b">▲ 43,7%</td></tr>
+        <tr><td>Agosto</td><td class="text-right">1.246.541,02</td><td class="text-right">8,1%</td><td class="text-right" style="color:#27ae60">▼ 17,7%</td></tr>
+        <tr><td>Setembro</td><td class="text-right">1.244.097,21</td><td class="text-right">8,1%</td><td class="text-right">▼ 0,2%</td></tr>
+        <tr><td>Outubro</td><td class="text-right">1.292.812,19</td><td class="text-right">8,4%</td><td class="text-right" style="color:#c0392b">▲ 3,9%</td></tr>
+        <tr><td>Novembro</td><td class="text-right">1.451.985,59</td><td class="text-right">9,4%</td><td class="text-right" style="color:#c0392b">▲ 12,3%</td></tr>
+        <tr style="background:#fff3cd"><td><strong>Dezembro</strong></td><td class="text-right"><strong>2.397.589,84</strong></td><td class="text-right"><strong>15,6%</strong></td><td class="text-right" style="color:#c0392b"><strong>▲ 65,1%</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="alert">
+      🔍 <strong>Padrão sazonal observado:</strong> meses de alta concentração de desembolso em <strong>abril</strong> (silagem/colheita), <strong>julho</strong> (compra de gado) e <strong>dezembro</strong> (compra estratégica de gado e fechamento do ano).
+    </div>
+  </section>
+
+  <section id="categorias">
+    <h2>3. 🥧 Distribuição por Categoria – 2025</h2>
+    <div class="chart-row">
+      <div class="chart-container"><canvas id="chartCatPie"></canvas></div>
+      <div class="chart-container"><canvas id="chartCatBar"></canvas></div>
+    </div>
+    <table>
+      <thead><tr><th>Categoria</th><th class="text-right">Total (R$)</th><th class="text-right">% Total</th></tr></thead>
+      <tbody>
+        <tr><td><strong>INSUMOS</strong></td><td class="text-right">5.658.215,40</td><td class="text-right">36,7%</td></tr>
+        <tr><td><strong>GADO</strong></td><td class="text-right">1.778.486,18</td><td class="text-right">11,5%</td></tr>
+        <tr><td><strong>INVESTIMENTOS</strong></td><td class="text-right">1.589.314,75</td><td class="text-right">10,3%</td></tr>
+        <tr><td>COMBUSTÍVEIS E LUBRIFICANTES</td><td class="text-right">829.450,18</td><td class="text-right">5,4%</td></tr>
+        <tr><td>SERVIÇOS DE TERCEIROS</td><td class="text-right">812.376,40</td><td class="text-right">5,3%</td></tr>
+        <tr><td>FOLHA DE PAGAMENTOS</td><td class="text-right">498.273,60</td><td class="text-right">3,2%</td></tr>
+        <tr><td>MANUTENÇÃO</td><td class="text-right">441.823,55</td><td class="text-right">2,9%</td></tr>
+        <tr><td>ALUGUEL/ARRENDAMENTO</td><td class="text-right">434.500,00</td><td class="text-right">2,8%</td></tr>
+        <tr><td>FRETES</td><td class="text-right">192.814,00</td><td class="text-right">1,3%</td></tr>
+        <tr><td>IMPOSTOS</td><td class="text-right">144.628,79</td><td class="text-right">0,9%</td></tr>
+        <tr><td>MEDICAÇÕES</td><td class="text-right">93.844,82</td><td class="text-right">0,6%</td></tr>
+        <tr><td>ENERGIA ELÉTRICA</td><td class="text-right">52.116,52</td><td class="text-right">0,3%</td></tr>
+        <tr><td>COMISSÕES</td><td class="text-right">52.114,13</td><td class="text-right">0,3%</td></tr>
+        <tr><td>COZINHA / ALIMENTAÇÃO</td><td class="text-right">42.788,17</td><td class="text-right">0,3%</td></tr>
+        <tr><td>OUTROS</td><td class="text-right">783.234,57</td><td class="text-right">5,1%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="sazonalidade">
+    <h2>4. 🔄 Análise de Sazonalidade – Categorias-Chave</h2>
+    <div class="chart-container"><canvas id="chartHeat"></canvas></div>
+    <h3>Concentração de Desembolso por Trimestre</h3>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">1º TRI 2025</div><div class="value">R$ 2,69 MM</div><div class="sub">17,5% do ano</div></div>
+      <div class="kpi"><div class="label">2º TRI 2025</div><div class="value">R$ 3,57 MM</div><div class="sub">23,2% do ano</div></div>
+      <div class="kpi warn"><div class="label">3º TRI 2025</div><div class="value">R$ 4,01 MM</div><div class="sub">26,0% do ano</div></div>
+      <div class="kpi danger"><div class="label">4º TRI 2025</div><div class="value">R$ 5,14 MM</div><div class="sub">33,4% do ano</div></div>
+    </div>
+    <div class="alert">
+      📌 <strong>Concentração no 4º trimestre:</strong> 33,4% do desembolso anual ocorreu nos últimos 3 meses, com destaque para compras de gado e estruturação operacional pré-confinamento 2026.
+    </div>
+  </section>
+
+  <section id="fornecedores">
+    <h2>5. 🏢 Top 15 Fornecedores 2025</h2>
+    <div class="chart-container"><canvas id="chartFornecedores"></canvas></div>
+    <table>
+      <thead><tr><th>#</th><th>Fornecedor</th><th class="text-right">Total Pago</th><th>Categoria Principal</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>SÃO MARTINHO S/A</td><td class="text-right">R$ 798.114,00</td><td>Insumos (DDG)</td></tr>
+        <tr><td>2</td><td>+FARELOS / LDC / BREJEIRO</td><td class="text-right">R$ 624.250,00</td><td>Insumos (Casca Soja)</td></tr>
+        <tr><td>3</td><td>NEOMILLE / CERRADINHO</td><td class="text-right">R$ 393.510,00</td><td>Insumos</td></tr>
+        <tr><td>4</td><td>CARGILL ALIMENTOS</td><td class="text-right">R$ 583.945,00</td><td>Insumos (Probeef)</td></tr>
+        <tr><td>5</td><td>AUTO POSTO APORÉ</td><td class="text-right">R$ 580.214,00</td><td>Combustíveis</td></tr>
+        <tr><td>6</td><td>NORMÉLIO PELIZON</td><td class="text-right">R$ 396.184,12</td><td>Insumos (Milho)</td></tr>
+        <tr><td>7</td><td>ARRENDAMENTO TOCA</td><td class="text-right">R$ 320.500,00</td><td>Arrendamento</td></tr>
+        <tr><td>8</td><td>BETO AGRONEGÓCIOS</td><td class="text-right">R$ 245.205,00</td><td>Insumos (Milho)</td></tr>
+        <tr><td>9</td><td>TIAGO CADORE</td><td class="text-right">R$ 240.477,94</td><td>Insumos</td></tr>
+        <tr><td>10</td><td>IRINEU SALIONI FILHO</td><td class="text-right">R$ 285.171,00</td><td>Insumos (Milho)</td></tr>
+        <tr><td>11</td><td>HERBERT W. SCHLATTER</td><td class="text-right">R$ 196.372,71</td><td>Insumos</td></tr>
+        <tr><td>12</td><td>MILHÃO INDÚSTRIA</td><td class="text-right">R$ 222.413,40</td><td>Insumos (Germem)</td></tr>
+        <tr><td>13</td><td>UMBERTO F. CARVALHO</td><td class="text-right">R$ 233.000,00</td><td>Gado</td></tr>
+        <tr><td>14</td><td>VALDEMAR CABRAL VIEIRA</td><td class="text-right">R$ 318.549,66</td><td>Gado</td></tr>
+        <tr><td>15</td><td>APARECIDO ROTONDO</td><td class="text-right">R$ 250.000,00</td><td>Investimento (Faz Serra)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <div style="font-size:.9em;opacity:.8;margin-bottom:15px">— Análise e Construção —</div>
+    <div class="author-name">Dr. Sidney Souza</div>
+    <div class="author-title">Economista e Administrador Agrícola</div>
+    <div class="author-title"><span class="highlight">Estrategista Econômico do Produtor</span></div>
+    <div class="author-title">Especialista em economia da fazenda e gestão de risco no agro</div>
+    <div class="author-tagline">"Transformamos dados da fazenda em decisões econômicas.<br>Ajudamos produtores a entender se o mercado sustenta seu negócio."</div>
+    <div class="contact">
+      <span>📧 sidneyagro@gmail.com</span>
+      <span>📱 (64) 9 9226-6886</span>
+      <span>🌐 @ruralin.ai</span>
+    </div>
+  </footer>
+</div>
+<script>
+const verde='#1e5631',verdeC='#2d8659',dourado='#d4af37';
+const cores=['#1e5631','#2d8659','#d4af37','#e67e22','#3498db','#9b59b6','#16a085','#c0392b','#7f8c8d','#f39c12','#27ae60','#34495e','#e74c3c','#1abc9c','#95a5a6'];
+
+new Chart(document.getElementById('chartMensal2025'),{
+ type:'bar',
+ data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[{label:'Desembolso (R$)',
+     data:[1214580,824367,651244,1197836,1314617,1054221,1515078,1246541,1244097,1292812,1451985,2397589],
+     backgroundColor:[verde,verde,verde,verdeC,verdeC,verdeC,verdeC,verdeC,verdeC,verdeC,verdeC,'#c0392b'],
+     borderRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Evolução Mensal de Desembolsos 2025',font:{size:16}},legend:{display:false}},
+   scales:{y:{ticks:{callback:v=>'R$ '+(v/1e6).toFixed(2)+' MM'}}}}});
+
+new Chart(document.getElementById('chartCatPie'),{
+ type:'doughnut',
+ data:{labels:['Insumos','Gado','Investimentos','Combustíveis','Serv. Terceiros','Folha','Manutenção','Arrendamento','Outros'],
+   datasets:[{data:[5658215,1778486,1589314,829450,812376,498273,441823,434500,1362532],backgroundColor:cores}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Distribuição por Categoria 2025',font:{size:15}},legend:{position:'right',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('chartCatBar'),{
+ type:'bar',
+ data:{labels:['Insumos','Gado','Investim.','Combust.','Serv.Terc.','Folha','Manut.','Arrend.','Fretes','Impostos'],
+   datasets:[{label:'R$',data:[5658215,1778486,1589314,829450,812376,498273,441823,434500,192814,144628],
+     backgroundColor:verde,borderRadius:6}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Top Categorias 2025 (R$)',font:{size:15}},legend:{display:false}},
+   scales:{x:{ticks:{callback:v=>'R$ '+(v/1e6).toFixed(2)+'MM'}}}}});
+
+new Chart(document.getElementById('chartHeat'),{
+ type:'line',
+ data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[
+     {label:'Insumos',data:[459,242,196,242,124,418,514,536,469,492,401,564],borderColor:verde,fill:false,tension:.3},
+     {label:'Gado',data:[10,0,0,0,17,146,531,233,60,158,304,1066],borderColor:dourado,fill:false,tension:.3},
+     {label:'Investimentos',data:[214,124,116,82,237,151,121,148,38,47,28,575],borderColor:'#e67e22',fill:false,tension:.3},
+     {label:'Combustíveis',data:[88,69,16,21,82,42,29,30,38,76,84,121],borderColor:'#3498db',fill:false,tension:.3}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Evolução das Principais Categorias 2025 (R$ mil)',font:{size:16}}},
+   scales:{y:{ticks:{callback:v=>'R$ '+v+' k'}}}}});
+
+new Chart(document.getElementById('chartFornecedores'),{
+ type:'bar',
+ data:{labels:['São Martinho','+Farelos/LDC','Cargill','Auto Posto Aporé','Normélio Pelizon','Cerradinho','Valdemar Cabral','Irineu Salioni','Aparecido Rotondo','Beto Agronegócios','Tiago Cadore','Umberto Carvalho','Milhão Indústria','Herbert Schlatter','Arrendamento Toca'],
+   datasets:[{label:'Total (R$)',data:[798114,624250,583945,580214,396184,393510,318549,285171,250000,245205,240477,233000,222413,196372,320500],
+     backgroundColor:verde,borderRadius:5}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Top 15 Fornecedores 2025',font:{size:16}},legend:{display:false}},
+   scales:{x:{ticks:{callback:v=>'R$ '+(v/1000).toFixed(0)+'k'}}}}});
+</script>
+</body>
+</html>

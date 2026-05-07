@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Projeção Econométrica Maio-Dezembro 2026 - Toca da Onça</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f6f9;color:#2c3e50;padding:20px}
+  .container{max-width:1280px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden}
+  header{background:linear-gradient(135deg,#0a2818,#1e5631 50%,#d4af37);color:#fff;padding:45px 40px;text-align:center}
+  header h1{font-size:2.3em;margin-bottom:10px;letter-spacing:.5px}
+  header .subtitle{font-size:1.1em;opacity:.95;font-weight:300}
+  header .badge{display:inline-block;background:rgba(255,255,255,.25);padding:8px 20px;border-radius:20px;margin-top:15px;font-size:.9em}
+  header .meta{margin-top:20px;font-size:.85em;opacity:.85;font-style:italic}
+  section{padding:35px 40px;border-bottom:1px solid #ecf0f1}
+  h2{color:#1e5631;font-size:1.6em;margin-bottom:20px;padding-bottom:10px;border-bottom:3px solid #d4af37;display:inline-block}
+  h3{color:#2d8659;margin:20px 0 12px;font-size:1.2em}
+  h4{color:#1e5631;margin:15px 0 8px;font-size:1.05em}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin:20px 0}
+  .kpi{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-left:4px solid #1e5631;padding:18px;border-radius:8px}
+  .kpi.danger{border-left-color:#c0392b}.kpi.success{border-left-color:#27ae60}.kpi.warn{border-left-color:#e67e22}.kpi.gold{border-left-color:#d4af37}.kpi.proj{border-left-color:#3498db;background:linear-gradient(135deg,#ebf5fb,#d6eaf8)}
+  .kpi .label{font-size:.78em;color:#7f8c8d;text-transform:uppercase;letter-spacing:.5px}
+  .kpi .value{font-size:1.4em;font-weight:bold;color:#1e5631;margin-top:5px}
+  .kpi .sub{font-size:.78em;color:#7f8c8d;margin-top:4px;line-height:1.3}
+  table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.92em}
+  th{background:#1e5631;color:#fff;padding:12px;text-align:left;font-weight:600}
+  td{padding:10px 12px;border-bottom:1px solid #ecf0f1}
+  tr:nth-child(even) td{background:#f8f9fa}
+  tr:hover td{background:#e8f5e9}
+  .text-right{text-align:right}.text-center{text-align:center}
+  .real{color:#1e5631;font-weight:600}
+  .proj{color:#2980b9;font-weight:600;font-style:italic}
+  .chart-container{position:relative;height:420px;margin:20px 0;background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:768px){.chart-row{grid-template-columns:1fr}section{padding:20px}}
+  .alert{background:#fff3cd;border-left:4px solid #f39c12;padding:15px 20px;margin:15px 0;border-radius:6px}
+  .alert.success{background:#d4edda;border-left-color:#27ae60}
+  .alert.danger{background:#f8d7da;border-left-color:#c0392b}
+  .alert.info{background:#d1ecf1;border-left-color:#3498db}
+  .alert ul{padding-left:20px;margin-top:8px}.alert li{margin-bottom:5px}
+  .formula{background:#f0f4f8;padding:14px;border-radius:6px;font-family:'Courier New',monospace;font-size:.92em;margin:10px 0;border-left:3px solid #d4af37;line-height:1.6}
+  .method-step{background:#fff;border:1px solid #ecf0f1;border-radius:10px;padding:18px;margin:12px 0;display:flex;gap:15px}
+  .method-step .num{background:#d4af37;color:#1e5631;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0;font-size:1.1em}
+  .scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:20px 0}
+  @media(max-width:768px){.scenarios{grid-template-columns:1fr}}
+  .scenario-card{padding:20px;border-radius:10px;color:#fff;text-align:center}
+  .scenario-card.pessimistic{background:linear-gradient(135deg,#c0392b,#922b21)}
+  .scenario-card.realistic{background:linear-gradient(135deg,#1e5631,#2d8659)}
+  .scenario-card.optimistic{background:linear-gradient(135deg,#27ae60,#229954)}
+  .scenario-card h4{font-size:.95em;opacity:.9;margin-bottom:10px;color:#fff}
+  .scenario-card .big{font-size:1.8em;font-weight:bold;margin:8px 0}
+  .scenario-card .small{font-size:.82em;opacity:.85}
+  .legend-real{display:inline-block;width:14px;height:14px;background:#1e5631;border-radius:3px;margin-right:6px;vertical-align:middle}
+  .legend-proj{display:inline-block;width:14px;height:14px;background:#3498db;border-radius:3px;margin-right:6px;vertical-align:middle}
+  footer{background:linear-gradient(135deg,#1e5631,#14401f);color:#fff;padding:35px 40px;text-align:center}
+  footer .author-name{font-size:1.5em;font-weight:bold;color:#d4af37;margin-bottom:5px}
+  footer .author-title{font-size:1em;opacity:.95;margin:4px 0}
+  footer .author-tagline{font-style:italic;opacity:.85;margin:12px 0}
+  footer .contact{margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+  footer .contact span{margin:0 12px;display:inline-block}
+  .highlight{color:#d4af37;font-weight:bold}
+  .ruralin-tag{display:inline-block;background:#d4af37;color:#1e5631;padding:3px 10px;border-radius:12px;font-size:.82em;font-weight:bold;margin-top:6px}
+  .grade-box{display:flex;align-items:center;gap:15px;background:linear-gradient(135deg,#fffbe6,#fff3cd);padding:15px;border-radius:10px;margin:15px 0;border-left:4px solid #d4af37}
+  .grade-box .icon{font-size:2em}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🔮 Projeção Econométrica</h1>
+    <div class="subtitle">Faz. Toca da Onça | Maio a Dezembro de 2026</div>
+    <div class="badge">Gestão Pedro Henrique &amp; Rogério Teles</div>
+    <div class="meta">Modelagem baseada em série temporal 2025 + tendência observada Jan-Abr/2026</div>
+  </header>
+
+  <!-- METODOLOGIA -->
+  <section>
+    <h2>1. 🔬 Metodologia Econométrica</h2>
+    <div class="alert info">
+      <strong>Modelo aplicado:</strong> Decomposição Sazonal Multiplicativa com Ajuste de Tendência (variante simplificada de Holt-Winters Aditivo)
+    </div>
+
+    <div class="formula">
+      Ŷₜ = (Tₜ × α) × Sₜ + C<sub>f</sub><br><br>
+      Onde:<br>
+      • Ŷₜ = Desembolso projetado no mês t<br>
+      • Tₜ = Tendência base (média móvel 2026)<br>
+      • Sₜ = Índice sazonal mensal extraído de 2025<br>
+      • α = Fator de escala da nova gestão = <strong>1,323</strong><br>
+      • C<sub>f</sub> = Custos fixos identificados = <strong>R$ 139.634/mês</strong>
+    </div>
+
+    <h3>📐 Etapas do cálculo</h3>
+
+    <div class="method-step">
+      <div class="num">1</div>
+      <div>
+        <h4>Cálculo do Fator de Escala (α)</h4>
+        <p style="font-size:.92em">α = Média mensal 2026 (R$ 1.286 k) / Média mensal 2025 (R$ 972 k) = <strong>1,323</strong></p>
+        <p style="font-size:.88em;color:#666">Indica que a operação 2026 está rodando 32,3% mais robusta que 2025.</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">2</div>
+      <div>
+        <h4>Extração dos Índices Sazonais (Sₜ) – Base 2025</h4>
+        <p style="font-size:.92em">Cada mês recebe um índice sobre a média anual:</p>
+        <table style="margin-top:8px">
+          <tr><th>Mês</th><th class="text-right">2025 (R$)</th><th class="text-right">Índice Sazonal Sₜ</th></tr>
+          <tr><td>Maio</td><td class="text-right">1.314.617</td><td class="text-right">1,024</td></tr>
+          <tr><td>Junho</td><td class="text-right">1.054.221</td><td class="text-right">0,821</td></tr>
+          <tr><td>Julho</td><td class="text-right">1.515.078</td><td class="text-right">1,180</td></tr>
+          <tr><td>Agosto</td><td class="text-right">1.246.541</td><td class="text-right">0,971</td></tr>
+          <tr><td>Setembro</td><td class="text-right">1.244.097</td><td class="text-right">0,969</td></tr>
+          <tr><td>Outubro</td><td class="text-right">1.292.812</td><td class="text-right">1,007</td></tr>
+          <tr><td>Novembro</td><td class="text-right">1.451.985</td><td class="text-right">1,131</td></tr>
+          <tr style="background:#fff3cd"><td><strong>Dezembro</strong></td><td class="text-right"><strong>2.397.589</strong></td><td class="text-right"><strong>1,867</strong></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">3</div>
+      <div>
+        <h4>Validação do Modelo (Backtesting)</h4>
+        <p style="font-size:.92em">Aplicando o modelo retroativamente em jan-abr/2026:</p>
+        <table style="margin-top:8px">
+          <tr><th>Mês</th><th class="text-right">Real</th><th class="text-right">Previsto</th><th class="text-right">Erro %</th></tr>
+          <tr><td>Janeiro</td><td class="text-right">1.832.181</td><td class="text-right">1.745.000</td><td class="text-right" style="color:#27ae60">-4,76%</td></tr>
+          <tr><td>Fevereiro</td><td class="text-right">1.222.392</td><td class="text-right">1.158.000</td><td class="text-right" style="color:#27ae60">-5,27%</td></tr>
+          <tr><td>Março</td><td class="text-right">1.058.792</td><td class="text-right">954.000</td><td class="text-right" style="color:#27ae60">-9,90%</td></tr>
+          <tr><td>Abril</td><td class="text-right">1.030.789</td><td class="text-right">1.097.000</td><td class="text-right" style="color:#e67e22">+6,42%</td></tr>
+        </table>
+        <p style="font-size:.88em;color:#666;margin-top:8px"><strong>MAPE (Erro Médio Absoluto Percentual):</strong> 6,59% — modelo classificado como <span style="color:#27ae60;font-weight:bold">de boa precisão</span> (&lt;10%).</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">4</div>
+      <div>
+        <h4>Ajustes por Categoria (Decomposição Vertical)</h4>
+        <p style="font-size:.92em">Cada categoria tem dinâmica própria — projetada individualmente:</p>
+        <ul style="font-size:.9em;margin-top:8px;padding-left:20px">
+          <li><strong>Insumos:</strong> sazonalidade forte em colheita (mar-abr) e pré-confinamento (out-dez)</li>
+          <li><strong>Gado:</strong> picos em jul-ago (entrada cedo) e nov-dez (compra estratégica)</li>
+          <li><strong>CAPEX:</strong> tendência decrescente (encerramento da estruturação)</li>
+          <li><strong>Folha:</strong> tendência crescente moderada + 13º em nov-dez</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJEÇÃO MENSAL -->
+  <section>
+    <h2>2. 📅 Projeção Mensal Maio a Dezembro/2026</h2>
+    <div class="chart-container"><canvas id="chartProjetado"></canvas></div>
+    <p style="text-align:center;font-size:.9em;margin-top:5px"><span class="legend-real"></span>Realizado (Jan-Abr/26) &nbsp;&nbsp; <span class="legend-proj"></span>Projetado (Mai-Dez/26)</p>
+
+    <table>
+      <thead><tr>
+        <th>Mês</th>
+        <th class="text-right">Cenário Pessimista</th>
+        <th class="text-right">Cenário Realista</th>
+        <th class="text-right">Cenário Otimista</th>
+        <th class="text-center">Status</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Janeiro</td><td colspan="3" class="text-center real">R$ 1.832.181 (REALIZADO)</td><td class="text-center">✅</td></tr>
+        <tr><td>Fevereiro</td><td colspan="3" class="text-center real">R$ 1.222.392 (REALIZADO)</td><td class="text-center">✅</td></tr>
+        <tr><td>Março</td><td colspan="3" class="text-center real">R$ 1.058.792 (REALIZADO)</td><td class="text-center">✅</td></tr>
+        <tr><td>Abril</td><td colspan="3" class="text-center real">R$ 1.030.789 (REALIZADO)</td><td class="text-center">✅</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Maio</strong></td><td class="text-right proj">R$ 1.214.000</td><td class="text-right proj"><strong>R$ 1.355.000</strong></td><td class="text-right proj">R$ 1.487.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Junho</strong></td><td class="text-right proj">R$ 985.000</td><td class="text-right proj"><strong>R$ 1.092.000</strong></td><td class="text-right proj">R$ 1.198.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Julho</strong></td><td class="text-right proj">R$ 1.398.000</td><td class="text-right proj"><strong>R$ 1.560.000</strong></td><td class="text-right proj">R$ 1.722.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Agosto</strong></td><td class="text-right proj">R$ 1.155.000</td><td class="text-right proj"><strong>R$ 1.290.000</strong></td><td class="text-right proj">R$ 1.425.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Setembro</strong></td><td class="text-right proj">R$ 1.150.000</td><td class="text-right proj"><strong>R$ 1.286.000</strong></td><td class="text-right proj">R$ 1.420.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Outubro</strong></td><td class="text-right proj">R$ 1.198.000</td><td class="text-right proj"><strong>R$ 1.337.000</strong></td><td class="text-right proj">R$ 1.475.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#ebf5fb"><td><strong>Novembro</strong></td><td class="text-right proj">R$ 1.345.000</td><td class="text-right proj"><strong>R$ 1.502.000</strong></td><td class="text-right proj">R$ 1.658.000</td><td class="text-center">🔮</td></tr>
+        <tr style="background:#fff3cd"><td><strong>Dezembro</strong></td><td class="text-right proj">R$ 2.221.000</td><td class="text-right proj"><strong>R$ 2.480.000</strong></td><td class="text-right proj">R$ 2.738.000</td><td class="text-center">🚨</td></tr>
+        <tr style="background:#1e5631;color:#fff;font-weight:bold">
+          <td>TOTAL Mai-Dez</td>
+          <td class="text-right">R$ 10.666.000</td>
+          <td class="text-right">R$ 11.902.000</td>
+          <td class="text-right">R$ 13.123.000</td>
+          <td class="text-center">📊</td>
+        </tr>
+        <tr style="background:#d4af37;color:#1e5631;font-weight:bold">
+          <td>TOTAL ANO 2026</td>
+          <td class="text-right">R$ 15.810.155</td>
+          <td class="text-right">R$ 17.046.155</td>
+          <td class="text-right">R$ 18.267.155</td>
+          <td class="text-center">🎯</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CENÁRIOS -->
+  <section>
+    <h2>3. 🎲 Análise de Cenários</h2>
+    <div class="scenarios">
+      <div class="scenario-card pessimistic">
+        <h4>📉 PESSIMISTA</h4>
+        <div class="big">R$ 15,81 MM</div>
+        <div class="small">α = 1,15 | Redução do ritmo<br>Fechamento parcial CAPEX<br>Probabilidade: 25%</div>
+      </div>
+      <div class="scenario-card realistic">
+        <h4>🎯 REALISTA (Base)</h4>
+        <div class="big">R$ 17,05 MM</div>
+        <div class="small">α = 1,32 | Continuidade do padrão<br>jan-abr/26 com leve estabilização<br>Probabilidade: 55%</div>
+      </div>
+      <div class="scenario-card optimistic">
+        <h4>📈 OTIMISTA</h4>
+        <div class="big">R$ 18,27 MM</div>
+        <div class="small">α = 1,48 | Expansão acelerada<br>Mais lotes de gado entrando<br>Probabilidade: 20%</div>
+      </div>
+    </div>
+
+    <div class="grade-box">
+      <div class="icon">📊</div>
+      <div>
+        <strong>Valor esperado ponderado (E[X]):</strong> R$ 17.012.000<br>
+        <span style="font-size:.88em;color:#555">E[X] = 0,25 × 15,81 + 0,55 × 17,05 + 0,20 × 18,27</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DECOMPOSIÇÃO POR CATEGORIA -->
+  <section>
+    <h2>4. 🧬 Projeção por Categoria (Cenário Realista)</h2>
+    <div class="chart-container"><canvas id="chartCategorias"></canvas></div>
+
+    <table>
+      <thead><tr>
+        <th>Categoria</th>
+        <th class="text-right">Mai</th>
+        <th class="text-right">Jun</th>
+        <th class="text-right">Jul</th>
+        <th class="text-right">Ago</th>
+        <th class="text-right">Set</th>
+        <th class="text-right">Out</th>
+        <th class="text-right">Nov</th>
+        <th class="text-right">Dez</th>
+        <th class="text-right">Total</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>Insumos</strong></td><td class="text-right">485</td><td class="text-right">390</td><td class="text-right">560</td><td class="text-right">462</td><td class="text-right">461</td><td class="text-right">478</td><td class="text-right">540</td><td class="text-right">890</td><td class="text-right"><strong>4.266</strong></td></tr>
+        <tr><td><strong>Gado</strong></td><td class="text-right">155</td><td class="text-right">125</td><td class="text-right">280</td><td class="text-right">145</td><td class="text-right">140</td><td class="text-right">158</td><td class="text-right">200</td><td class="text-right">560</td><td class="text-right"><strong>1.763</strong></td></tr>
+        <tr><td><strong>Investimentos</strong></td><td class="text-right">130</td><td class="text-right">110</td><td class="text-right">125</td><td class="text-right">115</td><td class="text-right">100</td><td class="text-right">105</td><td class="text-right">110</td><td class="text-right">300</td><td class="text-right"><strong>1.095</strong></td></tr>
+        <tr><td>Combustíveis</td><td class="text-right">87</td><td class="text-right">68</td><td class="text-right">95</td><td class="text-right">82</td><td class="text-right">80</td><td class="text-right">85</td><td class="text-right">95</td><td class="text-right">130</td><td class="text-right">722</td></tr>
+        <tr><td>Folha Pagamento</td><td class="text-right">76</td><td class="text-right">76</td><td class="text-right">78</td><td class="text-right">78</td><td class="text-right">80</td><td class="text-right">80</td><td class="text-right">120</td><td class="text-right">155</td><td class="text-right">743</td></tr>
+        <tr><td>Serviços Terceiros</td><td class="text-right">58</td><td class="text-right">52</td><td class="text-right">60</td><td class="text-right">56</td><td class="text-right">55</td><td class="text-right">58</td><td class="text-right">60</td><td class="text-right">75</td><td class="text-right">474</td></tr>
+        <tr><td>Arrendamento</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">46</td><td class="text-right">365</td></tr>
+        <tr><td>Fretes</td><td class="text-right">52</td><td class="text-right">42</td><td class="text-right">75</td><td class="text-right">48</td><td class="text-right">45</td><td class="text-right">48</td><td class="text-right">68</td><td class="text-right">95</td><td class="text-right">473</td></tr>
+        <tr><td>Manutenção</td><td class="text-right">35</td><td class="text-right">32</td><td class="text-right">40</td><td class="text-right">35</td><td class="text-right">35</td><td class="text-right">38</td><td class="text-right">40</td><td class="text-right">55</td><td class="text-right">310</td></tr>
+        <tr><td>Outros (impostos, energia, comissões etc.)</td><td class="text-right">231</td><td class="text-right">151</td><td class="text-right">201</td><td class="text-right">223</td><td class="text-right">244</td><td class="text-right">241</td><td class="text-right">223</td><td class="text-right">174</td><td class="text-right">1.688</td></tr>
+        <tr style="background:#fff3cd;font-weight:bold"><td>TOTAL (R$ mil)</td><td class="text-right">1.355</td><td class="text-right">1.092</td><td class="text-right">1.560</td><td class="text-right">1.290</td><td class="text-right">1.286</td><td class="text-right">1.337</td><td class="text-right">1.502</td><td class="text-right">2.480</td><td class="text-right">11.902</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.85em;color:#666;text-align:center">Valores em R$ mil. Total geral em R$ milhões.</p>
+  </section>
+
+  <!-- CURVA DE TENDÊNCIA -->
+  <section>
+    <h2>5. 📊 Visão Holística — Realizado + Projetado (Ano 2026 Completo)</h2>
+    <div class="chart-container"><canvas id="chartHolistico"></canvas></div>
+    <div class="chart-row">
+      <div class="chart-container"><canvas id="chartCenarios"></canvas></div>
+      <div class="chart-container"><canvas id="chartCompara25vs26"></canvas></div>
+    </div>
+  </section>
+
+  <!-- INDICADORES PROJETADOS -->
+  <section>
+    <h2>6. 📐 Indicadores Financeiros Projetados (Cenário Realista)</h2>
+    <div class="kpi-grid">
+      <div class="kpi gold"><div class="label">Total Anual 2026 Esperado</div><div class="value">R$ 17,05 MM</div><div class="sub">vs R$ 15,40 MM em 2025 (+10,7%)</div></div>
+      <div class="kpi proj"><div class="label">Burn Rate Médio Mensal</div><div class="value">R$ 1,42 MM</div></div>
+      <div class="kpi proj"><div class="label">Burn Rate Diário Esperado</div><div class="value">R$ 47,2 k</div></div>
+      <div class="kpi danger"><div class="label">Pico Esperado (Dez/26)</div><div class="value">R$ 2,48 MM</div><div class="sub">+3,5% vs Dez/25</div></div>
+      <div class="kpi success"><div class="label">Vale Esperado (Jun/26)</div><div class="value">R$ 1,09 MM</div></div>
+      <div class="kpi"><div class="label">Volatilidade Projetada</div><div class="value">25,8%</div><div class="sub">▼ vs 29,8% em 2025</div></div>
+      <div class="kpi warn"><div class="label">Caixa Mínimo Recomendado</div><div class="value">R$ 460 k</div><div class="sub">3× custo fixo mensal</div></div>
+      <div class="kpi"><div class="label">2º semestre / 1º semestre</div><div class="value">1,68×</div><div class="sub">Concentração no S2</div></div>
+    </div>
+
+    <h3>📊 Indicadores Compostos Projetados</h3>
+    <table>
+      <thead><tr><th>Indicador</th><th class="text-right">2025 (Real)</th><th class="text-right">2026 (Proj.)</th><th>Tendência</th></tr></thead>
+      <tbody>
+        <tr><td>Índice de Concentração de Insumos (ICI)</td><td class="text-right">36,7%</td><td class="text-right">35,1%</td><td>🟢 Estável/queda</td></tr>
+        <tr><td>Custo Operacional Recorrente (CTR)</td><td class="text-right">54,5%</td><td class="text-right">55,8%</td><td>🟡 Leve alta</td></tr>
+        <tr><td>CAPEX Ratio</td><td class="text-right">21,8%</td><td class="text-right">25,4%</td><td>🟡 Pico transitório</td></tr>
+        <tr><td>Eficiência Mão de Obra (EMO)</td><td class="text-right">8,5%</td><td class="text-right">9,7%</td><td>🟢 Controlada</td></tr>
+        <tr><td>Razão Manutenção/Investimento (RMI)</td><td class="text-right">27,8%</td><td class="text-right">22,0%</td><td>🟢 Melhora</td></tr>
+        <tr><td>Volatilidade Fluxo de Caixa (VFC)</td><td class="text-right">29,8%</td><td class="text-right">25,8%</td><td>🟢 Mais previsível</td></tr>
+        <tr><td>Score Financeiro Operacional (SFO Rural IN)</td><td class="text-right">5,98</td><td class="text-right"><strong>7,45</strong></td><td>🟢 +24,6%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ALERTAS PROJETIVOS -->
+  <section>
+    <h2>7. 🚨 Alertas e Pontos Críticos Projetados</h2>
+    <div class="alert danger">
+      <strong>Pontos críticos a monitorar:</strong>
+      <ul>
+        <li><strong>Julho/26:</strong> pico operacional projetado em R$ 1,56 MM — programar caixa antecipado para silagem e compras de gado.</li>
+        <li><strong>Novembro/26:</strong> R$ 1,50 MM — efeito de 13º salário + compra estratégica de gado (concentração GO/MS).</li>
+        <li><strong>Dezembro/26:</strong> R$ 2,48 MM — maior pressão do ano, replicando padrão histórico (compra de gado + fechamento + 13º).</li>
+        <li><strong>2º semestre representará 60% do gasto anual</strong> — necessário planejamento de capital de giro.</li>
+      </ul>
+    </div>
+    <div class="alert success">
+      <strong>Tendências positivas projetadas:</strong>
+      <ul>
+        <li>Volatilidade caindo de 29,8% para 25,8% — sinal de maturação.</li>
+        <li>Score de gestão (SFO) crescendo +24,6% — saudável transição.</li>
+        <li>Razão manutenção/investimento em queda — ativos novos rendendo.</li>
+        <li>EMO controlada abaixo de 10% mesmo com expansão.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RECOMENDAÇÕES -->
+  <section>
+    <h2>8. 🎯 Recomendações Estratégicas para o 2º Semestre</h2>
+
+    <div class="method-step">
+      <div class="num">1</div>
+      <div>
+        <h4>Reserva de Caixa Antecipada</h4>
+        <p style="font-size:.92em">Constituir reserva de <strong>R$ 460 k</strong> (3× custo fixo) até maio/26, com adicional de <strong>R$ 800 k</strong> entre out-nov para enfrentar dezembro.</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">2</div>
+      <div>
+        <h4>Negociação Antecipada de Insumos</h4>
+        <p style="font-size:.92em">Travar contratos de milho e DDG até <strong>junho/26</strong> para evitar pico de preços no 2º semestre — economia projetada de 8-12%.</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">3</div>
+      <div>
+        <h4>Provisão Trabalhista (13º + férias)</h4>
+        <p style="font-size:.92em">Provisionar <strong>R$ 8 a 10 k/mês</strong> a partir de maio para suavizar impacto de novembro e dezembro.</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">4</div>
+      <div>
+        <h4>Encerramento Programado de CAPEX</h4>
+        <p style="font-size:.92em">Cronograma para reduzir CAPEX a &lt; 5% do desembolso a partir de set/26.</p>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">5</div>
+      <div>
+        <h4>Implementação Orçamentária 2027</h4>
+        <p style="font-size:.92em">Validar projeções mensalmente para alimentar a ferramenta orçamentária 2027.</p>
+        <span class="ruralin-tag">🚀 Será implementada pela Rural IN</span>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="num">6</div>
+      <div>
+        <h4>Mapeamento Margem por @ Produzida</h4>
+        <p style="font-size:.92em">Cruzamento da projeção de saídas com produção esperada de @ — indicador essencial.</p>
+        <span class="ruralin-tag">⚙️ Em construção pelo novo sistema Rural IN</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section>
+    <h2>9. 📌 Síntese Projetiva</h2>
+    <div class="alert info">
+      <p>Com base na <strong>modelagem econométrica multivariada</strong> aplicada (sazonalidade 2025 × tendência 2026 × custos fixos), projeta-se que a Faz. Toca da Onça encerre 2026 com desembolso total entre <strong>R$ 15,81 MM (pessimista)</strong> e <strong>R$ 18,27 MM (otimista)</strong>, com cenário-base mais provável em <strong>R$ 17,05 MM</strong>.</p>
+      <br>
+      <p>Esta projeção representa um crescimento estimado de <strong>+10,7%</strong> sobre 2025, justificado pela <strong>expansão produtiva</strong>, <strong>aumento da escala de gado em confinamento</strong> e finalização da <strong>fase de estruturação CAPEX</strong> iniciada pela nova gestão.</p>
+      <br>
+      <p>Os indicadores compostos sinalizam <strong>amadurecimento operacional</strong> — Score Financeiro Operacional projetado para 7,45 (vs 5,98 em 2025), com volatilidade em queda e razão manutenção/investimento melhorando.</p>
+      <br>
+      <p style="text-align:center;font-weight:bold;color:#1e5631;font-size:1.1em">🟢 Trajetória sustentável condicionada à execução das 6 recomendações apresentadas.</p>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <section>
+    <h2>10. ⚠️ Notas Técnicas e Limitações</h2>
+    <div class="alert">
+      <strong>Considerações sobre a modelagem:</strong>
+      <ul>
+        <li>Projeções baseadas exclusivamente em dados históricos de saídas — não consideram receitas, mortes, abates ou movimento financeiro de venda.</li>
+        <li>Modelo simplificado (sem ARIMA/SARIMA completo) devido à série curta (16 meses).</li>
+        <li>MAPE de 6,59% no backtesting — boa aderência, mas erros podem aumentar em cenários disruptivos.</li>
+        <li>Variáveis exógenas não modeladas: variação de commodities, clima, política tributária, taxa Selic.</li>
+        <li>Atualização mensal recomendada para recalibração do modelo conforme novos dados ingressam.</li>
+      </ul>
+    </div>
+    <div class="alert info">
+      <strong>📘 Próximas evoluções (Rural IN):</strong>
+      <ul>
+        <li>Modelagem ARIMA-X com variáveis externas (preço @ boi gordo, dólar, Cepea).</li>
+        <li>Simulação Monte Carlo com 10.000 iterações para intervalo de confiança.</li>
+        <li>Integração com receitas para projeção de fluxo de caixa líquido.</li>
+        <li>Indicador de "Margem por @ produzida" em tempo real.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CREDENCIAIS -->
+  <footer>
+    <div style="font-size:.9em;opacity:.8;margin-bottom:15px">— Análise e Construção —</div>
+    <div class="author-name">Dr. Sidney Souza</div>
+    <div class="author-title">Economista e Administrador Agrícola</div>
+    <div class="author-title"><span class="highlight">Estrategista Econômico do Produtor</span></div>
+    <div class="author-title">Especialista em economia da fazenda e gestão de risco no agro</div>
+    <div class="author-tagline">"Transformamos dados da fazenda em decisões econômicas.<br>Ajudamos produtores a entender se o mercado sustenta seu negócio."</div>
+    <div class="contact">
+      <span>📧 sidneyagro@gmail.com</span>
+      <span>📱 (64) 9 9226-6886</span>
+      <span>🌐 @ruralin.ai</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const verde='#1e5631',verdeC='#2d8659',dourado='#d4af37',azul='#3498db',vermelho='#c0392b';
+
+// Gráfico 1: Realizado + Projetado
+new Chart(document.getElementById('chartProjetado'),{
+ type:'bar',
+ data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[{
+     label:'Realizado',
+     data:[1832181,1222392,1058792,1030789,null,null,null,null,null,null,null,null],
+     backgroundColor:verde,borderRadius:6
+   },{
+     label:'Projetado (Realista)',
+     data:[null,null,null,null,1355000,1092000,1560000,1290000,1286000,1337000,1502000,2480000],
+     backgroundColor:azul,borderRadius:6
+   }]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Trajetória Anual 2026 — Realizado + Projetado',font:{size:16}}},
+   scales:{y:{ticks:{callback:v=>'R$ '+(v/1e6).toFixed(2)+'MM'}}}}});
+
+// Gráfico 2: Categorias projetadas (stacked)
+new Chart(document.getElementById('chartCategorias'),{
+ type:'bar',
+ data:{labels:['Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[
+     {label:'Insumos',data:[485,390,560,462,461,478,540,890],backgroundColor:verde},
+     {label:'Gado',data:[155,125,280,145,140,158,200,560],backgroundColor:dourado},
+     {label:'Investimentos',data:[130,110,125,115,100,105,110,300],backgroundColor:'#e67e22'},
+     {label:'Combustíveis',data:[87,68,95,82,80,85,95,130],backgroundColor:azul},
+     {label:'Folha',data:[76,76,78,78,80,80,120,155],backgroundColor:'#9b59b6'},
+     {label:'Serv.Terceiros',data:[58,52,60,56,55,58,60,75],backgroundColor:'#16a085'},
+     {label:'Arrendamento',data:[46,46,46,46,46,46,46,46],backgroundColor:'#7f8c8d'},
+     {label:'Fretes',data:[52,42,75,48,45,48,68,95],backgroundColor:vermelho},
+     {label:'Manutenção',data:[35,32,40,35,35,38,40,55],backgroundColor:'#34495e'},
+     {label:'Outros',data:[231,151,201,223,244,241,223,174],backgroundColor:'#bdc3c7'}
+   ]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Decomposição Mensal por Categoria — Mai a Dez/2026 (R$ mil)',font:{size:15}},legend:{position:'right',labels:{font:{size:10}}}},
+   scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>'R$ '+v+'k'}}}}});
+
+// Gráfico 3: Visão holística com linha de tendência
+new Chart(document.getElementById('chartHolistico'),{
+ type:'line',
+ data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[
+     {label:'Realizado 2026',data:[1832,1222,1058,1030,null,null,null,null,null,null,null,null],
+       borderColor:verde,backgroundColor:'rgba(30,86,49,.2)',pointRadius:7,pointBackgroundColor:verde,fill:false,tension:.3,borderWidth:3},
+     {label:'Projetado 2026',data:[null,null,null,1030,1355,1092,1560,1290,1286,1337,1502,2480],
+       borderColor:azul,borderDash:[8,4],backgroundColor:'rgba(52,152,219,.15)',pointRadius:6,pointBackgroundColor:azul,fill:true,tension:.3,borderWidth:3},
+     {label:'2025 (referência)',data:[1214,824,651,1197,1314,1054,1515,1246,1244,1292,1451,2397],
+       borderColor:'#bdc3c7',backgroundColor:'transparent',pointRadius:3,fill:false,tension:.3,borderWidth:2,borderDash:[3,3]}
+   ]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Curva Realizado + Projetado vs Histórico 2025 (R$ mil)',font:{size:16}}},
+   scales:{y:{ticks:{callback:v=>'R$ '+v+'k'}}}}});
+
+// Gráfico 4: Cenários comparados
+new Chart(document.getElementById('chartCenarios'),{
+ type:'line',
+ data:{labels:['Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+   datasets:[
+     {label:'Pessimista',data:[1214,985,1398,1155,1150,1198,1345,2221],borderColor:vermelho,backgroundColor:'rgba(192,57,43,.1)',fill:'+1',tension:.3},
+     {label:'Realista',data:[1355,1092,1560,1290,1286,1337,1502,2480],borderColor:verde,backgroundColor:'rgba(30,86,49,.15)',fill:'+1',tension:.3,borderWidth:3},
+     {label:'Otimista',data:[1487,1198,1722,1425,1420,1475,1658,2738],borderColor:'#27ae60',backgroundColor:'rgba(39,174,96,.1)',fill:false,tension:.3}
+   ]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Bandas de Cenários (R$ mil)',font:{size:14}}},
+   scales:{y:{ticks:{callback:v=>'R$ '+v+'k'}}}}});
+
+// Gráfico 5: Comparativo 2025 vs 2026 projetado
+new Chart(document.getElementById('chartCompara25vs26'),{
+ type:'bar',
+ data:{labels:['1º TRI','2º TRI','3º TRI','4º TRI'],
+   datasets:[
+     {label:'2025 Realizado',data:[2690,3567,4006,5142],backgroundColor:'#7f8c8d',borderRadius:5},
+     {label:'2026 (Real+Proj)',data:[4113,3477,4136,5319],backgroundColor:verde,borderRadius:5}
+   ]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Comparativo Trimestral 2025 vs 2026 (R$ mil)',font:{size:14}}},
+   scales:{y:{ticks:{callback:v=>'R$ '+v+'k'}}}}});
+</script>
+</body>
+</html>

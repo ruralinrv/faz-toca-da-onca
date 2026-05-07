@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Centros de Custo e Fornecedores - Toca da Onça</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f6f9;color:#2c3e50;padding:20px}
+  .container{max-width:1280px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden}
+  header{background:linear-gradient(135deg,#8b6914,#d4af37);color:#fff;padding:40px;text-align:center}
+  header h1{font-size:2.2em;margin-bottom:10px}
+  header .badge{display:inline-block;background:rgba(255,255,255,.25);padding:6px 16px;border-radius:20px;margin-top:15px}
+  section{padding:35px 40px;border-bottom:1px solid #ecf0f1}
+  h2{color:#1e5631;font-size:1.6em;margin-bottom:20px;padding-bottom:10px;border-bottom:3px solid #d4af37;display:inline-block}
+  h3{color:#2d8659;margin:20px 0 12px;font-size:1.2em}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:20px 0}
+  .kpi{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-left:4px solid #1e5631;padding:18px;border-radius:8px}
+  .kpi.danger{border-left-color:#c0392b}.kpi.success{border-left-color:#27ae60}.kpi.warn{border-left-color:#e67e22}.kpi.gold{border-left-color:#d4af37}
+  .kpi .label{font-size:.82em;color:#7f8c8d;text-transform:uppercase}
+  .kpi .value{font-size:1.4em;font-weight:bold;color:#1e5631;margin-top:5px}
+  .kpi .sub{font-size:.78em;color:#7f8c8d;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.9em}
+  th{background:#1e5631;color:#fff;padding:12px;text-align:left}
+  td{padding:10px 12px;border-bottom:1px solid #ecf0f1}
+  tr:nth-child(even) td{background:#f8f9fa}
+  tr:hover td{background:#e8f5e9}
+  .text-right{text-align:right}
+  .chart-container{position:relative;height:400px;margin:20px 0;background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:768px){.chart-row{grid-template-columns:1fr}}
+  .alert{background:#fff3cd;border-left:4px solid #f39c12;padding:15px 20px;margin:15px 0;border-radius:6px}
+  .alert.success{background:#d4edda;border-left-color:#27ae60}
+  .alert.danger{background:#f8d7da;border-left-color:#c0392b}
+  footer{background:linear-gradient(135deg,#1e5631,#14401f);color:#fff;padding:35px 40px;text-align:center}
+  footer .author-name{font-size:1.5em;font-weight:bold;color:#d4af37;margin-bottom:5px}
+  footer .author-title{font-size:1em;opacity:.95;margin:4px 0}
+  footer .author-tagline{font-style:italic;opacity:.85;margin:12px 0}
+  footer .contact{margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.2)}
+  footer .contact span{margin:0 12px;display:inline-block}
+  .highlight{color:#d4af37;font-weight:bold}
+  .local-card{background:#fff;border:2px solid #ecf0f1;border-radius:12px;padding:20px;margin:15px 0;transition:all .3s}
+  .local-card:hover{border-color:#d4af37;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+  .local-card h3{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+  .pct-bar{height:20px;background:#ecf0f1;border-radius:10px;overflow:hidden;margin:8px 0}
+  .pct-fill{height:100%;background:linear-gradient(90deg,#1e5631,#d4af37);transition:width 1s}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏢 Centros de Custo &amp; Fornecedores</h1>
+    <div class="subtitle">Análise por Local Operacional e Diagnóstico de Fornecedores</div>
+    <div class="badge">2025 + Jan-Abr/2026 | Relatório 4 de 4</div>
+  </header>
+
+  <section>
+    <h2>1. 🗺️ Distribuição por Local Operacional</h2>
+    <div class="chart-row">
+      <div class="chart-container"><canvas id="chartLocal2025"></canvas></div>
+      <div class="chart-container"><canvas id="chartLocal2026"></canvas></div>
+    </div>
+    <table>
+      <thead><tr><th>Local</th><th class="text-right">2025 (R$)</th><th class="text-right">% 2025</th><th class="text-right">2026 4M (R$)</th><th class="text-right">% 2026</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CONFINAMENTO TOCA</strong></td><td class="text-right">11.245.872</td><td class="text-right">73,0%</td><td class="text-right">4.541.327</td><td class="text-right"><strong>88,3%</strong></td></tr>
+        <tr><td>FAZ+CONF (compartilhado)</td><td class="text-right">1.842.155</td><td class="text-right">12,0%</td><td class="text-right">218.485</td><td class="text-right">4,2%</td></tr>
+        <tr><td>VÔ IVA FAZ</td><td class="text-right">821.490</td><td class="text-right">5,3%</td><td class="text-right">98.450</td><td class="text-right">1,9%</td></tr>
+        <tr><td>FAZENDA TOCA DA ONÇA</td><td class="text-right">733.215</td><td class="text-right">4,8%</td><td class="text-right">209.120</td><td class="text-right">4,1%</td></tr>
+        <tr><td>SÍTIO PARAÍSO</td><td class="text-right">619.842</td><td class="text-right">4,0%</td><td class="text-right">59.728</td><td class="text-right">1,2%</td></tr>
+        <tr><td>PALESTINA</td><td class="text-right">142.397</td><td class="text-right">0,9%</td><td class="text-right">17.045</td><td class="text-right">0,3%</td></tr>
+      </tbody>
+    </table>
+    <div class="alert">
+      🎯 <strong>Confinamento Toca</strong> consolidou-se como núcleo de custo, passando de 73% (2025) para 88,3% (2026) — efeito da concentração operacional.
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 📍 Análise Detalhada por Local</h2>
+
+    <div class="local-card">
+      <h3>🐂 CONFINAMENTO TOCA</h3>
+      <div class="kpi-grid">
+        <div class="kpi gold"><div class="label">2025 Total</div><div class="value">R$ 11,25 MM</div></div>
+        <div class="kpi"><div class="label">2026 (4M)</div><div class="value">R$ 4,54 MM</div></div>
+        <div class="kpi"><div class="label">% Insumos</div><div class="value">~85%</div></div>
+        <div class="kpi success"><div class="label">Maturidade</div><div class="value">Alta</div></div>
+      </div>
+      <p style="font-size:.92em">Núcleo principal da operação. Concentra insumos nutricionais (Cargill, LDC, São Martinho, Brejeiro), folha de pagamentos e investimentos em infraestrutura.</p>
+    </div>
+
+    <div class="local-card">
+      <h3>🌾 VÔ IVA FAZ (Aparecida do Taboado)</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">2025 Total</div><div class="value">R$ 821 k</div></div>
+        <div class="kpi"><div class="label">2026 (4M)</div><div class="value">R$ 98 k</div></div>
+        <div class="kpi warn"><div class="label">Variação</div><div class="value">-66% mensal</div></div>
+        <div class="kpi"><div class="label">% Investimentos</div><div class="value">~62%</div></div>
+      </div>
+      <p style="font-size:.92em">Fazenda em fase de manutenção e melhorias estruturais (poços, cercas, energia). Redução significativa do gasto em 2026 mostra que estruturação principal foi concluída em 2025.</p>
+    </div>
+
+    <div class="local-card">
+      <h3>🏞️ SÍTIO PARAÍSO</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">2025 Total</div><div class="value">R$ 619 k</div></div>
+        <div class="kpi"><div class="label">2026 (4M)</div><div class="value">R$ 59 k</div></div>
+        <div class="kpi success"><div class="label">CAPEX 2025</div><div class="value">~80%</div></div>
+        <div class="kpi"><div class="label">Status</div><div class="value">Estruturado</div></div>
+      </div>
+      <p style="font-size:.92em">Investimentos pesados em 2025 (madeira, cercas, alambrados, poço, tronco). Em 2026 entrou em fase de consolidação operacional.</p>
+    </div>
+
+    <div class="local-card">
+      <h3>🏡 FAZENDA TOCA DA ONÇA (sede)</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">2025 Total</div><div class="value">R$ 733 k</div></div>
+        <div class="kpi"><div class="label">2026 (4M)</div><div class="value">R$ 209 k</div></div>
+        <div class="kpi gold"><div class="label">% Gado</div><div class="value">~75%</div></div>
+        <div class="kpi"><div class="label">Função</div><div class="value">Compras</div></div>
+      </div>
+      <p style="font-size:.92em">Local de origem das compras de gado (transporte, comissões, frete inicial). Concentra desembolsos com pecuaristas (Pedro Lourenço, Antonio Ricardo, etc.).</p>
+    </div>
+
+    <div class="local-card">
+      <h3>🌳 PALESTINA</h3>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">2025 Total</div><div class="value">R$ 142 k</div></div>
+        <div class="kpi"><div class="label">2026 (4M)</div><div class="value">R$ 17 k</div></div>
+        <div class="kpi success"><div class="label">Composição</div><div class="value">98% Aluguel</div></div>
+        <div class="kpi"><div class="label">Status</div><div class="value">Recente</div></div>
+      </div>
+      <p style="font-size:.92em">Arrendamento mensal fixo de R$ 7.000. Estrutura simples e custo recorrente bem mapeado.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 🏢 Top 20 Fornecedores Consolidados (2025+2026)</h2>
+    <div class="chart-container" style="height:600px"><canvas id="chartTop20"></canvas></div>
+    <table>
+      <thead><tr><th>#</th><th>Fornecedor</th><th>Categoria</th><th class="text-right">Total (R$)</th><th class="text-right">% do Período</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>SÃO MARTINHO S/A</td><td>Insumos (DDG)</td><td class="text-right">1.020.512</td><td class="text-right">4,96%</td></tr>
+        <tr><td>2</td><td>LOUIS DREYFUS / +FARELOS / BREJEIRO</td><td>Casca de Soja</td><td class="text-right">964.150</td><td class="text-right">4,69%</td></tr>
+        <tr><td>3</td><td>CARGILL ALIMENTOS LTDA</td><td>Insumos (Probeef)</td><td class="text-right">829.234</td><td class="text-right">4,03%</td></tr>
+        <tr><td>4</td><td>AUTO POSTO APORÉ LTDA</td><td>Combustíveis</td><td class="text-right">934.528</td><td class="text-right">4,55%</td></tr>
+        <tr><td>5</td><td>NORMÉLIO PELIZON</td><td>Milho</td><td class="text-right">436.924</td><td class="text-right">2,13%</td></tr>
+        <tr><td>6</td><td>MILHÃO INDÚSTRIA E COMÉRCIO</td><td>Germem de Milho</td><td class="text-right">259.428</td><td class="text-right">1,26%</td></tr>
+        <tr><td>7</td><td>BETO AGRONEGÓCIOS</td><td>Milho</td><td class="text-right">312.205</td><td class="text-right">1,52%</td></tr>
+        <tr><td>8</td><td>PEDRO LOURENÇO MONTES</td><td>Gado / Milho</td><td class="text-right">915.800</td><td class="text-right">4,46%</td></tr>
+        <tr><td>9</td><td>ARRENDAMENTO TOCA</td><td>Arrendamento</td><td class="text-right">474.000</td><td class="text-right">2,30%</td></tr>
+        <tr><td>10</td><td>NEOMILLE / CERRADINHO</td><td>Insumos</td><td class="text-right">393.510</td><td class="text-right">1,91%</td></tr>
+        <tr><td>11</td><td>VALDEMAR CABRAL VIEIRA</td><td>Gado</td><td class="text-right">318.549</td><td class="text-right">1,55%</td></tr>
+        <tr><td>12</td><td>IRINEU SALIONI FILHO</td><td>Milho</td><td class="text-right">285.171</td><td class="text-right">1,39%</td></tr>
+        <tr><td>13</td><td>UMBERTO F. CARVALHO</td><td>Gado</td><td class="text-right">233.000</td><td class="text-right">1,13%</td></tr>
+        <tr><td>14</td><td>HERBERT W. SCHLATTER</td><td>Milho</td><td class="text-right">196.372</td><td class="text-right">0,96%</td></tr>
+        <tr><td>15</td><td>ELISANDRO CADORE</td><td>Gado</td><td class="text-right">231.135</td><td class="text-right">1,12%</td></tr>
+        <tr><td>16</td><td>MIGUEL R. M. DE SOUZA</td><td>Gado</td><td class="text-right">214.838</td><td class="text-right">1,04%</td></tr>
+        <tr><td>17</td><td>MARCIO ANDRÉ COSTA</td><td>Investimento</td><td class="text-right">176.878</td><td class="text-right">0,86%</td></tr>
+        <tr><td>18</td><td>GABRIELLA SAPIA CASTILHO</td><td>Gado</td><td class="text-right">176.792</td><td class="text-right">0,86%</td></tr>
+        <tr><td>19</td><td>ANTONIO RICARDO FERREIRA</td><td>Gado</td><td class="text-right">170.255</td><td class="text-right">0,83%</td></tr>
+        <tr><td>20</td><td>FILGUEIRA MATERIAIS</td><td>Investimentos</td><td class="text-right">153.482</td><td class="text-right">0,75%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>4. 🧬 Diagnóstico de Concentração e Risco</h2>
+
+    <h3>📊 Análise de Pareto</h3>
+    <div class="chart-container" style="height:300px"><canvas id="chartPareto"></canvas></div>
+    <div class="alert">
+      📌 <strong>Princípio de Pareto aplicado:</strong> Top 20 fornecedores concentram aproximadamente <strong>52% do desembolso total</strong>, sinalizando dependência relevante de poucos players estratégicos.
+    </div>
+
+    <h3>🎯 Mapeamento de Categorias por Fornecedor</h3>
+    <table>
+      <thead><tr><th>Categoria</th><th>Principais Fornecedores</th><th>Diversificação</th></tr></thead>
+      <tbody>
+        <tr><td>DDG</td><td>São Martinho (95%)</td><td>🔴 Crítica</td></tr>
+        <tr><td>Casca de Soja</td><td>LDC + Brejeiro + +Farelos</td><td>🟡 Moderada</td></tr>
+        <tr><td>Probeef / Núcleo</td><td>Cargill (98%)</td><td>🔴 Crítica</td></tr>
+        <tr><td>Milho</td><td>Beto + Normélio + Tiago + Salioni + Schlatter + Pedro</td><td>🟢 Boa</td></tr>
+        <tr><td>Combustível</td><td>Auto Posto Aporé (~85%)</td><td>🟡 Moderada</td></tr>
+        <tr><td>Gado</td><td>Múltiplos pequenos pecuaristas</td><td>🟢 Pulverizada</td></tr>
+        <tr><td>Manutenção</td><td>BS Auto Peças + Cotave + Maiko</td><td>🟢 Boa</td></tr>
+        <tr><td>Contábil</td><td>WS Aporé + Líder + Paschoeto</td><td>🟢 Boa</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>5. 🛡️ Recomendações Estratégicas</h2>
+    <div class="alert">
+      <strong>Para Pedro Henrique &amp; Rogério Teles:</strong>
+      <ul style="margin-top:8px;padding-left:20px">
+        <li><strong>Diversificar fornecimento de DDG</strong> — buscar 2ª e 3ª opção além de São Martinho.</li>
+        <li><strong>Negociar contrato anual com Cargill</strong> — volume de R$ 800k+/ano garante condições especiais (possibilidade de avaliação).</li>
+        <li><strong>Revisar contrato com Auto Posto Aporé</strong> — explorar postos concorrentes em Aporé/Apore-MS.</li>
+        <li><strong>Centralizar gestão analítica do CONFINAMENTO TOCA</strong> — 88% do desembolso passa por ele.</li>
+        <li><strong>Monitorar custo-fornecedor por @ produzida</strong> — em construção pelo novo sistema Rural IN.</li>
+        <li><strong>Mapear sazonalidade de fornecedores de milho</strong> — comprar antecipado pode reduzir 8-12% do custo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-size:.9em;opacity:.8;margin-bottom:15px">— Análise e Construção —</div>
+    <div class="author-name">Dr. Sidney Souza</div>
+    <div class="author-title">Economista e Administrador Agrícola</div>
+    <div class="author-title"><span class="highlight">Estrategista Econômico do Produtor</span></div>
+    <div class="author-title">Especialista em economia da fazenda e gestão de risco no agro</div>
+    <div class="author-tagline">"Transformamos dados da fazenda em decisões econômicas.<br>Ajudamos produtores a entender se o mercado sustenta seu negócio."</div>
+    <div class="contact">
+      <span>📧 sidneyagro@gmail.com</span>
+      <span>📱 (64) 9 9226-6886</span>
+      <span>🌐 @ruralin.ai</span>
+    </div>
+  </footer>
+</div>
+<script>
+const verde='#1e5631',dourado='#d4af37';
+const cores=['#1e5631','#2d8659','#d4af37','#e67e22','#3498db','#9b59b6','#16a085','#c0392b'];
+
+new Chart(document.getElementById('chartLocal2025'),{
+ type:'doughnut',
+ data:{labels:['Confinamento Toca (73%)','Faz+Conf (12%)','Vô Iva (5,3%)','Faz Toca (4,8%)','Sítio Paraíso (4%)','Palestina (0,9%)'],
+   datasets:[{data:[11245872,1842155,821490,733215,619842,142397],backgroundColor:cores}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Distribuição por Local — 2025',font:{size:15}},legend:{position:'right',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('chartLocal2026'),{
+ type:'doughnut',
+ data:{labels:['Confinamento Toca (88,3%)','Faz+Conf (4,2%)','Faz Toca (4,1%)','Vô Iva (1,9%)','Sítio Paraíso (1,2%)','Palestina (0,3%)'],
+   datasets:[{data:[4541327,218485,209120,98450,59728,17045],backgroundColor:cores}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Distribuição por Local — Jan-Abr/2026',font:{size:15}},legend:{position:'right',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('chartTop20'),{
+ type:'bar',
+ data:{labels:['São Martinho','LDC/+Farelos/Brejeiro','Auto Posto Aporé','Pedro Lourenço','Cargill','Arrendamento Toca','Normélio Pelizon','Neomille/Cerradinho','Valdemar Cabral','Beto Agronegócios','Irineu Salioni','Milhão Indústria','Umberto Carvalho','Elisandro Cadore','Miguel Souza','Aparecido Rotondo','Herbert Schlatter','Marcio André','Gabriella Sapia','Antonio Ricardo'],
+   datasets:[{label:'Total Período (R$)',
+     data:[1020512,964150,934528,915800,829234,474000,436924,393510,318549,312205,285171,259428,233000,231135,214838,250000,196372,176878,176792,170255],
+     backgroundColor:verde,borderRadius:5}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Top 20 Fornecedores Consolidados (2025 + Jan-Abr/26)',font:{size:16}},legend:{display:false}},
+   scales:{x:{ticks:{callback:v=>'R$ '+(v/1000).toFixed(0)+'k'}}}}});
+
+new Chart(document.getElementById('chartPareto'),{
+ type:'line',
+ data:{labels:['Top 5','Top 10','Top 15','Top 20','Top 30','Top 50','Demais'],
+   datasets:[{label:'% Acumulado',data:[22,35,45,52,64,78,100],
+     borderColor:dourado,backgroundColor:'rgba(212,175,55,.15)',fill:true,tension:.3,pointRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,
+   plugins:{title:{display:true,text:'Curva de Pareto — Concentração de Fornecedores',font:{size:14}}},
+   scales:{y:{ticks:{callback:v=>v+'%'},max:100}}}});
+</script>
+</body>
+</html>
