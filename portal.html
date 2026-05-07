@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Portal Rural IN | Faz. Toca da Onça — Inteligência Econômica</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --verde:#1e5631;
+    --verde-c:#2d8659;
+    --verde-d:#0a2818;
+    --dourado:#d4af37;
+    --dourado-c:#b8941f;
+    --cinza:#f4f6f9;
+    --branco:#fff;
+    --texto:#2c3e50;
+  }
+  body{
+    font-family:'Segoe UI',Tahoma,Geneva,sans-serif;
+    background:var(--cinza);
+    color:var(--texto);
+    line-height:1.6;
+    min-height:100vh;
+  }
+
+  /* HERO */
+  .hero{
+    background:
+      linear-gradient(135deg, rgba(10,40,24,.92), rgba(30,86,49,.88) 50%, rgba(212,175,55,.75)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff10' d='M0 0h100v100H0z'/%3E%3Cpath fill='%23ffffff05' d='M0 50h100v50H0z'/%3E%3C/svg%3E");
+    color:#fff;
+    padding:80px 30px 100px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(circle at 20% 50%, rgba(212,175,55,.15) 0%, transparent 50%),
+               radial-gradient(circle at 80% 80%, rgba(45,134,89,.2) 0%, transparent 50%);
+    pointer-events:none;
+  }
+  .hero-content{
+    position:relative;
+    max-width:900px;
+    margin:0 auto;
+    z-index:2;
+  }
+  .hero .logo-tag{
+    display:inline-block;
+    background:rgba(212,175,55,.25);
+    border:1px solid rgba(212,175,55,.5);
+    padding:6px 18px;
+    border-radius:20px;
+    font-size:.85em;
+    letter-spacing:2px;
+    margin-bottom:25px;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+  .hero h1{
+    font-size:3em;
+    font-weight:700;
+    letter-spacing:-.5px;
+    margin-bottom:15px;
+    text-shadow:0 4px 20px rgba(0,0,0,.3);
+  }
+  .hero .subtitle{
+    font-size:1.3em;
+    opacity:.95;
+    font-weight:300;
+    margin-bottom:8px;
+  }
+  .hero .client{
+    font-size:1.1em;
+    opacity:.85;
+    font-style:italic;
+    margin-bottom:30px;
+  }
+  .hero .meta-tags{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+    margin-top:25px;
+  }
+  .hero .meta-tags span{
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    padding:8px 18px;
+    border-radius:20px;
+    font-size:.88em;
+    border:1px solid rgba(255,255,255,.2);
+  }
+
+  /* RESUMO EXECUTIVO */
+  .executive{
+    max-width:1280px;
+    margin:-60px auto 0;
+    padding:0 30px;
+    position:relative;
+    z-index:3;
+  }
+  .exec-card{
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 40px rgba(0,0,0,.12);
+    padding:35px 40px;
+  }
+  .exec-card h2{
+    color:var(--verde);
+    font-size:1.4em;
+    margin-bottom:20px;
+    padding-bottom:12px;
+    border-bottom:3px solid var(--dourado);
+    display:inline-block;
+  }
+  .exec-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    margin-top:15px;
+  }
+  .exec-kpi{
+    text-align:center;
+    padding:18px 12px;
+    background:linear-gradient(135deg,#f8f9fa,#fff);
+    border:1px solid #ecf0f1;
+    border-radius:10px;
+    transition:all .3s;
+  }
+  .exec-kpi:hover{
+    border-color:var(--dourado);
+    transform:translateY(-3px);
+    box-shadow:0 6px 20px rgba(212,175,55,.2);
+  }
+  .exec-kpi .icon{font-size:1.8em;margin-bottom:5px}
+  .exec-kpi .label{font-size:.78em;color:#7f8c8d;text-transform:uppercase;letter-spacing:.5px}
+  .exec-kpi .value{font-size:1.4em;font-weight:bold;color:var(--verde);margin-top:5px}
+  .exec-kpi .sub{font-size:.78em;color:#999;margin-top:3px}
+
+  /* RELATÓRIOS GRID */
+  .reports-section{
+    max-width:1280px;
+    margin:0 auto;
+    padding:60px 30px 40px;
+  }
+  .section-title{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .section-title h2{
+    color:var(--verde);
+    font-size:2em;
+    margin-bottom:8px;
+  }
+  .section-title p{
+    color:#7f8c8d;
+    font-size:1.05em;
+  }
+  .section-title .divider{
+    width:80px;
+    height:4px;
+    background:var(--dourado);
+    margin:15px auto;
+    border-radius:2px;
+  }
+
+  .reports-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+    gap:25px;
+  }
+
+  .report-card{
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+    transition:all .35s cubic-bezier(.175,.885,.32,1.275);
+    text-decoration:none;
+    color:inherit;
+    display:block;
+    position:relative;
+    border:2px solid transparent;
+  }
+  .report-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 16px 40px rgba(0,0,0,.18);
+    border-color:var(--dourado);
+  }
+
+  .report-banner{
+    height:140px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    overflow:hidden;
+  }
+  .report-banner::after{
+    content:'';
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:50%;
+    background:linear-gradient(to top, rgba(0,0,0,.3), transparent);
+  }
+  .report-banner .big-icon{
+    font-size:4em;
+    z-index:2;
+    filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));
+  }
+  .report-banner .number{
+    position:absolute;
+    top:15px;
+    left:20px;
+    background:rgba(255,255,255,.25);
+    backdrop-filter:blur(10px);
+    color:#fff;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:1em;
+    z-index:3;
+    border:1px solid rgba(255,255,255,.4);
+  }
+
+  .banner-1{background:linear-gradient(135deg,#1e5631,#2d8659)}
+  .banner-2{background:linear-gradient(135deg,#0a2818,#1e5631)}
+  .banner-3{background:linear-gradient(135deg,#1e5631,#d4af37)}
+  .banner-4{background:linear-gradient(135deg,#0f3a23,#1e5631)}
+  .banner-5{background:linear-gradient(135deg,#8b6914,#d4af37)}
+  .banner-6{background:linear-gradient(135deg,#0a2818,#1e5631 50%,#d4af37)}
+
+  .report-body{
+    padding:25px;
+  }
+  .report-body .tag{
+    display:inline-block;
+    background:#f0f4f8;
+    color:var(--verde);
+    padding:4px 10px;
+    border-radius:12px;
+    font-size:.75em;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:10px;
+  }
+  .report-body h3{
+    color:var(--verde);
+    font-size:1.25em;
+    margin-bottom:8px;
+    line-height:1.3;
+  }
+  .report-body .description{
+    color:#555;
+    font-size:.92em;
+    margin-bottom:18px;
+    line-height:1.55;
+  }
+  .report-body .features{
+    list-style:none;
+    padding:0;
+    margin:15px 0;
+  }
+  .report-body .features li{
+    font-size:.85em;
+    color:#666;
+    padding:4px 0 4px 20px;
+    position:relative;
+  }
+  .report-body .features li::before{
+    content:'✓';
+    position:absolute;
+    left:0;
+    color:var(--dourado);
+    font-weight:bold;
+  }
+
+  .report-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 25px;
+    background:#fafbfc;
+    border-top:1px solid #ecf0f1;
+  }
+  .report-footer .badge-period{
+    font-size:.8em;
+    color:#7f8c8d;
+  }
+  .report-footer .open-btn{
+    background:var(--verde);
+    color:#fff;
+    padding:8px 18px;
+    border-radius:20px;
+    font-size:.85em;
+    font-weight:600;
+    transition:all .3s;
+  }
+  .report-card:hover .open-btn{
+    background:var(--dourado);
+    color:var(--verde);
+    transform:translateX(3px);
+  }
+
+  /* TIMELINE */
+  .timeline-section{
+    background:#fff;
+    padding:60px 30px;
+    margin-top:40px;
+  }
+  .timeline-container{
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .timeline{
+    position:relative;
+    padding:30px 0;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:0;bottom:0;
+    width:3px;
+    background:linear-gradient(180deg, var(--verde), var(--dourado));
+    transform:translateX(-50%);
+  }
+  .timeline-item{
+    position:relative;
+    width:50%;
+    padding:15px 30px;
+  }
+  .timeline-item:nth-child(odd){
+    margin-left:0;
+    text-align:right;
+  }
+  .timeline-item:nth-child(even){
+    margin-left:50%;
+    text-align:left;
+  }
+  .timeline-item::before{
+    content:'';
+    position:absolute;
+    top:25px;
+    width:18px;
+    height:18px;
+    background:var(--dourado);
+    border:4px solid #fff;
+    border-radius:50%;
+    box-shadow:0 0 0 3px var(--verde);
+  }
+  .timeline-item:nth-child(odd)::before{right:-9px}
+  .timeline-item:nth-child(even)::before{left:-9px}
+  .timeline-item h4{color:var(--verde);font-size:1.05em;margin-bottom:5px}
+  .timeline-item p{color:#666;font-size:.9em}
+  .timeline-item .date{
+    display:inline-block;
+    background:var(--verde);
+    color:#fff;
+    padding:3px 12px;
+    border-radius:12px;
+    font-size:.78em;
+    margin-bottom:8px;
+  }
+
+  @media(max-width:768px){
+    .timeline::before{left:20px}
+    .timeline-item{width:100%;padding-left:50px;text-align:left!important;margin-left:0!important}
+    .timeline-item:nth-child(odd)::before,.timeline-item:nth-child(even)::before{left:11px;right:auto}
+  }
+
+  /* CTA / RECOMENDAÇÃO DE LEITURA */
+  .recommendation{
+    max-width:1280px;
+    margin:0 auto;
+    padding:30px;
+  }
+  .recommendation-card{
+    background:linear-gradient(135deg, #fffbe6, #fff3cd);
+    border-left:5px solid var(--dourado);
+    padding:30px 35px;
+    border-radius:12px;
+  }
+  .recommendation-card h3{
+    color:var(--verde);
+    margin-bottom:12px;
+    font-size:1.3em;
+  }
+  .recommendation-card p{
+    font-size:.95em;
+    color:#555;
+    margin-bottom:15px;
+  }
+  .recommendation-card .order-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:15px;
+  }
+  .recommendation-card .order-list span{
+    background:#fff;
+    border:2px solid var(--dourado);
+    color:var(--verde);
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:.85em;
+    font-weight:600;
+  }
+
+  /* FOOTER */
+  footer{
+    background:linear-gradient(135deg,var(--verde-d),var(--verde));
+    color:#fff;
+    padding:50px 30px 30px;
+    margin-top:60px;
+  }
+  .footer-content{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.5fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:30px;
+    border-bottom:1px solid rgba(255,255,255,.15);
+  }
+  @media(max-width:768px){
+    .footer-content{grid-template-columns:1fr}
+  }
+  .footer-brand h3{
+    color:var(--dourado);
+    font-size:1.6em;
+    margin-bottom:8px;
+  }
+  .footer-brand .role{
+    opacity:.95;
+    margin-bottom:5px;
+  }
+  .footer-brand .tagline{
+    font-style:italic;
+    opacity:.8;
+    margin-top:15px;
+    font-size:.92em;
+    line-height:1.6;
+  }
+  .footer-col h4{
+    color:var(--dourado);
+    margin-bottom:12px;
+    font-size:1.05em;
+  }
+  .footer-col p, .footer-col a{
+    display:block;
+    color:#fff;
+    opacity:.85;
+    text-decoration:none;
+    margin-bottom:6px;
+    font-size:.9em;
+    transition:opacity .3s;
+  }
+  .footer-col a:hover{opacity:1;color:var(--dourado)}
+  .footer-bottom{
+    max-width:1100px;
+    margin:0 auto;
+    padding-top:25px;
+    text-align:center;
+    font-size:.85em;
+    opacity:.7;
+  }
+
+  /* ANIMATION */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .report-card{animation:fadeUp .6s ease both}
+  .report-card:nth-child(1){animation-delay:.1s}
+  .report-card:nth-child(2){animation-delay:.2s}
+  .report-card:nth-child(3){animation-delay:.3s}
+  .report-card:nth-child(4){animation-delay:.4s}
+  .report-card:nth-child(5){animation-delay:.5s}
+  .report-card:nth-child(6){animation-delay:.6s}
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="logo-tag">🌾 Rural IN | Inteligência Econômica</span>
+      <h1>Portal de Relatórios Estratégicos</h1>
+      <div class="subtitle">Análise Econômico-Financeira Completa</div>
+      <div class="client">Faz. Toca da Onça — Pedro Henrique &amp; Rogério Teles</div>
+      <div class="meta-tags">
+        <span>📅 Período: 2025 + Jan-Abr/2026</span>
+        <span>📊 6 Relatórios Integrados</span>
+        <span>🔬 Modelagem Econométrica</span>
+        <span>💼 Por Dr. Sidney Souza</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMO EXECUTIVO -->
+  <div class="executive">
+    <div class="exec-card">
+      <h2>📌 Resumo Executivo</h2>
+      <div class="exec-grid">
+        <div class="exec-kpi">
+          <div class="icon">💰</div>
+          <div class="label">Total 2025</div>
+          <div class="value">R$ 15,4 MM</div>
+          <div class="sub">Realizado</div>
+        </div>
+        <div class="exec-kpi">
+          <div class="icon">📊</div>
+          <div class="label">Jan-Abr 2026</div>
+          <div class="value">R$ 5,14 MM</div>
+          <div class="sub">Realizado</div>
+        </div>
+        <div class="exec-kpi">
+          <div class="icon">🔮</div>
+          <div class="label">Projeção 2026</div>
+          <div class="value">R$ 17,0 MM</div>
+          <div class="sub">Cenário base</div>
+        </div>
+        <div class="exec-kpi">
+          <div class="icon">📈</div>
+          <div class="label">Variação 2026</div>
+          <div class="value">+10,7%</div>
+          <div class="sub">vs 2025</div>
+        </div>
+        <div class="exec-kpi">
+          <div class="icon">🎯</div>
+          <div class="label">Score Rural IN</div>
+          <div class="value">7,12</div>
+          <div class="sub">+1,14 vs gestão ant.</div>
+        </div>
+        <div class="exec-kpi">
+          <div class="icon">📐</div>
+          <div class="label">MAPE Modelo</div>
+          <div class="value">6,59%</div>
+          <div class="sub">Boa precisão</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMENDAÇÃO DE LEITURA -->
+  <div class="recommendation">
+    <div class="recommendation-card">
+      <h3>📖 Sequência Recomendada de Leitura</h3>
+      <p>Para máximo aproveitamento, sugerimos seguir a ordem abaixo. Cada relatório constrói camadas de entendimento sobre os anteriores — do diagnóstico ao planejamento futuro.</p>
+      <div class="order-list">
+        <span>1️⃣ Relatório Inicial</span>
+        <span>→ 2️⃣ Dashboard 2025</span>
+        <span>→ 3️⃣ Comparativo</span>
+        <span>→ 4️⃣ Indicadores</span>
+        <span>→ 5️⃣ Centros de Custo</span>
+        <span>→ 6️⃣ Projeção Futura</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <section class="reports-section">
+    <div class="section-title">
+      <h2>📁 Relatórios Disponíveis</h2>
+      <div class="divider"></div>
+      <p>Clique em qualquer card para abrir o relatório completo</p>
+    </div>
+
+    <div class="reports-grid">
+
+      <!-- 01 -->
+      <a href="01_rel_fin_jan-abr.html" class="report-card">
+        <div class="report-banner banner-1">
+          <span class="number">01</span>
+          <div class="big-icon">📄</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Diagnóstico Inicial</span>
+          <h3>Relatório Financeiro Jan-Abr 2026</h3>
+          <p class="description">Análise detalhada do primeiro quadrimestre da nova gestão, com pontos de atenção, recomendações estratégicas e diagnóstico operacional.</p>
+          <ul class="features">
+            <li>Visão mensal Jan-Abr/2026</li>
+            <li>Top 10 fornecedores do período</li>
+            <li>Análise por categoria-chave</li>
+            <li>5 alertas críticos identificados</li>
+            <li>6 recomendações estratégicas</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">📅 Jan-Abr/2026</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+      <!-- 02 -->
+      <a href="02_dashboard-2025.html" class="report-card">
+        <div class="report-banner banner-2">
+          <span class="number">02</span>
+          <div class="big-icon">📊</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Visão Anual</span>
+          <h3>Dashboard Operacional 2025</h3>
+          <p class="description">Panorama completo do ano de 2025 sob a gestão anterior — base histórica para todas as comparações posteriores.</p>
+          <ul class="features">
+            <li>12 meses de evolução mensal</li>
+            <li>Sazonalidade trimestral</li>
+            <li>Top 15 fornecedores do ano</li>
+            <li>Distribuição por categoria</li>
+            <li>Análise de volatilidade</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">📅 Jan-Dez/2025</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+      <!-- 03 -->
+      <a href="03_comparativo-2025-2026.html" class="report-card">
+        <div class="report-banner banner-3">
+          <span class="number">03</span>
+          <div class="big-icon">⚖️</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Comparativo de Gestão</span>
+          <h3>Gestão Anterior vs Nova Gestão</h3>
+          <p class="description">Comparação direta entre Jan-Abr/2025 e Jan-Abr/2026 — identificando o que melhorou, o que piorou e onde focar.</p>
+          <ul class="features">
+            <li>Comparativo mês a mês</li>
+            <li>13 categorias contrastadas</li>
+            <li>Variação % por categoria</li>
+            <li>Indicadores estruturais</li>
+            <li>Diagnóstico de transição</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">📅 4M/2025 vs 4M/2026</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+      <!-- 04 -->
+      <a href="04_indicadores-financeiros.html" class="report-card">
+        <div class="report-banner banner-4">
+          <span class="number">04</span>
+          <div class="big-icon">💰</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Análise Quantitativa</span>
+          <h3>Indicadores Financeiros &amp; Fluxo de Caixa</h3>
+          <p class="description">13 indicadores financeiros calculados — incluindo o Score Financeiro Operacional Rural IN, modelo proprietário de avaliação.</p>
+          <ul class="features">
+            <li>ICI, CTR, CAPEX Ratio</li>
+            <li>EMO, RMI, VFC, RET</li>
+            <li>Fluxo de Caixa estrutural</li>
+            <li>Custos fixos previsíveis</li>
+            <li>Score Rural IN: 5,98 → 7,12</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">📊 Indicadores Compostos</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+      <!-- 05 -->
+      <a href="05_centros-custo-fornecedores.html" class="report-card">
+        <div class="report-banner banner-5">
+          <span class="number">05</span>
+          <div class="big-icon">🏢</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Análise Estrutural</span>
+          <h3>Centros de Custo &amp; Fornecedores</h3>
+          <p class="description">Mapeamento por local operacional e diagnóstico de fornecedores estratégicos. Aplica o Princípio de Pareto à cadeia de pagamentos.</p>
+          <ul class="features">
+            <li>6 centros de custo analisados</li>
+            <li>Top 20 fornecedores consolidados</li>
+            <li>Curva de Pareto aplicada</li>
+            <li>Risco de concentração mapeado</li>
+            <li>Recomendações de diversificação</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">🗺️ Por Local + Fornecedor</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+      <!-- 06 -->
+      <a href="06_projecao-mai-dez-2026.html" class="report-card">
+        <div class="report-banner banner-6">
+          <span class="number">06</span>
+          <div class="big-icon">🔮</div>
+        </div>
+        <div class="report-body">
+          <span class="tag">Modelagem Preditiva</span>
+          <h3>Projeção Econométrica Mai-Dez/2026</h3>
+          <p class="description">Modelo de Decomposição Sazonal com ajuste de tendência. 3 cenários (pessimista/realista/otimista) com backtesting validado.</p>
+          <ul class="features">
+            <li>Modelo Holt-Winters Aditivo</li>
+            <li>MAPE de 6,59% (boa precisão)</li>
+            <li>3 cenários probabilísticos</li>
+            <li>Projeção por categoria</li>
+            <li>Ano 2026 completo: R$ 17,05 MM</li>
+          </ul>
+        </div>
+        <div class="report-footer">
+          <span class="badge-period">🔮 Mai-Dez/2026</span>
+          <span class="open-btn">Abrir →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- TIMELINE / METODOLOGIA -->
+  <section class="timeline-section">
+    <div class="timeline-container">
+      <div class="section-title">
+        <h2>🛤️ Jornada Analítica Rural IN</h2>
+        <div class="divider"></div>
+        <p>A sequência metodológica aplicada nos relatórios</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="date">Etapa 1</span>
+          <h4>📥 Coleta &amp; Estruturação dos Dados</h4>
+          <p>Consolidação de mais de 1.500 lançamentos analíticos com classificação por CDG (Código de Gestão).</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 2</span>
+          <h4>🔍 Diagnóstico Quadrimestral</h4>
+          <p>Análise dos primeiros 4 meses da nova gestão com identificação de pontos críticos.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 3</span>
+          <h4>📊 Construção da Base Histórica</h4>
+          <p>Dashboard completo de 2025 — referência para sazonalidade e variabilidade.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 4</span>
+          <h4>⚖️ Comparativo Estrutural</h4>
+          <p>Confronto direto entre gestões para extrair lições e ajustes.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 5</span>
+          <h4>🧮 Modelagem de Indicadores</h4>
+          <p>13 indicadores compostos + Score Financeiro Operacional proprietário Rural IN.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 6</span>
+          <h4>🏢 Análise por Centro de Custo</h4>
+          <p>Decomposição estrutural — onde o dinheiro está sendo aplicado.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 7</span>
+          <h4>🔮 Projeção Econométrica</h4>
+          <p>Modelo de séries temporais validado por backtesting com MAPE &lt; 10%.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="date">Etapa 8</span>
+          <h4>🎯 Decisões Estratégicas</h4>
+          <p>Recomendações priorizadas e ferramenta orçamentária 2027 em desenvolvimento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Dr. Sidney Souza</h3>
+        <p class="role">Economista e Administrador Agrícola</p>
+        <p class="role" style="color:var(--dourado)">Estrategista Econômico do Produtor</p>
+        <p class="role">Especialista em economia da fazenda e gestão de risco no agro</p>
+        <p class="tagline">"Transformamos dados da fazenda em decisões econômicas. Ajudamos produtores a entender se o mercado sustenta seu negócio."</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>📞 Contato</h4>
+        <a href="mailto:sidneyagro@gmail.com">📧 sidneyagro@gmail.com</a>
+        <a href="https://wa.me/5564992266886">📱 (64) 9 9226-6886</a>
+        <a href="https://instagram.com/ruralin.ai" target="_blank">🌐 @ruralin.ai</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>📚 Relatórios</h4>
+        <a href="01_rel_fin_jan-abr.html">01 - Relatório Inicial</a>
+        <a href="02_dashboard-2025.html">02 - Dashboard 2025</a>
+        <a href="03_comparativo-2025-2026.html">03 - Comparativo</a>
+        <a href="04_indicadores-financeiros.html">04 - Indicadores</a>
+        <a href="05_centros-custo-fornecedores.html">05 - Centros de Custo</a>
+        <a href="06_projecao-mai-dez-2026.html">06 - Projeção Futura</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Rural IN — Inteligência Econômica para o Produtor Rural Brasileiro<br>
+      Portal gerado para Faz. Toca da Onça | Pedro Henrique &amp; Rogério Teles
+    </div>
+  </footer>
+
+</body>
+</html>
