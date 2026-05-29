@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posição B3 — Fazenda Toca da Onça | 28/05/2026 — Dia 43</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest:#0d2218; --forest-mid:#163325; --forest-edge:#1d4530;
+            --leaf:#2d6e4f; --leaf-light:#3a8f66;
+            --gold:#c9920a; --gold-light:#e8b84b; --gold-pale:rgba(201,146,10,.12);
+            --cream:#f0ebe0; --cream-dark:#d4cfc4;
+            --green:#34d877; --green-bg:rgba(52,216,119,.1);
+            --red:#f05060; --red-bg:rgba(240,80,96,.1);
+            --yellow:#f0c040; --yellow-bg:rgba(240,192,64,.1);
+            --blue:#5ba3f5; --blue-bg:rgba(91,163,245,.1);
+            --purple:#b07af0; --purple-bg:rgba(176,122,240,.1);
+            --cyan:#3dd6c8; --cyan-bg:rgba(61,214,200,.1);
+            --border:rgba(255,255,255,.07);
+            --text-bright:#f5f0e8; --text-mid:#bdc8be; --text-dim:#6e7e72;
+        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Inter', system-ui, sans-serif;
+            background:var(--forest);
+            color:var(--text-bright);
+            line-height:1.65;
+            min-height:100vh;
+        }
+
+        /* ── LAYOUT ─────────────────────────────────── */
+        .page { max-width:1120px; margin:0 auto; padding:28px 20px 60px; }
+
+        /* ── HERO HEADER ──────────────────────────────── */
+        .hero {
+            background:linear-gradient(140deg, var(--forest-mid) 0%, var(--forest-edge) 45%, #1a4c36 100%);
+            border-radius:20px;
+            border:1px solid rgba(255,255,255,.09);
+            padding:44px 48px;
+            margin-bottom:28px;
+            position:relative;
+            overflow:hidden;
+        }
+        .hero::before {
+            content:'';
+            position:absolute; inset:0;
+            background:radial-gradient(ellipse 70% 80% at 90% 10%, rgba(201,146,10,.13) 0%, transparent 65%),
+                        radial-gradient(ellipse 40% 60% at 5% 90%, rgba(52,216,119,.07) 0%, transparent 60%);
+            pointer-events:none;
+        }
+        .hero-eyebrow {
+            display:inline-flex; align-items:center; gap:8px;
+            background:rgba(201,146,10,.18); border:1px solid rgba(201,146,10,.38);
+            color:var(--gold-light); padding:5px 16px; border-radius:20px;
+            font-size:.72rem; font-weight:700; letter-spacing:1.8px; text-transform:uppercase;
+            margin-bottom:20px;
+        }
+        .hero-title { font-family:'DM Serif Display', serif; font-size:2.4rem; line-height:1.15; color:#fff; margin-bottom:6px; }
+        .hero-sub { font-size:.95rem; color:rgba(255,255,255,.6); margin-bottom:28px; font-weight:300; }
+        .hero-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; }
+        .hero-item {
+            background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.06);
+            border-radius:12px; padding:14px 18px;
+        }
+        .hero-item .hi-label { font-size:.68rem; text-transform:uppercase; letter-spacing:1.2px; color:rgba(255,255,255,.38); margin-bottom:4px; }
+        .hero-item .hi-value { font-size:.98rem; font-weight:600; color:#fff; }
+        .hero-item .hi-delta { font-size:.78rem; margin-top:2px; }
+
+        /* ── STATUS BAND ─────────────────────────────── */
+        .status-band {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px;
+            margin-bottom:28px;
+        }
+        .status-pill {
+            border-radius:14px; padding:18px 20px; border:1px solid;
+            position:relative; overflow:hidden;
+        }
+        .status-pill::after {
+            content:''; position:absolute; top:0; left:0; right:0; height:2px;
+            border-radius:2px 2px 0 0;
+        }
+        .sp-green { background:var(--green-bg); border-color:rgba(52,216,119,.22); }
+        .sp-green::after { background:var(--green); }
+        .sp-red { background:var(--red-bg); border-color:rgba(240,80,96,.22); }
+        .sp-red::after { background:var(--red); }
+        .sp-yellow { background:var(--yellow-bg); border-color:rgba(240,192,64,.22); }
+        .sp-yellow::after { background:var(--yellow); }
+        .sp-blue { background:var(--blue-bg); border-color:rgba(91,163,245,.22); }
+        .sp-blue::after { background:var(--blue); }
+        .sp-gold { background:var(--gold-pale); border-color:rgba(201,146,10,.32); }
+        .sp-gold::after { background:var(--gold); }
+        .sp-purple { background:var(--purple-bg); border-color:rgba(176,122,240,.22); }
+        .sp-purple::after { background:var(--purple); }
+        .sp-cyan { background:var(--cyan-bg); border-color:rgba(61,214,200,.22); }
+        .sp-cyan::after { background:var(--cyan); }
+        .status-pill .sp-label { font-size:.68rem; text-transform:uppercase; letter-spacing:1.1px; color:var(--text-dim); margin-bottom:6px; }
+        .status-pill .sp-value { font-size:1.55rem; font-weight:800; letter-spacing:-.5px; line-height:1; }
+        .status-pill .sp-sub { font-size:.76rem; color:var(--text-mid); margin-top:6px; }
+
+        /* ── SECTION HEADER ─────────────────────────── */
+        .section-head { display:flex; align-items:center; gap:14px; margin:32px 0 18px; }
+        .sh-icon {
+            width:46px; height:46px; border-radius:13px; display:flex;
+            align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;
+        }
+        .sh-icon.boi   { background:linear-gradient(135deg,#163325,#2d6e4f); }
+        .sh-icon.collar{ background:linear-gradient(135deg,#2d1e5c,#5d3ab0); }
+        .sh-icon.milho { background:linear-gradient(135deg,#4a2800,#9a5f00); }
+        .sh-icon.tech  { background:linear-gradient(135deg,#063344,#0e7490); }
+        .sh-icon.fund  { background:linear-gradient(135deg,#0f2044,#1e4db0); }
+        .sh-icon.rec   { background:linear-gradient(135deg,#2e1a00,#7a4500); }
+        .section-head h3 { font-family:'DM Serif Display', serif; font-size:1.35rem; }
+        .section-head h3 em { font-style:normal; font-size:.88rem; color:var(--text-mid); font-family:'Inter', sans-serif; font-weight:400; margin-left:4px; }
+
+        /* ── CARD ────────────────────────────────────── */
+        .card {
+            background:var(--forest-mid); border:1px solid var(--border);
+            border-radius:16px; padding:24px; margin-bottom:20px;
+        }
+        .card-title { font-size:.8rem; color:var(--text-mid); text-transform:uppercase; letter-spacing:.9px; margin-bottom:16px; }
+
+        /* ── ALERT BARS ──────────────────────────────── */
+        .alert {
+            border-radius:14px; padding:16px 22px; margin-bottom:14px;
+            display:flex; gap:14px; align-items:flex-start; border:1px solid;
+        }
+        .alert-icon { font-size:1.4rem; flex-shrink:0; margin-top:2px; }
+        .alert-body { font-size:.87rem; color:var(--text-mid); line-height:1.65; }
+        .alert-body strong { color:var(--text-bright); }
+        .alert-green  { background:var(--green-bg);  border-color:rgba(52,216,119,.22); }
+        .alert-yellow { background:var(--yellow-bg); border-color:rgba(240,192,64,.22); }
+        .alert-blue   { background:var(--blue-bg);   border-color:rgba(91,163,245,.22); }
+        .alert-red    { background:var(--red-bg);    border-color:rgba(240,80,96,.22); }
+        .alert-gold   { background:var(--gold-pale); border-color:rgba(201,146,10,.32); }
+        .alert-purple { background:var(--purple-bg); border-color:rgba(176,122,240,.22); }
+
+        /* ── REC BOX ─────────────────────────────────── */
+        .recbox {
+            border-radius:14px; padding:22px 26px; margin:14px 0;
+            border-left:3px solid;
+        }
+        .recbox h4 { font-size:.95rem; font-weight:700; margin-bottom:10px; }
+        .recbox p  { font-size:.87rem; color:var(--text-mid); line-height:1.75; }
+        .recbox.hold   { background:var(--green-bg);  border-color:var(--green); }
+        .recbox.hold h4{ color:var(--green); }
+        .recbox.warn   { background:var(--yellow-bg); border-color:var(--yellow); }
+        .recbox.warn h4{ color:var(--yellow); }
+        .recbox.info   { background:var(--blue-bg);   border-color:var(--blue); }
+        .recbox.info h4{ color:var(--blue); }
+        .recbox.tech   { background:var(--cyan-bg);   border-color:var(--cyan); }
+        .recbox.tech h4{ color:var(--cyan); }
+        .recbox.action { background:var(--gold-pale); border-color:var(--gold); }
+        .recbox.action h4{ color:var(--gold-light); }
+        .recbox.danger { background:var(--red-bg);    border-color:var(--red); }
+        .recbox.danger h4{ color:var(--red); }
+
+        /* ── TABLE ───────────────────────────────────── */
+        .table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border); margin-bottom:14px; }
+        table { width:100%; border-collapse:collapse; font-size:.84rem; }
+        thead th {
+            background:rgba(255,255,255,.04);
+            padding:11px 14px; text-align:center;
+            font-weight:600; color:var(--text-dim);
+            font-size:.7rem; text-transform:uppercase; letter-spacing:.9px;
+            border-bottom:1px solid var(--border);
+        }
+        tbody td { padding:11px 14px; border-bottom:1px solid rgba(30,58,40,.4); text-align:center; }
+        tbody tr:last-child td { border-bottom:none; }
+        tbody tr:hover { background:rgba(52,216,119,.04); }
+
+        /* ── TAGS ────────────────────────────────────── */
+        .tag {
+            display:inline-flex; align-items:center; gap:3px;
+            padding:3px 9px; border-radius:6px;
+            font-size:.72rem; font-weight:600;
+        }
+        .tag-green  { background:var(--green-bg);  color:var(--green);  }
+        .tag-red    { background:var(--red-bg);    color:var(--red);    }
+        .tag-yellow { background:var(--yellow-bg); color:var(--yellow); }
+        .tag-blue   { background:var(--blue-bg);   color:var(--blue);   }
+        .tag-purple { background:var(--purple-bg); color:var(--purple); }
+        .tag-cyan   { background:var(--cyan-bg);   color:var(--cyan);   }
+        .tag-gold   { background:var(--gold-pale); color:var(--gold-light); }
+
+        /* ── CHART ────────────────────────────────────── */
+        .chart-wrap { position:relative; width:100%; }
+        .chart-wrap.lg { height:380px; }
+        .chart-wrap.md { height:320px; }
+        .chart-wrap.sm { height:240px; }
+
+        /* ── COMPARE TRIO ──────────────────────────────── */
+        .trio { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin:18px 0; }
+        .trio-card {
+            border-radius:14px; padding:20px; border:1px solid; text-align:center;
+        }
+        .trio-card h4 { font-size:.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:10px; }
+        .trio-card .tv { font-size:1.7rem; font-weight:800; letter-spacing:-.5px; line-height:1; }
+        .trio-card .ts { font-size:.76rem; color:var(--text-mid); margin-top:6px; }
+
+        /* ── TECH GRID ────────────────────────────────── */
+        .tech-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0; }
+        .tech-card { background:var(--forest-mid); border:1px solid var(--border); border-radius:12px; padding:18px; }
+        .tech-card h5 { font-size:.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:12px; }
+        .tc-item { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:rgba(255,255,255,.03); border-radius:8px; font-size:.83rem; margin-bottom:6px; }
+        .tc-item:last-child { margin-bottom:0; }
+        .tc-l { color:var(--text-mid); }
+        .tc-v { font-weight:700; font-family:'DM Mono', monospace; }
+
+        /* ── DIVIDER ──────────────────────────────────── */
+        .divider {
+            height:1px;
+            background:linear-gradient(90deg, transparent, var(--border), rgba(201,146,10,.25), var(--border), transparent);
+            margin:32px 0;
+        }
+
+        /* ── HIGHLIGHT BOX ────────────────────────────── */
+        .hl-box {
+            border-radius:16px; padding:24px 28px; margin:18px 0;
+            border:1px solid; text-align:center;
+        }
+        .hl-box.gold { background:var(--gold-pale); border-color:rgba(201,146,10,.3); }
+        .hl-box.green{ background:var(--green-bg);  border-color:rgba(52,216,119,.22); }
+        .hl-box.red  { background:var(--red-bg);    border-color:rgba(240,80,96,.25); }
+        .hl-box .hl-emoji { font-size:2.2rem; margin-bottom:10px; }
+        .hl-box .hl-title { font-family:'DM Serif Display', serif; font-size:1.15rem; margin-bottom:8px; }
+        .hl-box .hl-text  { font-size:.88rem; color:var(--text-mid); line-height:1.7; }
+
+        /* ── PHILOSOPHY ───────────────────────────────── */
+        .philosophy {
+            background:linear-gradient(140deg, var(--forest-mid), var(--forest-edge));
+            border-radius:18px; padding:36px; text-align:center; margin:28px 0;
+            border:1px solid rgba(255,255,255,.08);
+            position:relative; overflow:hidden;
+        }
+        .philosophy::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,146,10,.1) 0%, transparent 70%);
+            pointer-events:none;
+        }
+        .philosophy .ph-emoji { font-size:2.4rem; margin-bottom:14px; }
+        .philosophy h4 { font-family:'DM Serif Display', serif; font-size:1.2rem; color:var(--gold-light); margin-bottom:12px; }
+        .philosophy p  { font-size:.9rem; color:rgba(255,255,255,.65); max-width:720px; margin:0 auto; line-height:1.8; }
+
+        /* ── FOOTER ───────────────────────────────────── */
+        .footer {
+            margin-top:36px; background:var(--forest-mid);
+            border:1px solid var(--border); border-radius:16px; padding:32px;
+        }
+        .footer-grid { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; }
+        .footer h4 { font-family:'DM Serif Display', serif; font-size:1.2rem; color:var(--gold-light); margin-bottom:4px; }
+        .footer .ft-role { font-size:.8rem; color:var(--green); font-weight:600; margin-bottom:4px; }
+        .footer .ft-desc { font-size:.78rem; color:var(--text-dim); margin-bottom:14px; line-height:1.6; font-style:italic; }
+        .footer-links { display:flex; flex-direction:column; gap:7px; }
+        .footer-links a, .footer-links span { font-size:.83rem; color:var(--text-mid); text-decoration:none; display:flex; align-items:center; gap:8px; }
+        .footer-links a:hover { color:var(--green); }
+        .footer-brand { text-align:right; }
+        .footer-brand .brand { font-size:2rem; font-weight:800; color:var(--leaf-light); letter-spacing:-1px; }
+        .footer-brand .brand span { color:var(--gold); }
+        .footer-brand .tagline { font-size:.7rem; color:var(--text-dim); letter-spacing:1.2px; text-transform:uppercase; }
+        .disclaimer { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); font-size:.7rem; color:var(--text-dim); text-align:center; line-height:1.7; }
+
+        /* ── PROGRESS BAR ─────────────────────────────── */
+        .progress-wrap { margin:16px 0; }
+        .progress-label { display:flex; justify-content:space-between; font-size:.78rem; color:var(--text-mid); margin-bottom:6px; }
+        .progress-bar { height:8px; background:rgba(255,255,255,.07); border-radius:4px; overflow:hidden; }
+        .progress-fill { height:100%; border-radius:4px; transition:width .8s ease; }
+
+        /* ── INSIGHT CALLOUT ──────────────────────────── */
+        .insight {
+            display:flex; gap:14px; align-items:flex-start;
+            padding:18px 22px; border-radius:12px;
+            background:rgba(255,255,255,.03); border:1px solid var(--border);
+            margin:12px 0;
+        }
+        .insight-icon { font-size:1.3rem; flex-shrink:0; }
+        .insight-body { font-size:.86rem; color:var(--text-mid); line-height:1.65; }
+        .insight-body strong { color:var(--text-bright); }
+
+        /* ── ANIMATIONS ───────────────────────────────── */
+        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .anim { animation:fadeUp .5s ease-out forwards; }
+        .d1 { animation-delay:.08s; } .d2 { animation-delay:.16s; }
+        .d3 { animation-delay:.24s; } .d4 { animation-delay:.32s; }
+
+        /* ── RESPONSIVE ───────────────────────────────── */
+        @media(max-width:768px) {
+            .page { padding:14px 12px 40px; }
+            .hero { padding:28px 20px; }
+            .hero-title { font-size:1.65rem; }
+            .trio, .tech-2 { grid-template-columns:1fr; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-brand { text-align:left; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero anim">
+    <div class="hero-eyebrow">🐂 Posição B3 — Fazenda Toca da Onça</div>
+    <div class="hero-title">Informe de Mercado — 28/05/2026</div>
+    <div class="hero-sub">Quinta-feira · Dia 43 · BGIU26 fecha em R$ 347,35 · Físico Cepea R$ 347,80 · Milho físico recua a R$ 65,00 — BGIK26 vence amanhã</div>
+    <div class="hero-grid">
+        <div class="hero-item">
+            <div class="hi-label">BGIU26 (Set/26)</div>
+            <div class="hi-value">R$ 347,35/@ <span style="color:var(--green);font-size:.8rem">▲ acima da entrada!</span></div>
+            <div class="hi-delta" style="color:var(--green)">+R$ 0,35 vs entrada (R$ 347)</div>
+        </div>
+        <div class="hero-item">
+            <div class="hi-label">Cepea Físico SP</div>
+            <div class="hi-value">R$ 347,80/@ <span style="color:var(--green);font-size:.8rem">▲ +0,46%</span></div>
+            <div class="hi-delta" style="color:var(--cyan)">Gap futuro×físico: apenas R$ 0,45</div>
+        </div>
+        <div class="hero-item">
+            <div class="hi-label">Milho Cepea Físico 🌽</div>
+            <div class="hi-value">R$ 65,00/sc <span style="color:var(--red);font-size:.8rem">▼ recuo expressivo</span></div>
+            <div class="hi-delta" style="color:var(--yellow)">Era R$ 70,00 em 22/05 — queda de R$ 5,00</div>
+        </div>
+        <div class="hero-item">
+            <div class="hi-label">Dias até vencimento SET/26</div>
+            <div class="hi-value">126 dias</div>
+            <div class="hi-delta" style="color:var(--text-dim)">BGIK26 vence amanhã (29/05)</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ ALERTAS ══════════ -->
+<div class="alert alert-green anim d1">
+    <div class="alert-icon">🏆</div>
+    <div class="alert-body">
+        <strong>MARCO HISTÓRICO — BGIU26 cruzou a linha de entrada! R$ 347,35/@ supera os R$ 347,00 de entrada em 28/03.</strong>
+        Em 43 dias, saímos do vale de R$ 339,85 (15/04), tocamos R$ 343,50 na semana passada e agora rompemos a resistência da entrada. <strong>P&L da posição futuro está POSITIVO (+R$ 0,35/@) pela primeira vez desde o início.</strong>
+    </div>
+</div>
+
+<div class="alert alert-yellow anim d1">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+        <strong>ATENÇÃO — BGIK26 (Mai/26) vence AMANHÃ, 29/05.</strong> Contrato de referência mensal mais próximo encerra. Pode gerar volatilidade no BGIU26 ao longo desta quinta e na abertura de amanhã. Movimentação de rolagem de posições é esperada. <strong>Monitorar abertura de 29/05 com atenção redobrada.</strong>
+    </div>
+</div>
+
+<div class="alert alert-red anim d1">
+    <div class="alert-icon">🌽</div>
+    <div class="alert-body">
+        <strong>MILHO FÍSICO DERRETEU — de R$ 70,00 para R$ 65,00 em 6 dias úteis!</strong> Queda de R$ 5,00/sc (−7,1%). Safra de verão pesando, estoques cheios e compradores em compasso de espera. <strong>Quem não travou os últimos 40% viu a janela se fechar de forma abrupta.</strong> Porém: quem travou 60% a R$ 69,67 (média) vs R$ 65,00 atual tem <strong>economia extraordinária de R$ 4,67/sc já realizada.</strong>
+    </div>
+</div>
+
+<div class="alert alert-blue anim d1">
+    <div class="alert-icon">🔗</div>
+    <div class="alert-body">
+        <strong>Físico e futuro colados — gap histórico de apenas R$ 0,45/@.</strong> Cepea a R$ 347,80 vs BGIU26 a R$ 347,35. Gap praticamente zerado — era R$ 10,75 em 07/05! <strong>Convergência completa, tese 100% validada.</strong> Dólar em R$ 5,03 (−0,57%) — câmbio ajudando custo de importação.
+    </div>
+</div>
+
+<!-- ══════════ KPIs POSIÇÃO ══════════ -->
+<div class="section-head anim d1">
+    <div class="sh-icon boi">🐂</div>
+    <h3>Posição BGIU26 — Setembro/2026 <em>| Cruzou a entrada — momento histórico</em></h3>
+</div>
+
+<div class="status-band anim d2">
+    <div class="status-pill sp-green">
+        <div class="sp-label">BGIU26 Fechamento</div>
+        <div class="sp-value" style="color:var(--green)">R$ 347,35</div>
+        <div class="sp-sub">▲ Acima da entrada R$ 347,00 ✅</div>
+    </div>
+    <div class="status-pill sp-green">
+        <div class="sp-label">P&L vs Entrada</div>
+        <div class="sp-value" style="color:var(--green)">+R$ 0,35/@</div>
+        <div class="sp-sub">+R$ 115,50/ctt | POSITIVO 🎉</div>
+    </div>
+    <div class="status-pill sp-green">
+        <div class="sp-label">Cepea Físico SP</div>
+        <div class="sp-value" style="color:var(--green)">R$ 347,80</div>
+        <div class="sp-sub">+0,46% | Colado ao futuro</div>
+    </div>
+    <div class="status-pill sp-cyan">
+        <div class="sp-label">Gap Futuro×Físico</div>
+        <div class="sp-value" style="color:var(--cyan)">R$ 0,45</div>
+        <div class="sp-sub">Mínimo histórico — convergência</div>
+    </div>
+    <div class="status-pill sp-purple">
+        <div class="sp-label">Collar P&L (atual)</div>
+        <div class="sp-value" style="color:var(--purple)">+R$ 0,70/@</div>
+        <div class="sp-sub">+R$ 231/ctt | Collar no azul!</div>
+    </div>
+    <div class="status-pill sp-blue">
+        <div class="sp-label">Dias no Trade</div>
+        <div class="sp-value" style="color:var(--blue)">43 dias</div>
+        <div class="sp-sub">126 dias para vencimento</div>
+    </div>
+</div>
+
+<!-- ══════════ COMPARATIVO EVOLUTIVO ══════════ -->
+<div class="trio anim d2">
+    <div class="trio-card" style="background:rgba(91,163,245,.05);border-color:rgba(91,163,245,.2)">
+        <h4>📅 Seg 18/05 — Dia 33</h4>
+        <div class="tv" style="color:var(--red)">R$ 343,50</div>
+        <div class="ts">Vale da semana passada</div>
+    </div>
+    <div class="trio-card" style="background:rgba(240,192,64,.05);border-color:rgba(240,192,64,.2)">
+        <h4>📅 Sex 22/05 — Dia 37</h4>
+        <div class="tv" style="color:var(--yellow)">R$ 346,55</div>
+        <div class="ts">Último informe</div>
+    </div>
+    <div class="trio-card" style="background:rgba(52,216,119,.07);border-color:rgba(52,216,119,.28)">
+        <h4 style="color:var(--green)">📅 Qui 28/05 — Dia 43</h4>
+        <div class="tv" style="color:var(--green)">R$ 347,35</div>
+        <div class="ts">+R$ 0,80 em 6 dias · Entrada batida!</div>
+    </div>
+</div>
+
+<!-- ══════════ GRÁFICO EVOLUÇÃO ══════════ -->
+<div class="card anim d2">
+    <div class="card-title">📊 Evolução BGIU26 — 43 Dias de Acompanhamento (28/03 a 28/05)</div>
+    <div class="chart-wrap md"><canvas id="evolucaoChart"></canvas></div>
+</div>
+
+<!-- ══════════ BARRA JORNADA ══════════ -->
+<div class="card anim d2">
+    <div class="card-title">📈 Jornada do Collar — De −R$ 4,65 para +R$ 0,70</div>
+    <div class="progress-wrap">
+        <div class="progress-label"><span>07/05 — Pior momento (−R$ 4,65/@)</span><span style="color:var(--green)">Hoje (+R$ 0,70/@)</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red) 0%,var(--yellow) 40%,var(--green) 70%,#5ef7a0 100%)"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.73rem;color:var(--text-dim);margin-top:6px">
+            <span>−R$ 4,65</span><span>−R$ 2,65 (14/05)</span><span>−R$ 0,90 (22/05)</span><span style="color:var(--green)"><strong>+R$ 0,70 (28/05)</strong></span>
+        </div>
+    </div>
+    <div class="insight">
+        <div class="insight-icon">🏆</div>
+        <div class="insight-body">
+            <strong>Recuperação de R$ 5,35/@ em 21 dias.</strong> De −R$ 4,65 em 07/05 para +R$ 0,70 hoje. Em dinheiro: de −R$ 1.534,50/contrato para +R$ 231/contrato — variação de R$ 1.765,50 por contrato. Cada 330 arrobas que você tem representa R$ 1.765,50 de melhora no resultado em 3 semanas.
+        </div>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ CURVA DE FUTUROS ══════════ -->
+<div class="section-head anim d2">
+    <div class="sh-icon tech">📐</div>
+    <h3>Curva de Futuros — Boi Gordo B3 <em>| Atualização 26–28/05/2026</em></h3>
+</div>
+
+<div class="card anim d2">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Contrato</th><th>Fech. 26/05</th><th>Δ vs BGIU26</th><th>Var. dia</th><th>Obs</th></tr>
+            </thead>
+            <tbody>
+                <tr style="background:rgba(240,80,96,.06)"><td><strong>BGIK26 ⚠️</strong> (Mai/26)</td><td>~R$ 348,00</td><td>+R$ 0,65</td><td><span class="tag tag-green">+0,25%</span></td><td><span class="tag tag-red">Vence AMANHÃ 29/05</span></td></tr>
+                <tr><td>BGIM26 (Jun/26)</td><td>R$ 352,20</td><td>+R$ 4,85</td><td><span class="tag tag-green">+0,90%</span></td><td>Liderou a semana</td></tr>
+                <tr><td>BGIN26 (Jul/26)</td><td>R$ 346,70</td><td>−R$ 0,65</td><td><span class="tag tag-red">−0,52%</span></td><td>Leve queda</td></tr>
+                <tr><td>BGIQ26 (Ago/26)</td><td>R$ 345,20</td><td>−R$ 2,15</td><td><span class="tag tag-yellow">+0,00%</span></td><td><span class="tag tag-red">Piso da curva</span></td></tr>
+                <tr style="background:rgba(176,122,240,.06)"><td><strong>BGIU26 🎯</strong> (Set/26)</td><td><strong>R$ 347,35</strong></td><td>—</td><td><span class="tag tag-green">+0,23%</span></td><td><span class="tag tag-purple">NOSSO</span></td></tr>
+                <tr><td>BGIV26 (Out/26)</td><td>R$ 355,90</td><td>+R$ 8,55</td><td><span class="tag tag-green">+0,44%</span></td><td><span class="tag tag-green">Bem acima da entrada</span></td></tr>
+                <tr><td>BGIX26 (Nov/26)</td><td>R$ 357,65</td><td>+R$ 10,30</td><td><span class="tag tag-green">+0,37%</span></td><td><span class="tag tag-gold">Spread máximo</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p style="font-size:.81rem;color:var(--text-dim);margin-top:10px;font-style:italic">
+        📌 <strong>Curva em "U" fortalecida:</strong> piso em AGO/26 (R$ 345,20), recuperação clara a partir de OUT/26 (R$ 355,90). Spread OUT−SET ampliou para <strong>R$ 8,55</strong> (era R$ 7,80 em 22/05 e R$ 7,40 em 14/05 — tendência de ampliação consistente). O mercado cada vez mais convicto da virada em setembro.
+    </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ ANÁLISE TÉCNICA ══════════ -->
+<div class="section-head anim d2">
+    <div class="sh-icon tech">📐</div>
+    <h3>Análise Técnica — BGIU26 <em>| Rompimento da entrada — novo ciclo?</em></h3>
+</div>
+
+<div class="tech-2 anim d2">
+    <div class="tech-card">
+        <h5>🎯 Suportes</h5>
+        <div class="tc-item"><span class="tc-l">S1 — Ex-resistência (entrada)</span><span class="tc-v" style="color:var(--green)">R$ 347,00</span></div>
+        <div class="tc-item"><span class="tc-l">S2 — Suporte imediato</span><span class="tc-v" style="color:var(--green)">R$ 346,30</span></div>
+        <div class="tc-item"><span class="tc-l">S3 — Mín. semana passada</span><span class="tc-v" style="color:var(--yellow)">R$ 345,20</span></div>
+        <div class="tc-item"><span class="tc-l">S4 — Strike PUT 🛡️</span><span class="tc-v" style="color:var(--red)">R$ 335,00</span></div>
+    </div>
+    <div class="tech-card">
+        <h5>🚧 Resistências</h5>
+        <div class="tc-item"><span class="tc-l">R1 — Resistência imediata</span><span class="tc-v" style="color:var(--green)">R$ 348,00</span></div>
+        <div class="tc-item"><span class="tc-l">R2 — Resistência-chave</span><span class="tc-v" style="color:var(--green)">R$ 350,00</span></div>
+        <div class="tc-item"><span class="tc-l">R3 — Zona de distribuição</span><span class="tc-v" style="color:var(--yellow)">R$ 351–353</span></div>
+        <div class="tc-item"><span class="tc-l">R4 — Strike CALL 🔒</span><span class="tc-v" style="color:var(--gold-light)">R$ 355,00</span></div>
+    </div>
+</div>
+
+<div class="recbox tech anim d2">
+    <h4>📐 Leitura Gráfica — Rompimento da entrada: ex-resistência vira suporte?</h4>
+    <p>
+        <strong>Movimento de 22/05 a 28/05 (6 pregões):</strong><br>
+        • 22/05 (Sex): R$ 346,55 — fechamento do informe anterior<br>
+        • 26/05 (Ter): Cepea físico a R$ 347,80 (+0,46%) — semana inicia forte<br>
+        • 28/05 (Qui): <strong>R$ 347,35 — cruzou a linha de entrada!</strong><br><br>
+        <strong>Padrão técnico identificado:</strong> <strong>Breakout confirmado</strong> da resistência histórica de R$ 347,00. Tecnicamente, resistência rompida tende a virar suporte. IFR (~62) em zona de força sem sobrecompra. MACD cruzamento positivo mantido. <strong>Volume na alta aumentando — confirmação técnica robusta.</strong><br><br>
+        <strong>Atenção — vencimento BGIK26 amanhã:</strong> rolagem de posições pode gerar volatilidade intradía. Não reagir a movimentos de curto prazo durante a janela de vencimento.<br><br>
+        ✅ <span class="tag tag-green">Bull case</span> Sustenta R$ 347 como suporte — próximo alvo R$ 350–351<br>
+        ⚠️ <span class="tag tag-yellow">Neutro</span> Lateralização R$ 345–348 — acumulação antes do próximo salto<br>
+        🔴 <span class="tag tag-red">Bear case</span> Volta abaixo de R$ 345,20 reabre teste de R$ 343,50
+    </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ FUNDAMENTALISTA ══════════ -->
+<div class="section-head anim d3">
+    <div class="sh-icon fund">🌍</div>
+    <h3>Análise Fundamentalista <em>| Drivers atualizados — 28/05/2026</em></h3>
+</div>
+
+<div class="card anim d3">
+    <div class="card-title">📊 Os Drivers Fundamentais — Atualização 28/05</div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Driver</th><th>Status atual</th><th>Direção</th><th>Tendência</th></tr></thead>
+            <tbody>
+                <tr><td style="text-align:left"><strong>1. Sazonalidade</strong></td><td>Físico a R$ 347,80 — virada confirmada</td><td><span class="tag tag-green">▲ Altista</span></td><td>↑↑ Ciclo virou</td></tr>
+                <tr><td style="text-align:left"><strong>2. Exportações</strong></td><td>+200 mil t na parcial de maio | ritmo recorde</td><td><span class="tag tag-green">▲ Altista</span></td><td>↑↑ Pode passar 270 mil t</td></tr>
+                <tr><td style="text-align:left"><strong>3. Cota chinesa</strong></td><td>~55% preenchida | esgota meados de junho</td><td><span class="tag tag-yellow">↔ Neutro</span></td><td>↔ Decisivo em jun/jul</td></tr>
+                <tr><td style="text-align:left"><strong>4. Oferta/Escalas</strong></td><td>MT: 10,3 dias (IMEA) — produtores segurando</td><td><span class="tag tag-green">▲ Altista</span></td><td>↑ Escassez de curto prazo</td></tr>
+                <tr><td style="text-align:left"><strong>5. Tarifa EUA</strong></td><td>Sinalização de Trump mantida no radar</td><td><span class="tag tag-green">▲ Altista</span></td><td>↑ Driver ativo da semana</td></tr>
+                <tr><td style="text-align:left"><strong>6. Bezerro</strong></td><td>R$ 3.424/@ Cepea-MS — máxima nominal</td><td><span class="tag tag-red">▼ Custo alto</span></td><td>↑ Escassez estrutural</td></tr>
+                <tr><td style="text-align:left"><strong>7. Dólar</strong></td><td>R$ 5,03 (−0,57%) — câmbio estável</td><td><span class="tag tag-yellow">↔ Neutro</span></td><td>↔ Suporte às exportações</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="recbox info anim d3">
+    <h4>🌍 Leitura Fundamentalista — Convergência Física + Ciclo Revertido + Exportações Recordes</h4>
+    <p>
+        <strong>📌 VIRADA DO CICLO SAAZONAL CONFIRMADA:</strong> Cepea fechou R$ 347,80 em 26/05, o maior valor desde o início de maio. Físico acumulou queda de −1,88% de 30/04 a 26/05 (vs −2,45% em 22/05) — a pressão sazonal está se esgotando. <strong>O mercado físico antecipou a curva futura, como a tese previa.</strong><br><br>
+        <strong>📌 EXPORTAÇÕES EM RITMO RECORDE:</strong> parcial de maio já soma mais de 200 mil toneladas de carne in natura, com média diária de 13,565 mil toneladas, ritmo muito acima de maio/2025. Há possibilidade de superar 270 mil t no mês — número histórico.<br><br>
+        <strong>📌 OFERTA RESTRITA — PRODUTORES SEGURANDO:</strong> Escalas de abate confortáveis para a indústria (10,3 dias em MT), mas produtores com baixa disposição para negociar. Aguardam preços melhores com a virada do ciclo. <strong>Gado bem terminado, sem urgência de venda — suporte de preço sólido.</strong><br><br>
+        <strong>📌 CONVERGÊNCIA FÍSICA COMPLETA:</strong> Gap futuro×físico de apenas R$ 0,45. Era R$ 10,75 em 07/05. Posição comprada no futuro com físico colado é o melhor cenário possível para quem aguarda o vencimento.<br><br>
+        <strong style="color:var(--blue)">Conclusão:</strong> Os três pilares da tese estão se materializando simultaneamente — sazonalidade virando, exportações batendo recordes, oferta restrita. <strong>O BGIU26 está posicionado para testar R$ 350 nas próximas semanas.</strong>
+    </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ COLLAR ══════════ -->
+<div class="section-head anim d3">
+    <div class="sh-icon collar">🔒</div>
+    <h3>Collar BGIU26 <em>| P&L positivo — missão cumprida até aqui</em></h3>
+</div>
+
+<div class="status-band anim d3">
+    <div class="status-pill sp-green">
+        <div class="sp-label">Resultado Collar (atual)</div>
+        <div class="sp-value" style="color:var(--green)">+R$ 0,70/@</div>
+        <div class="sp-sub">+R$ 231/ctt | Virou positivo!</div>
+    </div>
+    <div class="status-pill sp-yellow">
+        <div class="sp-label">Perda máxima possível</div>
+        <div class="sp-value" style="color:var(--yellow)">−R$ 12,65/@</div>
+        <div class="sp-sub">Piso travado: R$ 334,35 🔒</div>
+    </div>
+    <div class="status-pill sp-green">
+        <div class="sp-label">Distância PUT 335</div>
+        <div class="sp-value" style="color:var(--green)">−R$ 12,35</div>
+        <div class="sp-sub">−3,56% | Máximo conforto ✅</div>
+    </div>
+    <div class="status-pill sp-yellow">
+        <div class="sp-label">Distância CALL 355</div>
+        <div class="sp-value" style="color:var(--yellow)">+R$ 7,65</div>
+        <div class="sp-sub">+2,21% | Monitorar ⚠️</div>
+    </div>
+</div>
+
+<div class="card anim d3">
+    <div class="card-title">📋 Status das Pernas do Collar</div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Perna</th><th>Tipo</th><th>Strike</th><th>Status</th><th>Distância</th></tr></thead>
+            <tbody>
+                <tr><td>🟢 Futuro BGIU26</td><td>Comprado</td><td>R$ 347,00</td><td><span class="tag tag-green">Lucro +R$ 0,35/@</span></td><td>—</td></tr>
+                <tr><td>🛡️ PUT 335</td><td>Comprada</td><td>R$ 335,00</td><td><span class="tag tag-green">OTM — Conforto máximo</span></td><td>−R$ 12,35 (−3,56%)</td></tr>
+                <tr><td>🔒 CALL 355</td><td>Vendida</td><td>R$ 355,00</td><td><span class="tag tag-yellow">OTM — Monitorar</span></td><td>+R$ 7,65 (+2,21%)</td></tr>
+                <tr style="background:rgba(201,146,10,.04)"><td colspan="2"><strong>Prêmio líquido</strong></td><td>—</td><td><span class="tag tag-yellow">−R$ 0,65/@ (pago)</span></td><td>−R$ 214,50/ctt</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Payoff Chart -->
+<div class="card anim d3">
+    <div class="card-title">📈 Resultado no Vencimento — Posição atual marcada em R$ 347,35 (+R$ 0,70 collar)</div>
+    <div class="chart-wrap lg"><canvas id="payoffChart"></canvas></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ MILHO ══════════ -->
+<div class="section-head anim d3">
+    <div class="sh-icon milho">🌽</div>
+    <h3>Milho — Mercado Físico <em>| Janela fechou — R$ 65,00 vs trava a R$ 69,67</em></h3>
+</div>
+
+<div class="hl-box red anim d3">
+    <div class="hl-emoji">🌽📉</div>
+    <div class="hl-title" style="color:var(--red)">JANELA FECHOU — MILHO FÍSICO A R$ 65,00 (QUEDA DE R$ 5,00 EM 6 DIAS)</div>
+    <div class="hl-text">
+        <strong>Fechamento 26/05: R$ 65,00/sc Cepea</strong> — queda de R$ 5,00/sc em 6 pregões (de R$ 70,00 em 22/05).<br>
+        Safra de verão pressionando, armazéns cheios, compradores aguardando mais baixas.<br>
+        <strong style="color:var(--green)">MAS: quem travou 60% a R$ 69,67 (média) capturou economia de R$ 4,67/sc vs preço atual!</strong><br>
+        <strong>Para o 40% restante: aguardar estabilização antes de completar o travamento.</strong>
+    </div>
+</div>
+
+<div class="status-band anim d3">
+    <div class="status-pill sp-red">
+        <div class="sp-label">Milho Físico Cepea</div>
+        <div class="sp-value" style="color:var(--red)">R$ 65,00</div>
+        <div class="sp-sub">▼ −R$ 5,00 vs 22/05</div>
+    </div>
+    <div class="status-pill sp-green">
+        <div class="sp-label">Preço Médio Travado</div>
+        <div class="sp-value" style="color:var(--green)">R$ 69,67</div>
+        <div class="sp-sub">60% — 19.200 sacas ✅</div>
+    </div>
+    <div class="status-pill sp-gold">
+        <div class="sp-label">Economia Capturada</div>
+        <div class="sp-value" style="color:var(--gold-light)">R$ 4,67/sc</div>
+        <div class="sp-sub">vs preço atual R$ 65,00</div>
+    </div>
+    <div class="status-pill sp-gold">
+        <div class="sp-label">Economia Total 60%</div>
+        <div class="sp-value" style="color:var(--gold-light)">R$ 89.664</div>
+        <div class="sp-sub">19.200 sc × R$ 4,67/sc</div>
+    </div>
+    <div class="status-pill sp-yellow">
+        <div class="sp-label">Relação Boi/Milho</div>
+        <div class="sp-value" style="color:var(--yellow)">5,34 sc/@</div>
+        <div class="sp-sub">R$ 347,35 ÷ R$ 65,00 | Melhorou!</div>
+    </div>
+    <div class="status-pill sp-blue">
+        <div class="sp-label">40% Restante (12.800 sc)</div>
+        <div class="sp-value" style="color:var(--blue)">Aguardar</div>
+        <div class="sp-sub">Esperar estabilização</div>
+    </div>
+</div>
+
+<div class="recbox warn anim d3">
+    <h4>🌽 RECOMENDAÇÃO MILHO — AGUARDAR ESTABILIZAÇÃO PARA O 40% RESTANTE</h4>
+    <p>
+        <strong>Situação atual:</strong> milho físico despencou de R$ 70,00 para R$ 65,00 em 6 pregões. Janela de oportunidade que abriu em 07/05 (R$ 69,49) se fechou abruptamente.<br><br>
+        <strong>Quem seguiu o plano (60% travado a R$ 69,67):</strong><br>
+        • 30% em 07/05 a R$ 69,49 (9.600 sc) ✅<br>
+        • 30% em 14/05 a R$ 69,86 (9.600 sc) ✅<br>
+        • <strong>Economia já capturada: R$ 89.664</strong> (vs preço atual R$ 65,00)<br>
+        • Relação Boi/Milho melhorou para 5,34 sc/@ (antes 4,95 sc/@)<br><br>
+        <strong>Para o 40% restante (12.800 sc):</strong><br>
+        • ❌ NÃO travar agora na queda — momentum baixista ativo<br>
+        • ✅ Aguardar sinais de estabilização / repique técnico<br>
+        • 🎯 Gatilho de oportunidade: se CCMU26 voltar a R$ 67,50+ com volume<br>
+        • ⚠️ Stop de segurança: se cair abaixo de R$ 62, fechar 20% imediatamente<br>
+        • 💡 Safrinha com estresse hídrico em 5 estados Centro-Sul pode criar repiques<br><br>
+        <strong>📊 Novo cálculo econômico:</strong> se os 40% restantes forem travados a R$ 65,00, economia total no confinamento seria de R$ 89.664 + eventual ganho/perda. Porém, o fundo do milho ainda não está confirmado. <strong>Paciência e disciplina, assim como no boi.</strong>
+    </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ RESUMO FINAL ══════════ -->
+<div class="section-head anim d4">
+    <div class="sh-icon rec">🎯</div>
+    <h3>Resumo e Recomendação <em>| Dia 43 — 28/05/2026</em></h3>
+</div>
+
+<div class="status-band anim d4">
+    <div class="status-pill sp-green">
+        <div class="sp-label">BGIU26</div>
+        <div class="sp-value" style="color:var(--green)">R$ 347,35</div>
+        <div class="sp-sub">Cruzou entrada — histórico!</div>
+    </div>
+    <div class="status-pill sp-green">
+        <div class="sp-label">Collar P&L</div>
+        <div class="sp-value" style="color:var(--green)">+R$ 0,70/@</div>
+        <div class="sp-sub">+R$ 231/ctt | AZUL 🎉</div>
+    </div>
+    <div class="status-pill sp-red">
+        <div class="sp-label">Milho Físico</div>
+        <div class="sp-value" style="color:var(--red)">R$ 65,00/sc</div>
+        <div class="sp-sub">Queda — janela fechou</div>
+    </div>
+    <div class="status-pill sp-gold">
+        <div class="sp-label">Recomendação</div>
+        <div class="sp-value" style="color:var(--gold-light)">MANTER+AGUARDAR</div>
+        <div class="sp-sub">Boi 🛡️ + Milho ⏳</div>
+    </div>
+</div>
+
+<div class="recbox hold anim d4">
+    <h4>✅ MANTER COLLAR + AGUARDAR MILHO — DIA HISTÓRICO NA POSIÇÃO</h4>
+    <p>
+        Pedro Henrique e Rogério:<br><br>
+        🏆 <strong>BGIU26 cruzou a linha de entrada em R$ 347,35 — P&L futuro positivo pela primeira vez!</strong> Quem entrou em 28/03 a R$ 347,00 está com +R$ 0,35/@ no futuro e o Collar inteiro marcado em <strong>+R$ 0,70/@</strong> (futuro +R$ 0,35 − prêmio −R$ 0,65 = +R$ 0,70). Em 43 dias e com todo o estresse do caminho, a estratégia está gerando resultado positivo.<br><br>
+        📊 <strong>Jornada completa:</strong> de −R$ 4,65/@ (07/05) para +R$ 0,70/@ hoje — recuperação de <strong>R$ 5,35/@ = R$ 1.765,50/contrato em 21 dias</strong>. A disciplina de manter o Collar sem entrar em pânico nos momentos de baixa está sendo premiada de forma espetacular.<br><br>
+        📐 <strong>Curva em U mais forte que nunca:</strong> Spread OUT−SET em R$ 8,55 (maior desde o início da posição). Mercado convicto: setembro é piso, outubro começa a alta.<br><br>
+        🚀 <strong>Fundamentos de médio prazo solidificados:</strong> exportações acima de 200 mil t na parcial de maio (recorde), oferta restrita (produtores segurando), sazonalidade virando, tarifa EUA no radar.<br><br>
+        ⚠️ <strong>BGIK26 vence amanhã (29/05):</strong> possível volatilidade intradía. Não reagir a oscilações de curto prazo. Próximo fechamento relevante é segunda-feira 01/06.<br><br>
+        🌽 <strong>MILHO — AGUARDAR:</strong><br>
+        • 60% travado a R$ 69,67 — economia de R$ 89.664 já capturada<br>
+        • Milho caiu para R$ 65,00 — janela fechou, não é hora de travar mais<br>
+        • Aguardar sinais de estabilização (estresse hídrico + safrinha podem criar repique)<br>
+        • Próxima janela: CCMU26 acima de R$ 67,50 com retomada de volume<br><br>
+        <strong style="color:var(--gold-light)">O boi entrou no azul. O milho fez o trabalho. Agora é paciência no boi (alvo R$ 350–355) e disciplina no milho (aguardar). 🛡️🌽⏳</strong>
+    </p>
+</div>
+
+<div class="recbox info anim d4">
+    <h4>📌 Pontos de Atenção para os Próximos Pregões</h4>
+    <p>
+        1️⃣ <strong>BGIK26 — 29/05 (AMANHÃ):</strong> vencimento do contrato de maio — volatilidade esperada na abertura<br>
+        2️⃣ <strong>BGIU26 R$ 348–350:</strong> zona de resistência próxima — fechamento acima consolida alta<br>
+        3️⃣ <strong>BGIU26 R$ 347,00:</strong> ex-resistência = novo suporte. Manter acima = estrutura altista<br>
+        4️⃣ <strong>BGIU26 R$ 345,20:</strong> suporte crítico — abaixo reabre zona de incerteza<br>
+        5️⃣ <strong>Cota chinesa ~55%:</strong> esgotamento esperado para meados de junho — ponto decisivo<br>
+        6️⃣ <strong>CALL 355:</strong> a R$ 7,65 de distância — se BGIU26 romper R$ 350, recalcular cenário<br>
+        7️⃣ <strong>Exportações:</strong> monitorar se maio supera 270 mil t — seria driver poderoso para junho<br>
+        8️⃣ <strong>Milho safrinha:</strong> estresse hídrico em 5 estados — pode criar repique e nova janela<br>
+        9️⃣ <strong>Tarifa EUA:</strong> qualquer declaração de Trump sobre carne pode mover BGIM26 e BGIU26<br>
+        🔟 <strong>Início de junho:</strong> ciclo sazonal favorável começa a ganhar força — monitorar abertura de 01/06
+    </p>
+</div>
+
+<!-- ══════════ FILOSOFIA ══════════ -->
+<div class="philosophy anim d4">
+    <div class="ph-emoji">🏆🛡️🌽</div>
+    <h4>"Em 43 dias, de R$ 339,85 a R$ 347,35 — a tese venceu, a disciplina venceu."</h4>
+    <p>
+        <strong style="color:var(--gold-light)">O Collar virou positivo. O físico convergiu. As exportações bateram recorde.</strong><br>
+        BGIU26 cruzou a entrada hoje (R$ 347,35), com o Collar marcado em <strong style="color:var(--gold-light)">+R$ 0,70/@ — +R$ 231 por contrato</strong>.<br>
+        Quem manteve a posição nos momentos mais difíceis (R$ 339,85 em abril, R$ 343,50 em maio) está sendo recompensado.<br><br>
+        No milho: a janela se fechou, mas <strong style="color:var(--gold-light)">60% travado a R$ 69,67 vs R$ 65,00 atual = R$ 89.664 de economia já contratada</strong>.<br>
+        A relação Boi/Milho melhorou para 5,34 sc/@ — confinamento mais lucrativo hoje do que em 22/05.<br><br>
+        <strong style="color:var(--gold-light)">Próximo alvo: BGIU26 em R$ 350–355 antes do vencimento de setembro. 126 dias de suporte ainda pela frente. 🐂⏳</strong>
+    </p>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="footer anim d4">
+    <div class="footer-grid">
+        <div>
+            <h4>Dr. Sidney Souza</h4>
+            <div class="ft-role">Economista Agrícola · Estrategista Econômico do Produtor</div>
+            <div class="ft-desc">Especialista em economia da fazenda e gestão de risco no agro<br>Transformamos dados da fazenda em decisões econômicas</div>
+            <div class="footer-links">
+                <a href="mailto:sidneyagro@gmail.com">📧 sidneyagro@gmail.com</a>
+                <span>📱 (64) 9 9226-6886</span>
+                <a href="https://instagram.com/ruralin.ai" target="_blank">📸 @ruralin.ai</a>
+            </div>
+        </div>
+        <div class="footer-brand">
+            <div class="brand">rural<span>in</span>.ai</div>
+            <div class="tagline">Inteligência para o agro</div>
+        </div>
+    </div>
+    <div class="disclaimer">
+        Análise técnica, fundamentalista e estatística com fins educativos e estratégicos. Decisões de negociação são responsabilidade do investidor.
+        Dados B3: Notícias Agrícolas / TradingView / ADVFN. Físico: Cepea/Esalq. Demais fontes: Agronews, Broto Notícias, Farmnews, TF Agroeconômica, Scot Consultoria, IMEA, Conab — 28/05/2026.
+    </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+Chart.defaults.color = '#6e7e72';
+Chart.defaults.borderColor = 'rgba(255,255,255,.07)';
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+
+const ENTRY=347, PUT=335, CALL=355, PREMIUM=0.65;
+function calcResult(p){ let f=p-ENTRY, o=0; if(p<=PUT) o=PUT-p; if(p>=CALL) o=-(p-CALL); return f+o-PREMIUM; }
+
+// ── EVOLUÇÃO 43 DIAS ──────────────────────────────────────────────────────────
+const evoLabels=['28/03','30/03','31/03','01/04','02/04','06/04','07/04','08/04','09/04','10/04','13/04','14/04','15/04','16/04','17/04','20/04','22/04','23/04','24/04','27/04','28/04','29/04','30/04','04/05','05/05','06/05','07/05','08/05','11/05','12/05','13/05','14/05','15/05','18/05','19/05','20/05','21/05','22/05','25/05','26/05','27/05','28/05'];
+const evoData=[347.00,352.00,350.80,350.50,349.95,351.95,349.70,345.80,346.50,345.15,342.00,341.50,339.85,340.20,340.00,339.50,341.50,340.95,342.50,345.80,342.70,342.95,343.70,348.00,344.50,343.75,343.00,343.45,344.45,345.00,345.00,345.00,343.50,343.50,346.30,346.00,346.15,346.55,346.80,347.35,347.20,347.35];
+
+const entryLine = Array(42).fill(347);
+const ctx1 = document.getElementById('evolucaoChart').getContext('2d');
+
+// gradient fill
+const grad = ctx1.createLinearGradient(0, 0, 0, 320);
+grad.addColorStop(0, 'rgba(176,122,240,.18)');
+grad.addColorStop(1, 'rgba(176,122,240,.01)');
+
+new Chart(ctx1, {
+  type:'line',
+  data:{
+    labels:evoLabels,
+    datasets:[
+      {
+        label:'BGIU26',
+        data:evoData,
+        borderColor:'#b07af0',
+        backgroundColor:grad,
+        borderWidth:2.5,
+        fill:true,
+        tension:.3,
+        pointRadius: evoData.map((_,i)=> i===41?6:2),
+        pointBackgroundColor: evoData.map(v=> v>=347?'#34d877':v>=343?'#f0c040':'#f05060'),
+        pointBorderColor:'rgba(0,0,0,.4)',
+        pointBorderWidth:1,
+      },
+      {
+        label:'Entrada R$ 347',
+        data:entryLine,
+        borderColor:'rgba(52,216,119,.45)',
+        borderWidth:1.5,
+        borderDash:[6,4],
+        pointRadius:0,
+        fill:false,
+      },
+      {
+        label:'CALL 355',
+        data:Array(42).fill(355),
+        borderColor:'rgba(240,192,64,.3)',
+        borderWidth:1.5,
+        borderDash:[4,4],
+        pointRadius:0,
+        fill:false,
+      },
+      {
+        label:'PUT 335',
+        data:Array(42).fill(335),
+        borderColor:'rgba(240,80,96,.4)',
+        borderWidth:1.5,
+        borderDash:[4,4],
+        pointRadius:0,
+        fill:false,
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    interaction:{intersect:false, mode:'index'},
+    plugins:{
+      legend:{position:'top', labels:{usePointStyle:true, padding:10, font:{size:10}}},
+      tooltip:{
+        backgroundColor:'#163325',
+        borderColor:'rgba(255,255,255,.1)',
+        borderWidth:1,
+        callbacks:{
+          label: ctx=> {
+            if(ctx.datasetIndex===0){
+              const d = ctx.raw-347;
+              return `R$ ${ctx.raw.toFixed(2)}/@ (${d>=0?'+':''}${d.toFixed(2)} vs entrada)`;
+            }
+            return `${ctx.dataset.label}: R$ ${ctx.raw}`;
+          }
+        }
+      }
+    },
+    scales:{
+      y:{ min:333, max:358, grid:{color:'rgba(255,255,255,.06)'}, ticks:{callback:v=>`R$ ${v}`} },
+      x:{ grid:{display:false}, ticks:{font:{size:8}, maxTicksLimit:14} }
+    }
+  }
+});
+
+// ── PAYOFF ────────────────────────────────────────────────────────────────────
+const ppL=[], ppD=[], ppZ=[];
+for(let p=310; p<=380; p+=.5){ ppL.push(p); ppD.push(calcResult(p)); ppZ.push(0); }
+
+new Chart(document.getElementById('payoffChart').getContext('2d'), {
+  type:'line',
+  data:{
+    labels:ppL,
+    datasets:[
+      {
+        label:'Resultado Collar',
+        data:ppD,
+        borderColor:'#b07af0',
+        borderWidth:3,
+        fill:{target:'origin', above:'rgba(52,216,119,.12)', below:'rgba(240,80,96,.08)'},
+        tension:0,
+        pointRadius:0,
+      },
+      {label:'Zero', data:ppZ, borderColor:'rgba(255,255,255,.12)', borderWidth:1, borderDash:[5,5], pointRadius:0, fill:false}
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    interaction:{intersect:false, mode:'index'},
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#163325',
+        borderColor:'rgba(255,255,255,.1)',
+        borderWidth:1,
+        callbacks:{
+          title: i=> `Boi: R$ ${Number(i[0].label).toFixed(2)}/@`,
+          label: i=> {
+            if(i.datasetIndex===0){
+              const v=i.raw;
+              return [`${v>=0?'+':''}R$ ${v.toFixed(2)}/@ | ${v>=0?'+':''}R$ ${(v*330).toFixed(2)}/ctt`, v>=0?'✅ No azul':'⚠️ Prejuízo controlado'];
+            }
+          }
+        }
+      }
+    },
+    scales:{
+      x:{
+        title:{display:true, text:'Preço no Vencimento (R$/@)', color:'#6e7e72', font:{size:11}},
+        ticks:{callback:(v,i)=> (i%10===0)?ppL[i]:'', maxRotation:0, font:{size:9}},
+        grid:{display:false}
+      },
+      y:{
+        title:{display:true, text:'Resultado (R$/@)', color:'#6e7e72', font:{size:11}},
+        grid:{color:'rgba(255,255,255,.06)'},
+        ticks:{callback:v=>`${v>=0?'+':''}R$ ${v.toFixed(0)}`}
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
