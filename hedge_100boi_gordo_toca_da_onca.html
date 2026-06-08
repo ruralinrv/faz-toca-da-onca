@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Hedge — Boi Gordo | Fazenda Toca da Onça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #1a4a2e;
+    --verde-medio: #2d6e47;
+    --verde-claro: #3d8c5a;
+    --verde-menta: #e8f5ee;
+    --verde-suave: #c8e8d5;
+    --ouro: #c8952a;
+    --ouro-claro: #f5e9d0;
+    --ouro-suave: #fdf6e8;
+    --cinza-escuro: #1c1c1c;
+    --cinza: #4a4a4a;
+    --cinza-medio: #6b6b6b;
+    --cinza-claro: #f4f4f2;
+    --cinza-borda: #e0ddd6;
+    --vermelho: #8b2e2e;
+    --vermelho-claro: #fdf0f0;
+    --azul: #1e4a7a;
+    --branco: #ffffff;
+    --ff-display: 'Playfair Display', Georgia, serif;
+    --ff-body: 'DM Sans', system-ui, sans-serif;
+    --ff-mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--ff-body);
+    background: #f8f7f4;
+    color: var(--cinza-escuro);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--branco);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+  }
+
+  /* ── HEADER ────────────────────────────────────────────── */
+  .header {
+    background: var(--verde);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(200,149,42,0.08);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .logo-wrapper img {
+    height: 44px;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+  }
+  .header-meta {
+    text-align: right;
+  }
+  .header-meta .doc-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .header-meta .doc-date {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    font-family: var(--ff-mono);
+  }
+
+  .header-body {
+    padding: 36px 48px 40px;
+  }
+  .badge-tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgba(200,149,42,0.18);
+    color: var(--ouro);
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(200,149,42,0.3);
+    margin-bottom: 16px;
+  }
+  .header-title {
+    font-family: var(--ff-display);
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--branco);
+    line-height: 1.25;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .header-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    max-width: 500px;
+    line-height: 1.6;
+  }
+  .header-client-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    margin-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .client-field {
+    padding: 14px 20px;
+    background: rgba(0,0,0,0.12);
+  }
+  .client-field-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 3px;
+  }
+  .client-field-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--branco);
+  }
+
+  /* ── SUMMARY BAR ───────────────────────────────────────── */
+  .summary-bar {
+    background: var(--verde-menta);
+    border-bottom: 2px solid var(--verde-suave);
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background-color: var(--verde-suave);
+  }
+  .summary-item {
+    background: var(--verde-menta);
+    padding: 20px 24px;
+  }
+  .summary-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--verde-medio);
+    margin-bottom: 4px;
+  }
+  .summary-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--verde);
+    font-family: var(--ff-mono);
+  }
+  .summary-sub {
+    font-size: 11px;
+    color: var(--verde-claro);
+    margin-top: 2px;
+  }
+
+  /* ── CONTENT ────────────────────────────────────────────── */
+  .content {
+    padding: 0 48px;
+  }
+
+  .section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--cinza-borda);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--verde);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--cinza-medio);
+    margin-bottom: 24px;
+    max-width: 620px;
+    line-height: 1.6;
+  }
+
+  /* ── PARAMETROS ─────────────────────────────────────────── */
+  .param-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .param-card {
+    background: var(--cinza-claro);
+    border: 1px solid var(--cinza-borda);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .param-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cinza-medio);
+    margin-bottom: 6px;
+  }
+  .param-value {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--cinza-escuro);
+    font-family: var(--ff-mono);
+    line-height: 1.2;
+  }
+  .param-sub {
+    font-size: 11px;
+    color: var(--cinza-medio);
+    margin-top: 3px;
+  }
+
+  /* ── STRATEGIES ─────────────────────────────────────────── */
+  .strategies-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .strategy-card {
+    border: 1px solid var(--cinza-borda);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .strategy-card.recommended {
+    border-color: var(--verde-medio);
+    box-shadow: 0 0 0 3px var(--verde-menta);
+  }
+  .strategy-header {
+    padding: 18px 22px 16px;
+    background: var(--cinza-claro);
+    border-bottom: 1px solid var(--cinza-borda);
+    position: relative;
+  }
+  .strategy-card.recommended .strategy-header {
+    background: var(--verde);
+  }
+  .strategy-rec-badge {
+    position: absolute;
+    top: 14px; right: 16px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ouro);
+    color: var(--branco);
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  .strategy-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--cinza-medio);
+  }
+  .strategy-card.recommended .strategy-name { color: rgba(255,255,255,0.6); }
+  .strategy-title {
+    font-family: var(--ff-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cinza-escuro);
+    line-height: 1.3;
+  }
+  .strategy-card.recommended .strategy-title { color: var(--branco); }
+  .strategy-ticker {
+    margin-top: 8px;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    color: var(--cinza-medio);
+  }
+  .strategy-card.recommended .strategy-ticker { color: rgba(255,255,255,0.5); }
+
+  .strategy-body {
+    padding: 20px 22px;
+  }
+
+  /* DRE Table */
+  .dre-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .dre-table th {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cinza-medio);
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--cinza-borda);
+    text-align: left;
+  }
+  .dre-table th:last-child { text-align: right; }
+  .dre-table td {
+    padding: 5px 0;
+    color: var(--cinza-escuro);
+    vertical-align: top;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .dre-table td:last-child {
+    text-align: right;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .dre-table tr.row-sub td { color: var(--cinza-medio); padding-left: 14px; font-size: 12px; }
+  .dre-table tr.row-subtotal td {
+    border-top: 1px solid var(--cinza-borda);
+    padding-top: 8px;
+    font-weight: 600;
+  }
+  .dre-table tr.row-total td {
+    border-top: 2px solid var(--cinza-escuro);
+    padding-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .dre-table tr.row-margin td {
+    padding-bottom: 4px;
+    font-size: 12px;
+    color: var(--cinza-medio);
+  }
+  .val-pos { color: #1a6b3a !important; }
+  .val-neg { color: #8b2e2e !important; }
+  .val-destaque { color: var(--verde) !important; font-weight: 700 !important; }
+  .val-pos-alt { color: #0d5a2f !important; font-weight: 700 !important; }
+
+  .strategy-result-box {
+    background: var(--verde-menta);
+    border: 1px solid var(--verde-suave);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .strategy-card:not(.recommended) .strategy-result-box {
+    background: var(--ouro-suave);
+    border-color: var(--ouro-claro);
+  }
+  .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cinza-medio);
+  }
+  .result-value {
+    font-family: var(--ff-mono);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--verde);
+  }
+  .result-margin {
+    font-size: 12px;
+    color: var(--verde-claro);
+    text-align: right;
+  }
+  .strategy-card:not(.recommended) .result-value { color: var(--ouro); }
+  .strategy-card:not(.recommended) .result-margin { color: var(--ouro); }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .pro-item, .con-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--cinza);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .pro-item {
+    background: rgba(30,90,50,0.06);
+  }
+  .con-item {
+    background: rgba(200,149,42,0.07);
+  }
+  .pro-icon { color: #1a6b3a; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .con-icon { color: var(--ouro); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── CENÁRIOS TABLE ─────────────────────────────────────── */
+  .scenarios-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .scenarios-table thead tr {
+    background: var(--verde);
+    color: var(--branco);
+  }
+  .scenarios-table th {
+    padding: 12px 16px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: left;
+    border: none;
+  }
+  .scenarios-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--cinza-borda);
+    vertical-align: middle;
+  }
+  .scenarios-table tbody tr:hover { background: var(--cinza-claro); }
+  .scenarios-table td:not(:first-child) {
+    font-family: var(--ff-mono);
+    font-size: 12.5px;
+  }
+  .sc-base { background: var(--verde-menta) !important; font-weight: 500; }
+  .sc-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+  .sc-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sc-dot-q { background: #c0392b; }
+  .sc-dot-b { background: var(--verde-medio); }
+  .sc-dot-a { background: var(--ouro); }
+  .sc-dot-as { background: #e67e22; }
+  .winner { color: #0d5a2f; font-weight: 600; }
+  .loser { color: #8b2e2e; }
+  .neutral { color: var(--cinza); }
+
+  /* ── COMO FUNCIONA ──────────────────────────────────────── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .step-list { list-style: none; }
+  .step-list-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cinza-medio);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--cinza-borda);
+  }
+  .step-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--verde);
+    color: var(--branco);
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-num.alt { background: var(--ouro); }
+  .step-content-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cinza-escuro);
+    margin-bottom: 2px;
+  }
+  .step-content-desc {
+    font-size: 12px;
+    color: var(--cinza-medio);
+    line-height: 1.55;
+  }
+
+  /* ── RISCOS ─────────────────────────────────────────────── */
+  .riscos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .risco-card {
+    border: 1px solid var(--cinza-borda);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .risco-nivel {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .nivel-medio { background: #fff3cd; color: #8b6914; }
+  .nivel-baixo { background: var(--verde-menta); color: var(--verde-medio); }
+  .nivel-alto { background: #fde8e8; color: var(--vermelho); }
+  .risco-title { font-size: 13px; font-weight: 600; color: var(--cinza-escuro); margin-bottom: 4px; }
+  .risco-desc { font-size: 12px; color: var(--cinza-medio); line-height: 1.55; }
+
+  /* ── RECOMENDAÇÃO ────────────────────────────────────────── */
+  .rec-box {
+    background: var(--verde);
+    border-radius: 14px;
+    padding: 36px 40px;
+    color: var(--branco);
+    position: relative;
+    overflow: hidden;
+  }
+  .rec-box::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(200,149,42,0.1);
+    pointer-events: none;
+  }
+  .rec-box-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    margin-bottom: 10px;
+  }
+  .rec-box-title {
+    font-family: var(--ff-display);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: var(--branco);
+  }
+  .rec-box-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+  .rec-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .rec-hl {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .rec-hl-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .rec-hl-value {
+    font-family: var(--ff-mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--branco);
+  }
+  .rec-hl-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* ── DISCLAIMER ──────────────────────────────────────────── */
+  .disclaimer {
+    background: var(--cinza-claro);
+    border-left: 3px solid var(--cinza-borda);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 11px;
+    color: var(--cinza-medio);
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+  .disclaimer strong { color: var(--cinza); }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .footer {
+    background: var(--cinza-escuro);
+    padding: 40px 48px 32px;
+    color: var(--branco);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 24px;
+  }
+  .footer-logo img {
+    height: 36px;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+  .footer-tagline {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .footer-analyst-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ouro);
+    margin-bottom: 10px;
+  }
+  .analyst-name {
+    font-family: var(--ff-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--branco);
+    margin-bottom: 2px;
+  }
+  .analyst-title {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.55;
+  }
+  .analyst-spec {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 6px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .footer-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .contact-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 12px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-pill:hover { color: var(--ouro); border-color: rgba(200,149,42,0.4); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+  }
+  .footer-url {
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    transition: color 0.2s;
+  }
+  .footer-url:hover { color: var(--ouro); }
+
+  /* ── PRINT ───────────────────────────────────────────────── */
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; max-width: 100%; }
+    .footer-contacts a { color: rgba(255,255,255,0.55) !important; }
+  }
+  @media (max-width: 680px) {
+    .header-top, .header-body, .content, .footer { padding-left: 20px; padding-right: 20px; }
+    .summary-bar { padding: 0 20px; grid-template-columns: repeat(2,1fr); }
+    .param-grid { grid-template-columns: repeat(2,1fr); }
+    .strategies-grid, .steps-grid, .pros-cons, .rec-highlights, .footer-top { grid-template-columns: 1fr; }
+    .riscos-grid { grid-template-columns: 1fr 1fr; }
+    .header-client-bar { grid-template-columns: 1fr; }
+    .header-title { font-size: 24px; }
+    .scenarios-table { font-size: 11px; }
+    .scenarios-table th, .scenarios-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="logo-wrapper">
+        <img src="https://ruralinai-commits.github.io/ruralin-site/img/logo.png" alt="Rural IN">
+      </div>
+      <div class="header-meta">
+        <span class="doc-label">Análise de Mercado</span>
+        <span class="doc-date">08/06/2026 · Conf. Restrito</span>
+      </div>
+    </div>
+    <div class="header-body">
+      <div class="badge-tipo">&#9670; Estratégia de Hedge</div>
+      <h1 class="header-title">Operação Boi Gordo<br>na B3 — BGI Q26</h1>
+      <p class="header-subtitle">Análise comparativa de estratégias de proteção de preço para confinamento de bovinos de corte — agosto/2026</p>
+    </div>
+    <div class="header-client-bar">
+      <div class="client-field">
+        <div class="client-field-label">Propriedade</div>
+        <div class="client-field-value">Fazenda Toca da Onça</div>
+      </div>
+      <div class="client-field">
+        <div class="client-field-label">Localização</div>
+        <div class="client-field-value">Aporé — GO</div>
+      </div>
+      <div class="client-field">
+        <div class="client-field-label">Gestores</div>
+        <div class="client-field-value">Pedro Henrique &amp; Rogério Teles</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-label">Animais</div>
+      <div class="summary-value">100</div>
+      <div class="summary-sub">cabeças · confinamento</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-label">Arrobas na saída</div>
+      <div class="summary-value">3.500 @</div>
+      <div class="summary-sub">35 @/cab × 100 cabs</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-label">Contratos BGI</div>
+      <div class="summary-value">10 ctrts</div>
+      <div class="summary-sub">BGI Q26 · ago/2026</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-label">Custo confinamento</div>
+      <div class="summary-value">R$ 143.625</div>
+      <div class="summary-sub">75 dias · R$ 1.436,25/cab</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. PARAMETROS -->
+    <section class="section">
+      <span class="section-tag">01 — Dados da Operação</span>
+      <h2 class="section-title">Parâmetros do Confinamento</h2>
+      <p class="section-desc">Levantamento econômico do lote a ser protegido. Valores utilizados como base de cálculo para ambas as estratégias de hedge.</p>
+      <div class="param-grid">
+        <div class="param-card">
+          <div class="param-label">Peso de entrada</div>
+          <div class="param-value">400 kg</div>
+          <div class="param-sub">26,67 @/cabeça</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Peso de saída</div>
+          <div class="param-value">525 kg</div>
+          <div class="param-sub">35,00 @/cabeça</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Ganho de peso</div>
+          <div class="param-value">125 kg</div>
+          <div class="param-sub">8,33 @/cabeça</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Período</div>
+          <div class="param-value">75 dias</div>
+          <div class="param-sub">jun/2026 → ago/2026</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Custo perm./cabeça</div>
+          <div class="param-value">R$ 1.436</div>
+          <div class="param-sub">R$ 143.625 total</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Boi magro (GO)</div>
+          <div class="param-value">R$ 5.250</div>
+          <div class="param-sub">R$ 525.000 total</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">Físico boi gordo GO</div>
+          <div class="param-value">R$ 322,00</div>
+          <div class="param-sub">Referência 05/06/2026</div>
+        </div>
+        <div class="param-card">
+          <div class="param-label">BGI Q26 (futuro)</div>
+          <div class="param-value">R$ 343,00</div>
+          <div class="param-sub">Agosto/2026 · B3</div>
+        </div>
+      </div>
+      <div class="disclaimer">
+        <strong>Nota sobre o futuro:</strong> Em 08/06/2026, o contrato BGI Q26 estava cotado a R$ 343,00/@, com ágio de R$ 21,00/@ sobre o físico de Goiás (R$ 322,00/@) — favorável ao produtor vendido. A base histórica da praça de Goiás deve ser monitorada ao longo do confinamento.
+      </div>
+    </section>
+
+    <!-- 2. ESTRATÉGIAS -->
+    <section class="section">
+      <span class="section-tag">02 — Estratégias Comparadas</span>
+      <h2 class="section-title">DRE por Estratégia de Hedge</h2>
+      <p class="section-desc">Demonstrativo de resultado projetado para cada operação, considerando os parâmetros acima e o cenário base de mercado.</p>
+
+      <div class="strategies-grid">
+
+        <!-- OPÇÃO 1 -->
+        <div class="strategy-card recommended">
+          <div class="strategy-header">
+            <span class="strategy-rec-badge">Recomendado</span>
+            <div class="strategy-name">Opção 1</div>
+            <div class="strategy-title">Hedge Vendido no Futuro</div>
+            <div class="strategy-ticker">BGI Q26 · Venda 10 contratos · R$ 338,00/@</div>
+          </div>
+          <div class="strategy-body">
+            <div class="strategy-result-box">
+              <div>
+                <div class="result-label">Resultado líquido</div>
+                <div class="result-value">R$ 463.275</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="result-margin" style="font-size:18px; font-weight:600; color:var(--verde);">41,5%</div>
+                <div class="result-margin" style="font-size:11px;">margem líquida</div>
+              </div>
+            </div>
+            <table class="dre-table">
+              <thead>
+                <tr><th>Componente</th><th>R$</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Receita física (3.300 @ × R$ 322,00)</td>
+                  <td>1.062.600</td>
+                </tr>
+                <tr>
+                  <td>Resultado B3 — ganho no ajuste futuro<br><small style="color:#888;font-size:11px;">(R$343 − R$322) × 3.300 @</small></td>
+                  <td class="val-pos">+ 69.300</td>
+                </tr>
+                <tr class="row-subtotal">
+                  <td>Receita bruta efetiva travada</td>
+                  <td>1.131.900</td>
+                </tr>
+                <tr class="row-sub">
+                  <td>(-) Custo boi magro (100 × R$ 5.250)</td>
+                  <td class="val-neg">(525.000)</td>
+                </tr>
+                <tr class="row-sub">
+                  <td>(-) Custo de permanência (75 dias)</td>
+                  <td class="val-neg">(143.625)</td>
+                </tr>
+                <tr class="row-total">
+                  <td><strong>Resultado líquido</strong></td>
+                  <td class="val-pos-alt">463.275</td>
+                </tr>
+                <tr class="row-margin">
+                  <td>Margem líquida sobre receita</td>
+                  <td class="val-pos">41,5%</td>
+                </tr>
+                <tr class="row-margin">
+                  <td>Custo do hedge</td>
+                  <td class="val-pos">R$ 0,00</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pros-cons">
+              <div class="pro-item"><span class="pro-icon">✓</span>Margem garantida em qualquer cenário</div>
+              <div class="con-item"><span class="con-icon">!</span>Sem participação na alta de preços</div>
+              <div class="pro-item"><span class="pro-icon">✓</span>Sem custo de prêmio</div>
+              <div class="con-item"><span class="con-icon">!</span>Exige reserva para ajustes diários</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OPÇÃO 2 -->
+        <div class="strategy-card">
+          <div class="strategy-header">
+            <div class="strategy-name">Opção 2</div>
+            <div class="strategy-title">Compra de Put sobre BGI</div>
+            <div class="strategy-ticker">BGI Q26 · B PUT SECA · Strike R$ 335/@ · Prêmio R$ 7,83/@ · Venc. 31/08/2026</div>
+          </div>
+          <div class="strategy-body">
+            <div class="strategy-result-box">
+              <div>
+                <div class="result-label">Resultado líquido (base)</div>
+                <div class="result-value">R$ 411.036</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="result-margin" style="font-size:18px; font-weight:600; color:var(--ouro);">38,1%</div>
+                <div class="result-margin" style="font-size:11px;">margem líquida (base)</div>
+              </div>
+            </div>
+            <table class="dre-table">
+              <thead>
+                <tr><th>Componente (cenário base: R$ 322/@)</th><th>R$</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Receita física (3.300 @ × R$ 322,00)</td>
+                  <td>1.062.600</td>
+                </tr>
+                <tr>
+                  <td>Exercício da put<br><small style="color:#888;font-size:11px;">(R$335 − R$322) × 3.300 @</small></td>
+                  <td class="val-pos">+ 42.900</td>
+                </tr>
+                <tr>
+                  <td>Prêmio pago (R$ 7,83/@ × 3.300 @)</td>
+                  <td class="val-neg">(25.839)</td>
+                </tr>
+                <tr class="row-subtotal">
+                  <td>Receita bruta efetiva</td>
+                  <td>1.079.661</td>
+                </tr>
+                <tr class="row-sub">
+                  <td>(-) Custo boi magro</td>
+                  <td class="val-neg">(525.000)</td>
+                </tr>
+                <tr class="row-sub">
+                  <td>(-) Custo de permanência</td>
+                  <td class="val-neg">(143.625)</td>
+                </tr>
+                <tr class="row-total">
+                  <td><strong>Resultado líquido</strong></td>
+                  <td style="color:var(--ouro); font-weight:700;">411.036</td>
+                </tr>
+                <tr class="row-margin">
+                  <td>Margem líquida sobre receita</td>
+                  <td class="val-pos">38,1%</td>
+                </tr>
+                <tr class="row-margin">
+                  <td>Breakeven da put (BGIQ26 @342,80)</td>
+                  <td class="val-neg">R$ 327,17/@</td>
+                </tr>
+                <tr class="row-margin">
+                  <td>Custo total do prêmio (10 ctrts)</td>
+                  <td class="val-neg">R$ 25.839</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pros-cons">
+              <div class="pro-item"><span class="pro-icon">✓</span>Captura toda alta acima do strike</div>
+              <div class="con-item"><span class="con-icon">!</span>Custo fixo de R$ 25.839 no início</div>
+              <div class="pro-item"><span class="pro-icon">✓</span>Sem chamadas de margem</div>
+              <div class="con-item"><span class="con-icon">!</span>Piso de proteção a R$ 327,17/@</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. CENÁRIOS -->
+    <section class="section">
+      <span class="section-tag">03 — Análise de Sensibilidade</span>
+      <h2 class="section-title">Resultado Líquido por Cenário de Preço</h2>
+      <p class="section-desc">Simulação do resultado final em diferentes realizações de preço no físico em agosto/2026. A Opção 1 entrega valor fixo em qualquer cenário; a Opção 2 ganha com alta.</p>
+
+      <table class="scenarios-table">
+        <thead>
+          <tr>
+            <th>Cenário</th>
+            <th>Físico (R$/@)</th>
+            <th>Resultado Liq. — Futuro</th>
+            <th>Resultado Liq. — Put</th>
+            <th>Vantagem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sc-label"><span class="sc-dot sc-dot-q"></span>Queda forte</span></td>
+            <td>R$ 290,00</td>
+            <td class="winner">R$ 463.275</td>
+            <td class="winner">R$ 411.036</td>
+            <td class="winner">Opção 1 (+R$ 52.239)</td>
+          </tr>
+          <tr>
+            <td><span class="sc-label"><span class="sc-dot sc-dot-q"></span>Queda moderada</span></td>
+            <td>R$ 310,00</td>
+            <td class="winner">R$ 463.275</td>
+            <td class="winner">R$ 411.036</td>
+            <td class="winner">Opção 1 (+R$ 52.239)</td>
+          </tr>
+          <tr class="sc-base">
+            <td><span class="sc-label"><span class="sc-dot sc-dot-b"></span>Cenário base ★</span></td>
+            <td>R$ 322,00</td>
+            <td class="winner">R$ 463.275</td>
+            <td class="neutral">R$ 411.036</td>
+            <td class="winner">Opção 1 (+R$ 52.239)</td>
+          </tr>
+          <tr>
+            <td><span class="sc-label"><span class="sc-dot sc-dot-a"></span>Alta moderada</span></td>
+            <td>R$ 345,00</td>
+            <td class="neutral">R$ 463.275</td>
+            <td class="neutral">R$ 433.911</td>
+            <td class="winner">Opção 1 (+R$ 29.364)</td>
+          </tr>
+          <tr>
+            <td><span class="sc-label"><span class="sc-dot sc-dot-a"></span>Alta expressiva</span></td>
+            <td>R$ 368,00</td>
+            <td class="neutral">R$ 463.275</td>
+            <td class="winner">R$ 469.911</td>
+            <td class="winner">Opção 2 (+R$ 6.636)</td>
+          </tr>
+          <tr>
+            <td><span class="sc-label"><span class="sc-dot sc-dot-as"></span>Alta forte</span></td>
+            <td>R$ 390,00</td>
+            <td class="neutral">R$ 463.275</td>
+            <td class="winner">R$ 542.511</td>
+            <td class="winner">Opção 2 (+R$ 79.236)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="disclaimer">
+        <strong>Leitura dos cenários:</strong> com o BGI Q26 cotado a R$ 343,00/@ e prêmio real de R$ 7,83/@ (breakeven R$ 327,17/@), a Opção 1 (Futuro) é superior até ~R$ 368/@. Acima desse patamar, a Opção 2 (Put) passa a capturar toda a alta do físico, superando o resultado travado. O ponto de equilíbrio entre as estratégias é o nível de preço em que o ganho adicional da put iguala os R$ 25.839 pagos de prêmio.
+      </div>
+    </section>
+
+    <!-- 4. RISCOS -->
+    <section class="section">
+      <span class="section-tag">04 — Gestão de Risco</span>
+      <h2 class="section-title">Riscos Relevantes a Monitorar</h2>
+      <p class="section-desc">Fatores de risco identificados que devem ser acompanhados durante o período do confinamento, independente da estratégia adotada.</p>
+
+      <div class="riscos-grid">
+        <div class="risco-card">
+          <span class="risco-nivel nivel-medio">Médio</span>
+          <div class="risco-title">Risco de base</div>
+          <div class="risco-desc">Diferença entre o preço físico em Aporé/GO e o indicador ESALQ (referência da B3). A base pode variar e reduzir a efetividade do hedge. Recomenda-se levantar o histórico de base da praça.</div>
+        </div>
+        <div class="risco-card">
+          <span class="risco-nivel nivel-medio">Médio</span>
+          <div class="risco-title">Chamada de margem (Opção 1)</div>
+          <div class="risco-desc">Em caso de alta expressiva do futuro, haverá débitos diários de ajuste na conta da corretora. Recomenda-se manter reserva de ~R$ 40.000 a R$ 60.000 para liquidez operacional.</div>
+        </div>
+        <div class="risco-card">
+          <span class="risco-nivel nivel-baixo">Baixo</span>
+          <div class="risco-title">Cobertura parcial</div>
+          <div class="risco-desc">Os 10 contratos cobrem 3.300 das 3.500 arrobas projetadas (94,3%). As 200 @ restantes ficam expostas ao preço físico. O 11º contrato cobriria 100% mas sobreexposição.</div>
+        </div>
+        <div class="risco-card">
+          <span class="risco-nivel nivel-alto">Atenção</span>
+          <div class="risco-title">Liquidez de opções (Opção 2)</div>
+          <div class="risco-desc">O mercado de opções sobre boi gordo pode ter liquidez reduzida em vencimentos específicos. O strike desejado pode não estar disponível ou ter spread elevado no momento da execução.</div>
+        </div>
+        <div class="risco-card">
+          <span class="risco-nivel nivel-medio">Médio</span>
+          <div class="risco-title">Desempenho zootécnico</div>
+          <div class="risco-desc">Variação no ganho de peso (abaixo de 125 kg/animal) reduz as arrobas produzidas e impacta a cobertura do hedge. O acompanhamento do GMD é fundamental para ajustes na posição.</div>
+        </div>
+        <div class="risco-card">
+          <span class="risco-nivel nivel-baixo">Baixo</span>
+          <div class="risco-title">Rolagem de contrato</div>
+          <div class="risco-desc">Se os animais não estiverem prontos antes do vencimento do BGI Q26 (último dia útil de agosto), será necessário rolar a posição para o contrato seguinte (BGI U26 — setembro).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. RECOMENDAÇÃO -->
+    <section class="section" style="border-bottom:none;">
+      <span class="section-tag">05 — Conclusão e Recomendação</span>
+      <h2 class="section-title">Posicionamento Estratégico</h2>
+      <p class="section-desc">Avaliação consolidada das duas alternativas considerando o perfil de risco e o objetivo de travamento de margem da operação.</p>
+
+      <div class="rec-box">
+        <div class="rec-box-label">&#9670; Estratégia recomendada</div>
+        <div class="rec-box-title">Venda de 10 contratos BGI Q26<br>a R$ 338,00/@ — Hedge Vendido</div>
+        <p class="rec-box-text">
+          Para o objetivo de <strong style="color:var(--branco);">travar margem e garantir previsibilidade</strong>, a Opção 1 é superior. Com o BGI Q26 cotado a R$ 343/@, o futuro já carrega um ágio de R$ 21/@ sobre o físico de Goiás — um diferencial favorável que trabalha diretamente a favor do produtor vendido. O resultado líquido garantido de <strong style="color:var(--branco);">R$ 463.275 (41,5% de margem)</strong> é assegurado independente do comportamento do mercado em agosto. A Opção 2 (Put Seca) é recomendável como alternativa somente se Pedro Henrique e Rogério Teles tiverem convicção de alta do físico acima de R$ 368/@, estando dispostos a pagar R$ 25.839 de prêmio por essa flexibilidade.
+        </p>
+        <div class="rec-highlights">
+          <div class="rec-hl">
+            <div class="rec-hl-label">Resultado garantido</div>
+            <div class="rec-hl-value">R$ 463.275</div>
+            <div class="rec-hl-sub">em qualquer cenário de preço</div>
+          </div>
+          <div class="rec-hl">
+            <div class="rec-hl-label">Margem líquida travada</div>
+            <div class="rec-hl-value">41,5%</div>
+            <div class="rec-hl-sub">sobre receita bruta efetiva</div>
+          </div>
+          <div class="rec-hl">
+            <div class="rec-hl-label">Custo do hedge</div>
+            <div class="rec-hl-value">R$ 0,00</div>
+            <div class="rec-hl-sub">sem prêmio · margem depósito</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclaimer" style="margin-top:20px;">
+        <strong>Importante:</strong> Esta análise tem caráter consultivo e utiliza referências de mercado de 08/06/2026 (físico GO: R$ 322/@; BGI Q26: R$ 343,00/@; Put Seca Strike R$ 335 — prêmio R$ 7,83/@ cotado em mesa, breakeven R$ 327,17/@, vencimento 31/08/2026). Os preços reais de execução dependem da liquidez e do momento da operação na B3. O preço do boi magro utilizado (R$ 5.250/cab) é referência regional e deve ser ajustado ao custo real de aquisição do lote. A Rural IN recomenda a execução com acompanhamento de um operador de derivativos agropecuários habilitado.
+      </div>
+    </section>
+
+  </div><!-- /content -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <img src="https://ruralinai-commits.github.io/ruralin-site/img/logo.png" alt="Rural IN">
+        </div>
+        <p class="footer-tagline">
+          "Transformamos dados da fazenda em decisões econômicas.<br>
+          Ajudamos produtores a entender se o mercado sustenta seu negócio."
+        </p>
+        <div class="footer-contacts">
+          <a class="contact-pill" href="https://ruralinai-commits.github.io/ruralin-site/">&#127760; ruralin.ai</a>
+          <a class="contact-pill" href="https://instagram.com/ruralin.ai">&#9825; @ruralin.ai</a>
+          <a class="contact-pill" href="mailto:sidneyagro@gmail.com">&#9993; sidneyagro@gmail.com</a>
+          <a class="contact-pill" href="tel:+5564992266886">&#9742; (64) 9 9226-6886</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-analyst-label">&#9670; Análise e construção</div>
+        <div class="analyst-name">Dr. Sidney Souza</div>
+        <div class="analyst-title">
+          Economista e Administrador Agrícola<br>
+          Estrategista Econômico do Produtor
+        </div>
+        <div class="analyst-spec">
+          Especialista em economia da fazenda e gestão de risco no agro<br>
+          Doutor em Agronomia (Economia Rural) · Mestre em Administração
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Rural IN — Gestão Inteligente com Tecnologia no Agro · Rio Verde – GO</span>
+      <a class="footer-url" href="https://ruralinai-commits.github.io/ruralin-site/">ruralinai-commits.github.io/ruralin-site</a>
+    </div>
+  </footer>
+
+</div><!-- /page -->
+</body>
+</html>
