@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Comercial — Confinamento com Preço Mínimo Garantido | Fazenda Toca da Onça</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde:       #1a4a2e;
+  --verde-m:     #2d6e47;
+  --verde-c:     #3d8c5a;
+  --verde-mint:  #e8f5ee;
+  --verde-suave: #c8e8d5;
+  --ouro:        #c8952a;
+  --ouro-c:      #f5e9d0;
+  --ouro-s:      #fdf6e8;
+  --carvao:      #141414;
+  --cinza-e:     #1c1c1c;
+  --cinza:       #4a4a4a;
+  --cinza-m:     #6b6b6b;
+  --cinza-c:     #f4f4f2;
+  --cinza-b:     #e0ddd6;
+  --vermelho:    #8b2e2e;
+  --branco:      #ffffff;
+  --ff-d: 'Playfair Display', Georgia, serif;
+  --ff-b: 'DM Sans', system-ui, sans-serif;
+  --ff-m: 'DM Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff-b);background:#f5f3ef;color:var(--cinza-e);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.page{max-width:920px;margin:0 auto;background:var(--branco);box-shadow:0 8px 60px rgba(0,0,0,.1)}
+
+/* HERO */
+.hero{background:var(--carvao);min-height:400px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hero-tx{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.018) 40px);pointer-events:none}
+.hero-g1{position:absolute;top:-100px;right:-80px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(200,149,42,.13) 0%,transparent 65%);pointer-events:none}
+.hero-g2{position:absolute;bottom:-60px;left:-40px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(26,74,46,.35) 0%,transparent 65%);pointer-events:none}
+.hero-top{display:flex;justify-content:space-between;align-items:center;padding:28px 52px 0;position:relative;z-index:2}
+.logo-w img{height:40px;filter:brightness(0) invert(1);opacity:.9}
+.hero-badge{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ouro);border:1px solid rgba(200,149,42,.35);background:rgba(200,149,42,.08);padding:6px 14px;border-radius:20px}
+.hero-body{flex:1;padding:40px 52px 52px;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-ey{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:14px}
+.hero-title{font-family:var(--ff-d);font-size:44px;font-weight:900;color:var(--branco);line-height:1.08;letter-spacing:-.02em;margin-bottom:18px}
+.hero-title em{font-style:normal;color:var(--ouro)}
+.hero-desc{font-size:14px;color:rgba(255,255,255,.52);max-width:540px;line-height:1.68;margin-bottom:36px}
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap}
+.hero-pill{font-size:11px;font-weight:500;color:rgba(255,255,255,.65);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;font-family:var(--ff-m)}
+
+/* TESE CENTRAL */
+.tese{background:var(--verde);padding:28px 52px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+.tese-icon{font-size:28px;margin-top:2px}
+.tese-text{font-size:14px;color:rgba(255,255,255,.8);line-height:1.68}
+.tese-text strong{color:var(--branco)}
+
+/* CONTEÚDO */
+.content{padding:0 52px}
+.section{padding:44px 0;border-bottom:1px solid var(--cinza-b)}
+.section:last-child{border-bottom:none}
+.sec-ey{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro);margin-bottom:8px;display:block}
+.sec-title{font-family:var(--ff-d);font-size:24px;font-weight:700;color:var(--verde);line-height:1.25;margin-bottom:8px}
+.sec-desc{font-size:13px;color:var(--cinza-m);line-height:1.65;max-width:640px;margin-bottom:28px}
+
+/* PARAMS */
+.param-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.param{background:var(--cinza-c);border:1px solid var(--cinza-b);border-radius:10px;padding:14px 16px}
+.param.g{background:var(--verde-mint);border-color:var(--verde-suave)}
+.param.o{background:var(--ouro-s);border-color:var(--ouro-c)}
+.param.dark{background:var(--verde);border-color:var(--verde)}
+.p-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cinza-m);margin-bottom:6px}
+.param.g .p-label{color:var(--verde-m)}
+.param.o .p-label{color:#8b6914}
+.param.dark .p-label{color:rgba(255,255,255,.45)}
+.p-value{font-size:18px;font-weight:600;color:var(--cinza-e);font-family:var(--ff-m);line-height:1.2}
+.param.g .p-value{color:var(--verde)}
+.param.o .p-value{color:#7a5200}
+.param.dark .p-value{color:var(--ouro)}
+.p-sub{font-size:11px;color:var(--cinza-m);margin-top:3px}
+.param.dark .p-sub{color:rgba(255,255,255,.4)}
+
+/* MECANISMO */
+.mec-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:24px}
+.mec-step{border:1px solid var(--cinza-b);border-radius:12px;padding:22px 20px;position:relative}
+.mec-step.central{background:var(--verde);border-color:var(--verde)}
+.mec-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ouro);margin-bottom:10px}
+.mec-step.central .mec-num{color:rgba(255,255,255,.5)}
+.mec-icon{font-size:26px;margin-bottom:10px;display:block}
+.mec-title{font-size:14px;font-weight:600;color:var(--cinza-e);margin-bottom:6px;line-height:1.3}
+.mec-step.central .mec-title{color:var(--branco)}
+.mec-desc{font-size:12px;color:var(--cinza-m);line-height:1.6}
+.mec-step.central .mec-desc{color:rgba(255,255,255,.6)}
+.mec-arrow{position:absolute;right:-14px;top:50%;transform:translateY(-50%);width:28px;height:28px;background:var(--ouro);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--branco);font-size:12px;font-weight:700;z-index:2}
+
+/* SPREAD BOX */
+.spread-box{background:linear-gradient(135deg,var(--verde) 0%,#0f3320 100%);border-radius:14px;padding:32px 36px;margin-bottom:24px;position:relative;overflow:hidden}
+.spread-box::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(200,149,42,.15) 0%,transparent 65%);pointer-events:none}
+.spread-ey{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro);margin-bottom:12px}
+.spread-title{font-family:var(--ff-d);font-size:22px;font-weight:700;color:var(--branco);margin-bottom:14px;line-height:1.25}
+.spread-calc{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:16px}
+.sc-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px;text-align:center}
+.sc-item.result{background:rgba(200,149,42,.15);border-color:rgba(200,149,42,.3)}
+.sc-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:6px}
+.sc-val{font-family:var(--ff-m);font-size:20px;font-weight:600;color:var(--branco)}
+.sc-item.result .sc-val{color:var(--ouro)}
+.sc-op{font-size:20px;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;padding-top:8px}
+.spread-desc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.65;max-width:580px}
+.spread-desc strong{color:var(--branco)}
+
+/* DRE CONFINAMENTO */
+.dre-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.dre-card{border:1px solid var(--cinza-b);border-radius:12px;overflow:hidden}
+.dre-card.best{border-color:var(--verde);box-shadow:0 0 0 3px var(--verde-mint)}
+.dre-head{padding:16px 20px;background:var(--cinza-c);border-bottom:1px solid var(--cinza-b);display:flex;justify-content:space-between;align-items:center}
+.dre-card.best .dre-head{background:var(--verde)}
+.dre-head-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cinza-m)}
+.dre-card.best .dre-head-label{color:rgba(255,255,255,.5)}
+.dre-head-name{font-size:14px;font-weight:600;color:var(--cinza-e)}
+.dre-card.best .dre-head-name{color:var(--branco)}
+.best-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--ouro);color:var(--branco);padding:3px 10px;border-radius:10px}
+.dre-body{padding:20px}
+.dre-kpi{background:var(--cinza-c);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.dre-card.best .dre-kpi{background:var(--verde-mint)}
+.dre-kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--cinza-m)}
+.dre-kpi-val{font-family:var(--ff-m);font-size:22px;font-weight:600;color:var(--verde)}
+.dre-kpi-sub{font-size:11px;color:var(--cinza-m);text-align:right;margin-top:2px}
+.dre-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:14px}
+.dre-table th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cinza-m);padding:0 0 8px;border-bottom:1px solid var(--cinza-b);text-align:left}
+.dre-table th:last-child,.dre-table td:last-child{text-align:right}
+.dre-table td{padding:5px 0;color:var(--cinza-e);vertical-align:top;line-height:1.5}
+.dre-table td:last-child{font-family:var(--ff-m);font-size:12px;white-space:nowrap}
+.dre-table tr.sub td{color:var(--cinza-m);padding-left:12px;font-size:12px}
+.dre-table tr.subtot td{border-top:1px solid var(--cinza-b);padding-top:8px;font-weight:600}
+.dre-table tr.tot td{border-top:2px solid var(--cinza-e);padding-top:10px;font-size:14px;font-weight:600}
+.dre-table tr.mg td{font-size:12px;color:var(--cinza-m);padding-bottom:2px}
+.pos{color:#0d5a2f!important;font-weight:600!important}
+.neg{color:#8b2e2e!important}
+.gol{color:#7a5200!important;font-weight:600!important}
+
+/* TABELAS */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl thead tr{background:var(--carvao);color:var(--branco)}
+.tbl th{padding:12px 16px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;text-align:left}
+.tbl td{padding:10px 16px;border-bottom:1px solid var(--cinza-b);vertical-align:middle}
+.tbl td:not(:first-child){font-family:var(--ff-m);font-size:12.5px}
+.tbl tbody tr:hover{background:var(--cinza-c)}
+.tr-ref{background:var(--verde-mint)!important;font-weight:500}
+.tr-piso{background:var(--ouro-s)!important}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.g-txt{color:#0d5a2f;font-weight:600}
+.r-txt{color:#8b2e2e;font-weight:600}
+.o-txt{color:#7a5200;font-weight:600}
+
+/* COMPARATIVO 3 MODELOS */
+.comp3{background:var(--cinza-c);border:1px solid var(--cinza-b);border-radius:12px;padding:24px;margin-bottom:20px}
+.comp3-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--cinza-m);margin-bottom:16px}
+.comp3-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--cinza-b);font-size:13px}
+.comp3-row:last-child{border-bottom:none}
+.comp3-row.winner{background:var(--verde-mint);border-radius:8px;padding:12px 16px;margin:4px -16px}
+.comp3-label{color:var(--cinza)}
+.comp3-row.winner .comp3-label{font-weight:600;color:var(--verde)}
+.comp3-val{font-family:var(--ff-m);font-size:13px;text-align:right;white-space:nowrap}
+.comp3-at{font-family:var(--ff-m);font-size:12px;color:var(--cinza-m);text-align:right}
+.comp3-badge{font-size:9px;font-weight:700;text-transform:uppercase;background:var(--verde);color:var(--branco);padding:2px 8px;border-radius:8px}
+
+/* RECOMENDAÇÃO */
+.rec{background:var(--verde);border-radius:16px;padding:40px 44px;position:relative;overflow:hidden}
+.rec::before{content:'';position:absolute;top:-80px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(200,149,42,.14) 0%,transparent 65%);pointer-events:none}
+.rec-ey{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro);margin-bottom:12px}
+.rec-title{font-family:var(--ff-d);font-size:28px;font-weight:700;color:var(--branco);line-height:1.2;margin-bottom:16px}
+.rec-text{font-size:14px;color:rgba(255,255,255,.72);line-height:1.72;max-width:640px;margin-bottom:28px}
+.rec-text strong{color:var(--branco);font-weight:600}
+.rec-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.rec-kpi{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px 16px}
+.rk-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px}
+.rk-val{font-family:var(--ff-m);font-size:17px;font-weight:600;color:var(--branco)}
+.rk-val.o{color:var(--ouro)}
+.rk-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* DISCLAIMER */
+.disc{background:var(--cinza-c);border-left:3px solid var(--cinza-b);border-radius:0 8px 8px 0;padding:14px 18px;font-size:11px;color:var(--cinza-m);line-height:1.6;margin-top:20px}
+.disc strong{color:var(--cinza)}
+
+/* FOOTER */
+.footer{background:var(--carvao);padding:44px 52px 32px}
+.ft-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:22px}
+.ft-logo img{height:34px;filter:brightness(0) invert(1);opacity:.8;margin-bottom:12px}
+.ft-tag{font-size:12px;color:rgba(255,255,255,.38);line-height:1.65;font-style:italic}
+.ft-ey{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ouro);margin-bottom:10px}
+.ft-name{font-family:var(--ff-d);font-size:21px;font-weight:600;color:var(--branco);margin-bottom:2px}
+.ft-title{font-size:12px;color:rgba(255,255,255,.5);line-height:1.55}
+.ft-spec{font-size:11px;color:rgba(255,255,255,.3);margin-top:6px;font-style:italic;line-height:1.5}
+.contacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cp{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,.5);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:5px 12px;text-decoration:none}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,.2)}
+.ft-url{color:rgba(255,255,255,.3);text-decoration:none;font-family:var(--ff-m);font-size:11px}
+
+@media(max-width:700px){
+  .hero-top,.hero-body,.content,.footer,.tese{padding-left:20px;padding-right:20px}
+  .hero-title{font-size:28px}
+  .param-grid,.mec-grid,.dre-grid,.rec-kpis,.comp3-row,.ft-grid{grid-template-columns:1fr}
+  .spread-calc{grid-template-columns:1fr 1fr}
+  .tbl th,.tbl td{padding:8px 10px;font-size:11px}
+  .mec-arrow{display:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tx"></div><div class="hero-g1"></div><div class="hero-g2"></div>
+  <div class="hero-top">
+    <div class="logo-w"><img src="https://ruralinai-commits.github.io/ruralin-site/img/logo.png" alt="Rural IN"></div>
+    <div class="hero-badge">&#9670; Estratégia Comercial &amp; Financeira · Confidencial</div>
+  </div>
+  <div class="hero-body">
+    <div class="hero-ey">Fazenda Toca da Onça · Aporé — GO · Para: Rogério Teles · 11/06/2026</div>
+    <h1 class="hero-title">O Confinamento que<br><em>Garante o Preço</em><br>do seu Boi</h1>
+    <p class="hero-desc">Como transformar a estrutura de engorda em um produto financeiro diferenciado — atraindo pecuaristas sem pasto com preço mínimo garantido, enquanto o confinamento captura margem adicional via B3.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">90 bois · lote piloto</span>
+      <span class="hero-pill">BGI Q26 · R$ 343,00/@</span>
+      <span class="hero-pill">Put Seca · R$ 7,83/@</span>
+      <span class="hero-pill">Piso ofertado: R$ 315,00/@</span>
+      <span class="hero-pill">Spread capturado: R$ 12,17/@</span>
+    </div>
+  </div>
+</header>
+
+<!-- TESE -->
+<div class="tese">
+  <div class="tese-icon">🎯</div>
+  <div class="tese-text">
+    <strong>A tese central:</strong> o confinamento compra uma put na B3 com breakeven real em R$ 327,17/@ e oferece ao pecuarista um piso de R$ 315,00/@. A diferença de R$ 12,17/@ é o spread capturado pela Toca da Onça — <strong>margem extra de R$ 20.080 por lote, sem custo algum para o cliente, e com proteção total para o pecuarista.</strong>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- 01 PARÂMETROS -->
+  <section class="section">
+    <span class="sec-ey">01 — Base da Operação</span>
+    <h2 class="sec-title">Parâmetros do Lote Piloto</h2>
+    <p class="sec-desc">O boi é do cliente — o confinamento não compra nem vende o animal. Sua receita vem exclusivamente do serviço de engorda medido em arrobas produzidas, mais o spread da operação financeira estruturada na B3.</p>
+    <div class="param-grid">
+      <div class="param">
+        <div class="p-label">Animais</div>
+        <div class="p-value">90 cabs.</div>
+        <div class="p-sub">Boi do pecuarista · sem compra</div>
+      </div>
+      <div class="param">
+        <div class="p-label">@ entrada → saída</div>
+        <div class="p-value">13 → 19 @</div>
+        <div class="p-sub">+6 @/cab produzidas · 70–80 dias</div>
+      </div>
+      <div class="param">
+        <div class="p-label">Total @ saída</div>
+        <div class="p-value">1.710 @</div>
+        <div class="p-sub">19 @/cab × 90 cabs</div>
+      </div>
+      <div class="param">
+        <div class="p-label">@ produzidas lote</div>
+        <div class="p-value">540 @</div>
+        <div class="p-sub">6 @/cab × 90 cabs</div>
+      </div>
+      <div class="param g">
+        <div class="p-label">Receita serviço engorda</div>
+        <div class="p-value">R$ 135.000</div>
+        <div class="p-sub">540 @ × R$ 250/@ produzida</div>
+      </div>
+      <div class="param">
+        <div class="p-label">BGI Q26 (ago/2026)</div>
+        <div class="p-value">R$ 343,00/@</div>
+        <div class="p-sub">Fechamento 11/06/2026 · B3</div>
+      </div>
+      <div class="param o">
+        <div class="p-label">Put Seca · Strike · Prêmio</div>
+        <div class="p-value">R$ 335 · R$ 7,83</div>
+        <div class="p-sub">BE R$ 327,17/@ · venc. 31/08/2026</div>
+      </div>
+      <div class="param dark">
+        <div class="p-label">Piso ofertado ao cliente</div>
+        <div class="p-value">R$ 315,00/@</div>
+        <div class="p-sub">Spread capturado: R$ 12,17/@</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 MECANISMO -->
+  <section class="section">
+    <span class="sec-ey">02 — O Mecanismo</span>
+    <h2 class="sec-title">Como a Operação Funciona na Prática</h2>
+    <p class="sec-desc">Três movimentos simultâneos que criam valor para o confinamento e segurança para o pecuarista — sem que o cliente precise desembolsar nada além da diária de engorda.</p>
+
+    <div class="mec-grid">
+      <div class="mec-step">
+        <div class="mec-arrow">→</div>
+        <div class="mec-num">Passo 1 · Confinamento</div>
+        <span class="mec-icon">🏦</span>
+        <div class="mec-title">Compra a Put na B3</div>
+        <div class="mec-desc">5 contratos BGI Q26 · Strike R$ 335/@ · Prêmio R$ 7,83/@ · Total R$ 12.920. A put garante que, se o boi cair abaixo de R$ 335, o confinamento recebe a diferença da B3. Breakeven real: <strong>R$ 327,17/@.</strong></div>
+      </div>
+      <div class="mec-step central">
+        <div class="mec-arrow">→</div>
+        <div class="mec-num">Passo 2 · Proposta Comercial</div>
+        <span class="mec-icon">🤝</span>
+        <div class="mec-title">Oferece R$ 315/@ de piso ao pecuarista</div>
+        <div class="mec-desc">O cliente não paga nada extra. Só paga R$ 250/@ produzida como sempre. Em troca, o confinamento garante que, se o boi gordo cair abaixo de R$ 315/@, completa a diferença. O spread R$ 12,17/@ entre o piso real e o piso ofertado é a <strong>margem extra do confinamento.</strong></div>
+      </div>
+      <div class="mec-step">
+        <div class="mec-num">Passo 3 · Resultado</div>
+        <span class="mec-icon">📈</span>
+        <div class="mec-title">Captura margem · protege o cliente</div>
+        <div class="mec-desc">Se o boi cair: a put da B3 paga mais do que o confinamento deve ao cliente — margem do confinamento <strong>aumenta em queda.</strong> Se o boi subir: o cliente captura toda a alta, o confinamento fica com a margem de serviço + spread capturado.</div>
+      </div>
+    </div>
+
+    <!-- SPREAD BOX -->
+    <div class="spread-box">
+      <div class="spread-ey">&#9670; O coração da operação — captura de spread</div>
+      <div class="spread-title">De onde vem a margem extra do confinamento</div>
+      <div class="spread-calc">
+        <div class="sc-item">
+          <div class="sc-label">Piso real (BE put)</div>
+          <div class="sc-val">R$ 327,17</div>
+        </div>
+        <div class="sc-op">−</div>
+        <div class="sc-item">
+          <div class="sc-label">Piso ofertado cliente</div>
+          <div class="sc-val">R$ 315,00</div>
+        </div>
+        <div class="sc-item result">
+          <div class="sc-label">Spread capturado</div>
+          <div class="sc-val">R$ 12,17/@</div>
+        </div>
+      </div>
+      <div class="spread-desc">
+        <strong>R$ 12,17/@ × 1.650 @ cobertas = R$ 20.080,50 de margem extra por lote.</strong> Esse valor já está embutido na put — o confinamento não precisa de nenhum recurso adicional. É a diferença entre o que a B3 garante e o que o confinamento prometeu ao cliente.
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 DRE -->
+  <section class="section">
+    <span class="sec-ey">03 — Resultado Financeiro</span>
+    <h2 class="sec-title">DRE do Confinamento — Modelo C vs. Alternativas</h2>
+    <p class="sec-desc">O Modelo C supera todas as alternativas: ganha mais que oferecer o piso pelo breakeven (Modelo A) e mais que repassar o custo ao cliente (Modelo B), ao mesmo tempo que entrega uma proposta irrecusável ao mercado.</p>
+
+    <div class="dre-grid">
+      <!-- MODELO A -->
+      <div class="dre-card">
+        <div class="dre-head">
+          <div>
+            <div class="dre-head-label">Modelo A</div>
+            <div class="dre-head-name">Absorve a put · piso = BE</div>
+          </div>
+        </div>
+        <div class="dre-body">
+          <div class="dre-kpi">
+            <div>
+              <div class="dre-kpi-label">Margem confinamento</div>
+              <div class="dre-kpi-val" style="color:var(--cinza-m);">R$ 122.080</div>
+            </div>
+            <div class="dre-kpi-sub">R$ 226,07/@prod</div>
+          </div>
+          <table class="dre-table">
+            <thead><tr><th>Item</th><th>R$</th></tr></thead>
+            <tbody>
+              <tr><td>Receita serviço engorda</td><td>135.000</td></tr>
+              <tr class="sub"><td>(−) Prêmio put absorvido</td><td class="neg">(12.920)</td></tr>
+              <tr class="sub"><td>(+) Spread ofertado ao cliente</td><td class="neg">R$ 0</td></tr>
+              <tr class="tot"><td><strong>Margem líquida</strong></td><td style="color:var(--cinza-m);">122.080</td></tr>
+              <tr class="mg"><td>Por @ produzida</td><td>R$ 226,07</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:12px;color:var(--cinza-m);background:var(--cinza-c);border-radius:6px;padding:10px 12px;line-height:1.5;">
+            Oferece piso ao preço exato do breakeven (R$ 327,17/@). Menor margem das três opções. O cliente recebe proteção completa, mas o confinamento não captura spread.
+          </div>
+        </div>
+      </div>
+
+      <!-- MODELO C -->
+      <div class="dre-card best">
+        <div class="dre-head">
+          <div>
+            <div class="dre-head-label">Modelo C · Recomendado</div>
+            <div class="dre-head-name">Spread capturado · piso R$ 315</div>
+          </div>
+          <span class="best-badge">&#9670; Mais rentável</span>
+        </div>
+        <div class="dre-body">
+          <div class="dre-kpi">
+            <div>
+              <div class="dre-kpi-label">Margem confinamento</div>
+              <div class="dre-kpi-val">R$ 142.161</div>
+            </div>
+            <div class="dre-kpi-sub" style="color:var(--verde);">R$ 263,26/@prod</div>
+          </div>
+          <table class="dre-table">
+            <thead><tr><th>Item</th><th>R$</th></tr></thead>
+            <tbody>
+              <tr><td>Receita serviço engorda</td><td>135.000</td></tr>
+              <tr class="sub"><td>(−) Prêmio put (custo B3)</td><td class="neg">(12.920)</td></tr>
+              <tr class="sub"><td>(+) Spread capturado</td><td class="pos">+ 20.081</td></tr>
+              <tr class="subtot"><td>Margem operacional</td><td>142.161</td></tr>
+              <tr class="tot"><td><strong>Margem líquida</strong></td><td class="pos">142.161</td></tr>
+              <tr class="mg"><td>Por @ produzida</td><td class="pos">R$ 263,26</td></tr>
+              <tr class="mg"><td>Ganho extra vs. Modelo B</td><td class="pos">+ R$ 7.161</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:12px;color:var(--verde);background:var(--verde-mint);border-radius:6px;padding:10px 12px;line-height:1.5;border:1px solid var(--verde-suave);">
+            Oferece piso real e atrativo ao cliente (R$ 315/@), captura spread de R$ 12,17/@ e ainda gera mais margem que qualquer outra alternativa. Marketing poderoso + maior rentabilidade.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARATIVO 3 MODELOS -->
+    <div class="comp3">
+      <div class="comp3-title">Comparativo de margem · 3 modelos</div>
+      <div class="comp3-row">
+        <span class="comp3-label">Modelo A — Absorve put, oferece piso = BE (R$ 327,17)</span>
+        <span class="comp3-val" style="color:var(--cinza-m);">R$ 122.080</span>
+        <span class="comp3-at">R$ 226,07/@</span>
+        <span></span>
+      </div>
+      <div class="comp3-row">
+        <span class="comp3-label">Modelo B — Repassa put ao cliente, sem piso próprio</span>
+        <span class="comp3-val">R$ 135.000</span>
+        <span class="comp3-at">R$ 250,00/@</span>
+        <span></span>
+      </div>
+      <div class="comp3-row winner">
+        <span class="comp3-label">Modelo C — Spread capturado · piso ofertado R$ 315/@</span>
+        <span class="comp3-val" style="color:var(--verde);">R$ 142.161</span>
+        <span class="comp3-at" style="color:var(--verde);">R$ 263,26/@</span>
+        <span class="comp3-badge">Melhor</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CENÁRIOS -->
+  <section class="section">
+    <span class="sec-ey">04 — Sensibilidade de Mercado</span>
+    <h2 class="sec-title">Resultado em Cada Cenário de Preço</h2>
+    <p class="sec-desc">O efeito mais surpreendente do Modelo C: quanto mais o boi cai, maior a margem do confinamento — pois a put da B3 paga mais do que o confinamento deve ao cliente. A Toca da Onça está protegida em qualquer direção.</p>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--cinza-m);margin-bottom:12px;">Perspectiva do confinamento (Modelo C)</div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Cenário</th>
+            <th>Físico (R$/@)</th>
+            <th>Rec. serviço</th>
+            <th>Resultado put B3</th>
+            <th>Pgto. ao cliente</th>
+            <th>Margem conf.</th>
+            <th>R$/@prod</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="dot" style="background:#c0392b"></span>Queda forte</td><td>R$ 290</td><td>135.000</td><td class="g-txt">+61.330</td><td class="r-txt">(42.750)</td><td class="g-txt">153.580</td><td class="g-txt">284,41</td></tr>
+          <tr><td><span class="dot" style="background:#c0392b"></span>Queda moderada</td><td>R$ 300</td><td>135.000</td><td class="g-txt">+44.830</td><td class="r-txt">(25.650)</td><td class="g-txt">154.180</td><td class="g-txt">285,52</td></tr>
+          <tr><td><span class="dot" style="background:#e67e22"></span>Queda leve</td><td>R$ 310</td><td>135.000</td><td class="g-txt">+28.330</td><td class="r-txt">(8.550)</td><td class="g-txt">154.780</td><td class="g-txt">286,63</td></tr>
+          <tr class="tr-piso"><td><span class="dot" style="background:#c8952a"></span>Piso ofertado ◆</td><td>R$ 315</td><td>135.000</td><td class="g-txt">+20.081</td><td>0</td><td class="g-txt">155.081</td><td class="g-txt">287,19</td></tr>
+          <tr class="tr-ref"><td><span class="dot" style="background:#2d6e47"></span>Cenário base ★</td><td>R$ 322</td><td>135.000</td><td class="g-txt">+8.531</td><td>0</td><td class="g-txt">143.531</td><td class="g-txt">265,80</td></tr>
+          <tr><td><span class="dot" style="background:#2d6e47"></span>Breakeven put</td><td>R$ 327,17</td><td>135.000</td><td>0</td><td>0</td><td>135.000</td><td>250,00</td></tr>
+          <tr><td><span class="dot" style="background:#1a4a2e"></span>Strike put</td><td>R$ 335</td><td>135.000</td><td class="neg">(12.920)</td><td>0</td><td>122.080</td><td>226,07</td></tr>
+          <tr><td><span class="dot" style="background:#1a4a2e"></span>BGI Q26 atual</td><td>R$ 343</td><td>135.000</td><td class="neg">(12.920)</td><td>0</td><td>122.080</td><td>226,07</td></tr>
+          <tr><td><span class="dot" style="background:#1a4a2e"></span>Alta expressiva</td><td>R$ 380</td><td>135.000</td><td class="neg">(12.920)</td><td>0</td><td>122.080</td><td>226,07</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--cinza-m);margin-bottom:12px;">Perspectiva do cliente pecuarista (piso garantido R$ 315/@)</div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Cenário</th>
+            <th>Físico (R$/@)</th>
+            <th>Preço efetivo recebido</th>
+            <th>Receita total cliente</th>
+            <th>(-) Serviço engorda</th>
+            <th>Resultado líquido</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="dot" style="background:#c0392b"></span>Queda forte</td><td>R$ 290</td><td class="o-txt">R$ 315,00 ←piso</td><td>538.650</td><td>(135.000)</td><td class="g-txt">403.650</td></tr>
+          <tr><td><span class="dot" style="background:#c0392b"></span>Queda moderada</td><td>R$ 300</td><td class="o-txt">R$ 315,00 ←piso</td><td>538.650</td><td>(135.000)</td><td class="g-txt">403.650</td></tr>
+          <tr class="tr-piso"><td><span class="dot" style="background:#c8952a"></span>Piso exato ◆</td><td>R$ 315</td><td class="o-txt">R$ 315,00 ←piso</td><td>538.650</td><td>(135.000)</td><td class="g-txt">403.650</td></tr>
+          <tr class="tr-ref"><td><span class="dot" style="background:#2d6e47"></span>Cenário base ★</td><td>R$ 322</td><td>R$ 322,00</td><td>550.620</td><td>(135.000)</td><td class="g-txt">415.620</td></tr>
+          <tr><td><span class="dot" style="background:#2d6e47"></span>BGI Q26 atual</td><td>R$ 343</td><td>R$ 343,00</td><td>586.530</td><td>(135.000)</td><td class="g-txt">451.530</td></tr>
+          <tr><td><span class="dot" style="background:#1a4a2e"></span>Alta moderada</td><td>R$ 360</td><td>R$ 360,00</td><td>615.600</td><td>(135.000)</td><td class="g-txt">480.600</td></tr>
+          <tr><td><span class="dot" style="background:#1a4a2e"></span>Alta expressiva</td><td>R$ 380</td><td>R$ 380,00</td><td>649.800</td><td>(135.000)</td><td class="g-txt">514.800</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="disc">
+      <strong>Leitura-chave:</strong> o pecuarista nunca recebe menos que R$ 315/@ — mas captura toda a alta acima desse nível sem pagar nada extra. Para o confinamento, quanto mais o boi cai, maior é a margem (a put paga mais do que o compromisso com o cliente). Em alta, a margem se estabiliza em R$ 122.080 — ainda assim 90% da margem de serviço base.
+    </div>
+  </section>
+
+  <!-- 05 RECOMENDAÇÃO -->
+  <section class="section" style="border-bottom:none;">
+    <span class="sec-ey">05 — Recomendação Rural IN</span>
+    <h2 class="sec-title">Posicionamento Estratégico</h2>
+
+    <div class="rec">
+      <div class="rec-ey">&#9670; Estratégia recomendada para a Toca da Onça</div>
+      <div class="rec-title">Modelo C — Spread Capturado<br>Piso ofertado R$ 315/@, prêmio absorvido</div>
+      <p class="rec-text">
+        Esta é a estratégia mais inteligente porque faz três coisas ao mesmo tempo: <strong>cria um produto comercial irresistível</strong> para pecuaristas sem pasto, <strong>preserva e amplia a margem do confinamento</strong> para R$ 263,26/@ produzida, e <strong>elimina o risco de queda do boi</strong> — já que a put da B3 paga mais do que o confinamento deve ao cliente em qualquer cenário de baixa. O pecuarista recebe uma proposta que não existe em nenhum outro confinamento da região: pago minha diária, tenho preço mínimo garantido e ainda capturo a alta se o mercado subir. O custo total dessa operação para a Toca da Onça é o prêmio de <strong>R$ 12.920</strong> — que é recuperado integralmente pelo spread capturado de <strong>R$ 20.080</strong>, gerando ganho líquido de <strong>R$ 7.161</strong> em relação ao modelo sem hedge. Rogério, o Modelo C não é um custo. É um investimento de R$ 12.920 que retorna R$ 20.080 e ainda traz o pecuarista para dentro do confinamento.
+      </p>
+      <div class="rec-kpis">
+        <div class="rec-kpi">
+          <div class="rk-label">Margem do confinamento</div>
+          <div class="rk-val">R$ 142.161</div>
+          <div class="rk-sub">R$ 263,26/@ produzida</div>
+        </div>
+        <div class="rec-kpi">
+          <div class="rk-label">Spread capturado</div>
+          <div class="rk-val o">R$ 20.081</div>
+          <div class="rk-sub">R$ 12,17/@ × 1.650 @</div>
+        </div>
+        <div class="rec-kpi">
+          <div class="rk-label">Piso ofertado cliente</div>
+          <div class="rk-val o">R$ 315,00/@</div>
+          <div class="rk-sub">sem custo ao pecuarista</div>
+        </div>
+        <div class="rec-kpi">
+          <div class="rk-label">Custo do seguro</div>
+          <div class="rk-val">R$ 12.920</div>
+          <div class="rk-sub">retorna R$ 20.081 em spread</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc" style="margin-top:20px;">
+      <strong>Base de cálculo:</strong> BGI Q26 fechamento 11/06/2026 R$ 343,00/@; B Put Seca Strike R$ 335 · prêmio R$ 7,83/@ · vencimento 31/08/2026; 5 contratos × 330 @ = 1.650 @ cobertas (96,5% do lote de 1.710 @). Piso ofertado ao cliente R$ 315,00/@ — spread de R$ 12,17/@ em relação ao breakeven real da put (R$ 327,17/@). A Rural IN recomenda formalizar o modelo comercial em contrato antes de ofertar ao mercado, especificando claramente o piso garantido, o prazo e as condições de liquidação.
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo"><img src="https://ruralinai-commits.github.io/ruralin-site/img/logo.png" alt="Rural IN"></div>
+      <p class="ft-tag">"Transformamos dados da fazenda em decisões econômicas.<br>Ajudamos produtores a entender se o mercado sustenta seu negócio."</p>
+      <div class="contacts">
+        <a class="cp" href="https://ruralinai-commits.github.io/ruralin-site/">&#127760; ruralin.ai</a>
+        <a class="cp" href="https://instagram.com/ruralin.ai">&#9825; @ruralin.ai</a>
+        <a class="cp" href="mailto:sidneyagro@gmail.com">&#9993; sidneyagro@gmail.com</a>
+        <a class="cp" href="tel:+5564992266886">&#9742; (64) 9 9226-6886</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-ey">&#9670; Análise e construção</div>
+      <div class="ft-name">Dr. Sidney Souza</div>
+      <div class="ft-title">Economista e Administrador Agrícola<br>Estrategista Econômico do Produtor</div>
+      <div class="ft-spec">Especialista em economia da fazenda e gestão de risco no agro<br>Doutor em Agronomia (Economia Rural) · Mestre em Administração</div>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span>© 2026 Rural IN — Gestão Inteligente com Tecnologia no Agro · Rio Verde – GO</span>
+    <a class="ft-url" href="https://ruralinai-commits.github.io/ruralin-site/">ruralinai-commits.github.io/ruralin-site</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
