@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Econômico-Financeiro — Fazenda Toca da Onça · Aporé/GO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+ --pine:#13351E; --pine2:#1F4E2C; --pine3:#2E7D46;
+ --gold:#C9A227; --gold2:#E3C463; --clay:#B5482E; --clay2:#D46A4C;
+ --bone:#F6F3EA; --bone2:#ECE6D6; --ink:#22241E; --muted:#6E6B5E;
+ --good:#2E7D46; --warn:#D8A21A; --bad:#B5482E; --exc:#1F6F3D;
+ --line:rgba(19,53,30,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--bone);line-height:1.55;-webkit-font-smoothing:antialiased}
+.mono{font-family:'Spline Sans Mono',monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding:0 26px}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:900;line-height:1.05;letter-spacing:-.01em}
+section{padding:74px 0;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--gold)}
+.lead{font-size:1.06rem;color:var(--muted);max-width:70ch;margin-top:14px}
+.sec-title{font-size:clamp(1.7rem,3.4vw,2.5rem);color:var(--pine)}
+
+/* TAB NAV */
+.topnav{position:sticky;top:0;z-index:50;background:rgba(13,33,20,.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(201,162,39,.3)}
+.topnav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.topnav .bn{font-family:'Fraunces',serif;font-weight:900;color:#fff;font-size:1.1rem}
+.topnav .bn span{color:var(--gold)}
+.tabs{display:flex;gap:6px}
+.tabbtn{font-family:'Spline Sans Mono',monospace;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:#bcd3c2;background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:600;transition:.2s}
+.tabbtn:hover{color:#fff}
+.tabbtn.active{color:var(--pine);background:var(--gold)}
+.page{display:none}.page.active{display:block}
+
+/* HERO */
+.hero{background:radial-gradient(1200px 600px at 78% -10%,#1c4a2b 0%,var(--pine) 46%,#0d2616 100%);color:var(--bone);position:relative;overflow:hidden;border-bottom:4px solid var(--gold)}
+.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(700px 500px at 80% 0%,#000 0%,transparent 75%)}
+.hero .wrap{position:relative;z-index:2;padding-top:54px;padding-bottom:54px}
+.brandrow{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:42px}
+.brand{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;letter-spacing:.02em}
+.brand span{color:var(--gold)}
+.brand small{display:block;font-family:'Spline Sans Mono',monospace;font-weight:500;font-size:.62rem;letter-spacing:.2em;color:#9fc1a8;text-transform:uppercase;margin-top:2px}
+.tag{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#bfe0c6;border:1px solid rgba(255,255,255,.2);padding:7px 12px;border-radius:999px}
+.hero h1{font-size:clamp(2.2rem,5.4vw,4rem);max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--gold2)}
+.hero .sub{margin-top:18px;font-size:1.1rem;color:#cfe3d4;max-width:60ch}
+.client{margin-top:30px;display:inline-flex;align-items:center;gap:14px;background:rgba(0,0,0,.22);border:1px solid rgba(201,162,39,.4);padding:14px 20px;border-radius:12px;flex-wrap:wrap}
+.client b{font-family:'Fraunces',serif;font-size:1.2rem;color:#fff}
+.client small{color:#9fc1a8;font-family:'Spline Sans Mono',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;display:block}
+.client .gest{color:#cfe3d4;font-size:.86rem}
+.client .sep{width:1px;height:34px;background:rgba(255,255,255,.18)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px}
+.kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 18px;backdrop-filter:blur(4px)}
+.kpi .v{font-family:'Fraunces',serif;font-weight:900;font-size:1.95rem;color:#fff}
+.kpi .v.gold{color:var(--gold2)} .kpi .v.clay{color:var(--clay2)}
+.kpi .l{font-size:.78rem;color:#bcd3c2;margin-top:4px;line-height:1.3}
+.ticker{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
+.tk{display:flex;align-items:center;gap:9px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.1);padding:9px 13px;border-radius:10px;font-family:'Spline Sans Mono',monospace;font-size:.82rem}
+.tk .nm{color:#9fc1a8;font-size:.72rem;letter-spacing:.08em}
+.tk .pr{color:#fff;font-weight:600}
+.up{color:#7BD389} .down{color:#E89B7F}
+
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 1px 0 rgba(19,53,30,.04)}
+.card h3{font-size:1.15rem;color:var(--pine);margin-bottom:6px}
+.note{font-size:.86rem;color:var(--muted);margin-top:10px}
+.chartbox{position:relative;height:300px}
+.chartbox.sm{height:230px}.chartbox.tall{height:360px}
+
+.gaugewrap{display:flex;flex-direction:column;align-items:center;text-align:center}
+.gnum{font-family:'Fraunces',serif;font-weight:900;font-size:3.2rem;line-height:1;margin-top:-6px}
+.gband{font-family:'Spline Sans Mono',monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:999px;margin-top:10px;font-weight:600}
+.subgauges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+.sg{background:var(--bone);border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center}
+.sg .t{font-size:.72rem;color:var(--muted);height:30px;display:flex;align-items:center;justify-content:center}
+.bar{height:8px;border-radius:6px;background:var(--bone2);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;border-radius:6px;transition:width 1s ease}
+.sg .pv{font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:.95rem;margin-top:7px}
+
+.thermos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.thermo{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 18px;display:flex;gap:16px;align-items:center}
+.tube{width:34px;height:150px;position:relative;flex:none}
+.tube .glass{position:absolute;left:9px;top:0;width:16px;height:128px;background:var(--bone2);border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.tube .fill{position:absolute;bottom:0;left:0;width:100%;border-radius:10px;transition:height 1.1s ease}
+.tube .bulb{position:absolute;bottom:0;left:3px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line)}
+.thermo .info .lab{font-size:.74rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.thermo .info .big{font-family:'Fraunces',serif;font-weight:900;font-size:1.7rem;color:var(--pine);line-height:1.1;margin-top:2px}
+.thermo .info .delta{font-family:'Spline Sans Mono',monospace;font-size:.82rem;font-weight:600;margin-top:3px}
+.thermo .info .cmt{font-size:.78rem;color:var(--muted);margin-top:7px;max-width:24ch}
+
+.indgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.ind{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--pine3);border-radius:12px;padding:14px 16px}
+.ind .nm{font-weight:600;font-size:.92rem}
+.ind .ds{font-size:.78rem;color:var(--muted);margin-top:2px;max-width:34ch}
+.ind .rt{text-align:right;flex:none}
+.ind .val{font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:1.05rem}
+.pill{display:inline-block;font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:999px;font-weight:600;margin-top:5px}
+
+.split3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.flag{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;border-top:4px solid var(--pine3)}
+.flag.good{border-top-color:var(--good)} .flag.warn{border-top-color:var(--warn)} .flag.bad{border-top-color:var(--clay)}
+.flag .ic{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.flag h4{font-family:'Fraunces',serif;font-size:1.22rem;color:var(--pine);margin:6px 0 4px}
+.flag p{font-size:.88rem;color:#3c3f36}
+.flag .mk{font-family:'Spline Sans Mono',monospace;font-weight:600;font-size:.84rem;margin-top:10px;color:var(--pine2)}
+
+.tech{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.levelrow{display:flex;justify-content:space-between;font-family:'Spline Sans Mono',monospace;font-size:.84rem;padding:8px 0;border-bottom:1px dashed var(--line)}
+.levelrow b{color:var(--pine)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;font-weight:600;padding:5px 11px;border-radius:999px;letter-spacing:.06em}
+.b-bull{background:rgba(46,125,70,.13);color:var(--pine2)} .b-bear{background:rgba(181,72,46,.14);color:var(--clay)}
+
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.col90{background:linear-gradient(180deg,#fff,#fbf9f2);border:1px solid var(--line);border-radius:16px;padding:24px}
+.col90 h3{display:flex;align-items:baseline;gap:10px}
+.col90 h3 small{font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--gold);letter-spacing:.12em}
+.todo{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.todo:last-child{border-bottom:0}
+.todo .n{font-family:'Fraunces',serif;font-weight:900;color:var(--gold);font-size:1.1rem;flex:none;width:22px}
+
+.alert{background:#FBF1D6;border:1px solid rgba(201,162,39,.5);border-left:6px solid var(--gold);border-radius:12px;padding:18px 20px;margin-top:24px;font-size:.92rem;color:#5b4a12}
+.alert b{color:#7a5e09}
+
+/* PAGE 2 specifics */
+.p2hero{background:linear-gradient(120deg,var(--pine) 0%,#17402480 100%),var(--pine);color:var(--bone);padding:46px 0;border-bottom:4px solid var(--gold)}
+.p2hero h1{font-size:clamp(1.9rem,4.4vw,2.9rem)}
+.p2hero p{color:#cfe3d4;margin-top:10px;max-width:64ch}
+.statline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px}
+.stat .v{font-family:'Fraunces',serif;font-weight:900;font-size:1.5rem;color:#fff}
+.stat .v.gold{color:var(--gold2)}.stat .v.clay{color:var(--clay2)}
+.stat .l{font-size:.72rem;color:#bcd3c2;margin-top:3px}
+.yeartoggle{display:inline-flex;background:var(--bone2);border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px}
+.yeartoggle button{font-family:'Spline Sans Mono',monospace;font-size:.76rem;font-weight:600;border:0;background:transparent;color:var(--muted);padding:7px 16px;border-radius:7px;cursor:pointer}
+.yeartoggle button.active{background:var(--pine2);color:#fff}
+.tbl{width:100%;border-collapse:collapse;font-size:.86rem;margin-top:6px}
+.tbl th{background:var(--pine2);color:#fff;font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;padding:10px 10px;text-align:right}
+.tbl th:first-child{text-align:left;border-radius:8px 0 0 0}.tbl th:last-child{border-radius:0 8px 0 0}
+.tbl td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);font-family:'Spline Sans Mono',monospace}
+.tbl td:first-child{text-align:left;font-family:'Inter',sans-serif;font-weight:500}
+.tbl tr:hover td{background:#faf8f1}
+.tbl .tot td{background:var(--bone2);font-weight:700;border-top:2px solid var(--pine3)}
+.heat{display:grid;gap:3px;margin-top:8px;font-family:'Spline Sans Mono',monospace}
+.heat .hh{font-size:.66rem;color:var(--muted);text-align:center;padding:3px 0}
+.heat .rl{font-size:.72rem;color:var(--ink);display:flex;align-items:center;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.heat .cell{height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:rgba(0,0,0,.55)}
+
+.foot{background:var(--pine);color:var(--bone);border-bottom:none;padding:64px 0 54px}
+.creds{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+.creds .seal{width:78px;height:78px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:1.7rem;color:var(--gold2);flex:none}
+.creds .lab{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#9fc1a8}
+.creds h3{font-size:1.5rem;color:#fff;margin-top:4px}
+.creds .role{color:var(--gold2);font-weight:600;margin-top:2px}
+.creds .desc{color:#cfe3d4;font-size:.92rem;margin-top:8px;max-width:52ch}
+.creds .contact{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px 18px;font-family:'Spline Sans Mono',monospace;font-size:.86rem}
+.creds .contact a,.creds .contact span{color:#bfe0c6;text-decoration:none}
+.disc{margin-top:34px;font-size:.74rem;color:#7fa389;max-width:80ch;line-height:1.6}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(max-width:860px){.grid2,.tech,.steps{grid-template-columns:1fr}
+ .kpis,.grid3,.subgauges,.split3,.thermos,.indgrid,.statline{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.kpis,.grid3,.subgauges,.split3,.thermos,.indgrid,.statline{grid-template-columns:1fr}
+ .topnav .bn small{display:none}}
+@media(prefers-reduced-motion:reduce){.reveal{transition:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+ <div class="wrap">
+  <div class="bn">Rural <span>IN</span></div>
+  <div class="tabs">
+   <button class="tabbtn active" data-tab="apresentacao">Apresentação</button>
+   <button class="tabbtn" data-tab="fluxo">Fluxo de Caixa Detalhado</button>
+   <button class="tabbtn" data-tab="quant">Análise Quantitativa</button>
+   <button class="tabbtn" data-tab="stress">Estatística &amp; Stress</button>
+  </div>
+ </div>
+</nav>
+
+<div class="page active" id="apresentacao">
+<header class="hero">
+ <div class="wrap">
+  <div class="brandrow">
+   <div class="brand">Rural <span>IN</span><small>Inteligência Econômica para o Produtor</small></div>
+   <div class="tag">Apresentação ao Cliente · Jun/2026</div>
+  </div>
+  <h1>O confinamento está <em>sustentando</em> o seu negócio?</h1>
+  <p class="sub">Diagnóstico econômico-financeiro do exercício 2025 e de janeiro a maio de 2026, conectado ao cenário de mercado de junho de 2026 — com leitura fundamentalista e técnica do boi, da reposição e da ração.</p>
+  <div class="client">
+   <div><small>Cliente</small><b>Fazenda Toca da Onça</b><span class="gest">Aporé / GO</span></div>
+   <div class="sep"></div>
+   <div><small>Gestão</small><b style="font-size:1rem">Pedro Henrique &amp; Rogério Teles</b></div>
+  </div>
+  <div class="kpis">
+   <div class="kpi"><div class="v">R$ 14,56 mi</div><div class="l">Capital aplicado no ciclo em 2025 (compra + engorda)</div></div>
+   <div class="kpi"><div class="v gold">R$ 2,20 mi</div><div class="l">Vendas realizadas em 2026 (a partir de fevereiro)</div></div>
+   <div class="kpi"><div class="v clay">54,8/100</div><div class="l">Índice de Saúde Financeira — faixa <b>Atenção</b></div></div>
+  </div>
+  <div class="ticker">
+   <div class="tk"><span class="nm">BOI GORDO · GO</span><span class="pr">R$ 327,00/@</span><span class="up">▲ +10,6% no ano</span></div>
+   <div class="tk"><span class="nm">BEZERRO · MS</span><span class="pr">R$ 3.398/cab</span><span class="up">▲ +10,8%</span></div>
+   <div class="tk"><span class="nm">MILHO · CEPEA</span><span class="pr">R$ 64,5/sc</span><span class="down">▼ −10% (mín. 8 meses)</span></div>
+  </div>
+ </div>
+</header>
+
+<section style="background:linear-gradient(180deg,#fbf9f2,#f6f3ea);border-top:3px solid var(--gold)"><div class="wrap reveal">
+ <div class="eyebrow">Resumo Executivo · Leitura em 1 minuto</div>
+ <h2 class="sec-title">O essencial para a decisão</h2>
+ <div class="grid2" style="margin-top:24px;align-items:stretch">
+  <div class="card" style="border-left:5px solid var(--warn)">
+   <h3>Veredito</h3>
+   <p style="font-size:1.05rem">Operação <b>viável e bem estruturada nos custos certos</b>, com <b>saúde financeira em “Atenção” (54,8/100)</b>: caixa apertado no carrego e margem ainda não medida. Não é uma empresa doente — é uma empresa <b>descapitalizada de informação</b>.</p>
+   <div class="alert" style="margin-top:14px"><b>Importante:</b> o saldo negativo de 2025 (−R$ 14,56 mi) <b>não é prejuízo</b> — é capital investido em boi que ainda será vendido. A receita só passou a ser registrada em 2026.</div>
+  </div>
+  <div class="card">
+   <h3>5 mensagens-chave</h3>
+   <div class="todo"><span class="n">1</span><span><b>Dois drivers decidem tudo:</b> animais + nutrição = ~65% do caixa.</span></div>
+   <div class="todo"><span class="n">2</span><span><b>Mercado a favor:</b> boi gordo em recorde e milho na mínima — mas reposição cara.</span></div>
+   <div class="todo"><span class="n">3</span><span><b>Risco nº 1 é liquidez:</b> pico de R$ 18,7 mi imobilizados no ciclo.</span></div>
+   <div class="todo"><span class="n">4</span><span><b>Margem fina:</b> ~40% de chance de prejuízo sem travar preço (Monte Carlo).</span></div>
+   <div class="todo"><span class="n">5</span><span><b>A virada é medir:</b> registrar receita e custo por arroba destrava a gestão.</span></div>
+  </div>
+ </div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Termômetro · Saúde Financeira</div>
+ <h2 class="sec-title">Onde a operação está hoje</h2>
+ <p class="lead">A pontuação pondera seis dimensões. A nota é puxada para baixo pela liquidez apertada do carrego e pela falta de medição de margem — não por endividamento.</p>
+ <div class="grid2" style="margin-top:30px">
+  <div class="card"><div class="gaugewrap">
+   <svg id="gauge" viewBox="0 0 260 150" width="100%" style="max-width:360px"></svg>
+   <div class="gnum" style="color:var(--warn)">54,8</div>
+   <div class="gband" style="background:rgba(216,162,26,.16);color:#9a7407">Faixa: Atenção (41–60)</div>
+  </div></div>
+  <div class="card">
+   <h3>Leitura das dimensões</h3><p class="note">Cada barra é a nota da dimensão (0–100).</p>
+   <div class="subgauges" id="subg"></div>
+   <div class="note" style="margin-top:16px"><b>Tradução:</b> operação viável e bem estruturada nos custos certos, mas que precisa de caixa de giro para o carrego e de medição de margem por arroba.</div>
+  </div>
+ </div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Para onde vai o caixa</div>
+ <h2 class="sec-title">O ciclo do confinamento, mês a mês</h2>
+ <p class="lead">No confinamento, compra-se e engorda-se primeiro; a receita só chega na venda do lote. Por isso o saldo fica negativo durante o carrego — <b>isso é capital imobilizado em boi, não prejuízo</b>.</p>
+ <div class="card" style="margin-top:26px">
+  <div class="chartbox"><canvas id="cashChart"></canvas></div>
+  <div class="note"><b>Abril/2026 foi o único mês de caixa positivo (+R$ 105,8 mil)</b>, justamente quando as vendas se concentraram. Dezembro/2025 (R$ 2,89 mi) foi o maior desembolso — entrada de animais e ração.</div>
+ </div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Estrutura de Custos · Curva ABC</div>
+ <h2 class="sec-title">Dois drivers decidem o resultado</h2>
+ <p class="lead">Animais e nutrição concentram cerca de dois terços de todo o caixa. São eles — e não o administrativo — que definem a rentabilidade.</p>
+ <div class="grid2" style="margin-top:26px">
+  <div class="card"><h3>Composição do desembolso (2025)</h3><div class="chartbox sm"><canvas id="abcChart"></canvas></div></div>
+  <div class="card"><h3>Concentração</h3>
+   <div class="subgauges" style="grid-template-columns:1fr">
+    <div class="sg" style="text-align:left"><div style="display:flex;justify-content:space-between"><b>Classe A</b><span class="mono">76,6%</span></div><div class="note">Insumos, Gado, Investimentos — acompanhamento mensal obrigatório.</div></div>
+    <div class="sg" style="text-align:left"><div style="display:flex;justify-content:space-between"><b>Classe B</b><span class="mono">17,9%</span></div><div class="note">Combustível, Serviços, Manutenção, Arrendamento, Folha.</div></div>
+    <div class="sg" style="text-align:left"><div style="display:flex;justify-content:space-between"><b>Classe C</b><span class="mono">5,5%</span></div><div class="note">Demais — pulverizados; pesam pouco isolados.</div></div>
+   </div>
+  </div>
+ </div>
+ <div class="alert"><b>Ponto de atenção:</b> a categoria “Investimentos” (R$ 1,38 mi, 207 lançamentos) mistura capex real, custeio e possíveis retiradas — distorce a margem e merece reclassificação. Combustível está no teto da faixa típica (logística).</div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Indicadores de Eficiência · 2026</div>
+ <h2 class="sec-title">Os números que importam</h2>
+ <p class="lead">Calculados sobre 2026 (único período com receita) e ainda sobre venda parcial — leia como tendência, não como margem fechada.</p>
+ <div class="indgrid" id="indgrid" style="margin-top:24px"></div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Análise Fundamentalista · Mercado Jun/2026</div>
+ <h2 class="sec-title">O mercado está a favor — com um porém</h2>
+ <p class="lead">O resultado do confinamento nasce de três preços: o boi que se vende, o animal que se repõe e a ração que engorda. Hoje, dois jogam a favor e um aperta.</p>
+ <div class="thermos" style="margin-top:26px" id="thermos"></div>
+ <div class="split3" style="margin-top:22px">
+  <div class="flag good"><div class="ic">Venda · favorável</div><h4>Boi gordo em recorde nominal</h4><p>A arroba em Goiás está em ~R$ 327 e o indicador CEPEA rondou R$ 353 em junho — cerca de 12–13% acima de junho/2025. Bom momento para realizar vendas do lote terminado.</p><div class="mk">≈ +10,6% no ano · recorde para o período</div></div>
+  <div class="flag bad"><div class="ic">Reposição · aperta</div><h4>Bezerro/magro caro</h4><p>A reposição subiu ~10,8% no ano (bezerro MS ~R$ 3.399/cab). Comprar boi magro continua caro — é o que explica os R$ 14,5 mi imobilizados em 2025 e exige caixa de giro robusto.</p><div class="mk">relação de troca estável, mas em patamar alto</div></div>
+  <div class="flag good"><div class="ic">Ração · favorável</div><h4>Milho na mínima de 8 meses</h4><p>O milho recuou ~10% no ano e renovou mínimas em junho (~R$ 64,5/sc). Como nutrição é o 2º maior driver da fazenda (~45% do caixa em 2026), há janela para baixar o custo de engorda.</p><div class="mk">futuros jul–nov pressionados · custo do ganho menor</div></div>
+ </div>
+ <div class="alert"><b>Leitura estrutural:</b> anos de abate recorde de fêmeas apontam para um rebanho em contração e oferta de carne mais restrita adiante — fundamento de alta para o boi no médio prazo. No curto prazo, o receio com a cota de exportação à China (com frigoríficos reduzindo compras) pressiona a arroba. <b>Para o confinador, o combo ideal hoje é: travar ração barata agora e proteger o preço de venda do lote.</b></div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Análise Técnica · Tendência e Janelas</div>
+ <h2 class="sec-title">Curto prazo x estrutura</h2>
+ <p class="lead">A leitura de preço e momentum aponta direções opostas no curto e no longo prazo. Quem tem boi para vender e ração para comprar precisa agir nas duas pontas.</p>
+ <div class="tech" style="margin-top:26px">
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Boi gordo</h3><span class="badge b-bear">↘ Curto prazo: pressão</span></div>
+   <div class="chartbox sm"><canvas id="boiChart"></canvas></div>
+   <div class="levelrow"><span>Resistência (recorde jun)</span><b>~R$ 353/@</b></div>
+   <div class="levelrow"><span>Praça GO (físico)</span><b>~R$ 327/@</b></div>
+   <div class="levelrow"><span>Suporte regional</span><b>~R$ 320/@</b></div>
+   <div class="note"><b>Tese:</b> correção de curto prazo (cota China) dentro de uma tendência estrutural de alta (ciclo pecuário). <span class="badge b-bull" style="margin-left:4px">↗ Estrutural: alta</span></div>
+  </div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Milho (custo)</h3><span class="badge b-bear">↘ Em mínimas</span></div>
+   <div class="chartbox sm"><canvas id="milhoChart"></canvas></div>
+   <div class="levelrow"><span>Físico CEPEA</span><b>~R$ 64,5/sc</b></div>
+   <div class="levelrow"><span>Mínima de</span><b>8 meses</b></div>
+   <div class="levelrow"><span>Coringa de alta</span><b>seca em GO/MT</b></div>
+   <div class="note"><b>Janela:</b> preço e futuros pressionados criam oportunidade para travar/antecipar a compra de ração do próximo lote. Risco climático pode reverter.</div>
+  </div>
+ </div>
+ <div class="grid3" style="margin-top:18px">
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">Recomendação 1</h3><p class="note">Escalonar as vendas do lote e avaliar trava de preço (B3/termo) para proteger a arroba contra a pressão de curto prazo da China.</p></div>
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">Recomendação 2</h3><p class="note">Aproveitar a janela do milho barato para fixar o custo de engorda do próximo ciclo — o 2º maior driver de custo.</p></div>
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">Recomendação 3</h3><p class="note">Calibrar o ritmo de reposição: animal magro caro pede compra seletiva e capital de giro estruturado.</p></div>
+ </div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Síntese · Plano de Ação</div>
+ <h2 class="sec-title">As decisões que movem o resultado</h2>
+ <div class="steps" style="margin-top:26px">
+  <div class="col90"><h3>Próximos 90 dias <small>QUICK WINS</small></h3>
+   <div class="todo"><span class="n">1</span><span>Registrar 100% das receitas e amarrar cada venda ao seu lote — sair da cegueira de margem.</span></div>
+   <div class="todo"><span class="n">2</span><span>Reclassificar “Investimentos” e “Serviços de Terceiros”; separar retiradas de sócios.</span></div>
+   <div class="todo"><span class="n">3</span><span>Travar ração (milho na mínima) e proteger preço de venda do lote pronto.</span></div>
+   <div class="todo"><span class="n">4</span><span>Auditar ~R$ 270 mil de possíveis duplicidades.</span></div>
+  </div>
+  <div class="col90"><h3>Próximos 12 meses <small>ESTRUTURANTES</small></h3>
+   <div class="todo"><span class="n">5</span><span>Painel de custo por arroba e por lote (margem real do ciclo).</span></div>
+   <div class="todo"><span class="n">6</span><span>Renegociar nutrição/insumos por volume — economia potencial ~R$ 293 mil/ano.</span></div>
+   <div class="todo"><span class="n">7</span><span>Estruturar capital de giro barato dimensionado ao carrego.</span></div>
+   <div class="todo"><span class="n">8</span><span>Indicadores zootécnicos (GMD, conversão) + gestão de frota/combustível.</span></div>
+  </div>
+ </div>
+ <div class="alert" style="background:#EAF3EC;border-color:rgba(46,125,70,.4);border-left-color:var(--pine3);color:#234b30"><b>Conclusão:</b> a maior alavanca não é cortar custo — é <b>medir</b>. Com receita registrada, custo por arroba e ração travada na mínima, a Fazenda Toca da Onça tem condição de converter um mercado favorável de boi gordo em margem real e caixa positivo no próximo ciclo.</div>
+</div></section>
+
+<section><div class="wrap reveal">
+ <div class="eyebrow">Próximos Passos · Proposta de Continuidade</div>
+ <h2 class="sec-title">Como transformamos isto em resultado</h2>
+ <div class="grid3" style="margin-top:24px">
+  <div class="card"><h3 style="font-size:1.05rem">1 · Implantar a medição</h3><p class="note">Registrar 100% das receitas, custo por arroba e por lote, e reclassificar o plano de contas (separar capex, custeio e retiradas). Quick win de 30–60 dias.</p></div>
+  <div class="card"><h3 style="font-size:1.05rem">2 · Blindar caixa e preço</h3><p class="note">Estruturar capital de giro para o carrego e operar a trava de preço (futuro/opção) nas janelas favoráveis da B3.</p></div>
+  <div class="card"><h3 style="font-size:1.05rem">3 · Módulo econômico-zootécnico</h3><p class="note">Com peso de entrada/saída e dias de cocho, fechamos GMD, conversão alimentar, custo do ganho, TIR e payback do lote — a rentabilidade real.</p></div>
+ </div>
+ <div class="card" style="margin-top:20px"><h3>Como ler este material — glossário rápido</h3>
+  <div class="indgrid" style="grid-template-columns:1fr 1fr;margin-top:12px">
+   <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">Carrego</div><div class="ds">Período entre comprar/engordar e vender — quando o caixa fica imobilizado no boi.</div></div></div>
+   <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">Break-even (R$/@)</div><div class="ds">Preço da arroba que empata receita e custo. Acima dele há lucro; abaixo, prejuízo.</div></div></div>
+   <div class="ind" style="border-left-color:#C9A227"><div><div class="nm">Curva ABC</div><div class="ds">Ranking que mostra que poucas categorias (A) concentram a maior parte do gasto.</div></div></div>
+   <div class="ind" style="border-left-color:#C9A227"><div><div class="nm">HHI / Gini</div><div class="ds">Medem concentração: o quanto poucos fornecedores dominam o desembolso.</div></div></div>
+   <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">VaR / Monte Carlo</div><div class="ds">Simulam milhares de cenários de preço para estimar perda potencial e chance de prejuízo.</div></div></div>
+   <div class="ind" style="border-left-color:#1F4E2C"><div><div class="nm">Base (SP−GO)</div><div class="ds">Diferença entre o preço de referência (SP) e o físico de Goiás — ajusta o hedge ao seu preço real.</div></div></div>
+  </div>
+ </div>
+ <div class="alert" style="background:#EAF3EC;border-color:rgba(46,125,70,.4);border-left-color:var(--pine3);color:#234b30"><b>Em uma frase:</b> a Fazenda Toca da Onça tem a estrutura de custo certa e um mercado favorável; falta instrumentar a margem e blindar a liquidez — e é exatamente isso que as próximas etapas entregam.</div>
+</div></section>
+</div>
+
+<div class="page" id="fluxo">
+<header class="p2hero">
+ <div class="wrap">
+  <div class="eyebrow" style="color:var(--gold2)">Fluxo de Caixa · Detalhamento</div>
+  <h1>Para onde foi cada real</h1>
+  <p>Desembolsos e receitas abertos por mês, categoria, segmento gerencial e driver de confinamento. Base: livro-caixa de 2025 (12 meses) e de janeiro a maio de 2026.</p>
+  <div class="statline">
+   <div class="stat"><div class="v">R$ 14,56 mi</div><div class="l">Desembolso 2025</div></div>
+   <div class="stat"><div class="v clay">R$ 6,32 mi</div><div class="l">Desembolso 2026 (Jan–Mai)</div></div>
+   <div class="stat"><div class="v gold">R$ 2,20 mi</div><div class="l">Receita 2026 (Jan–Mai)</div></div>
+   <div class="stat"><div class="v">2.485</div><div class="l">Lançamentos de despesa</div></div>
+  </div>
+ </div>
+</header>
+
+<section><div class="wrap">
+ <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px">
+  <div><div class="eyebrow">Visão Mensal</div><h2 class="sec-title">Entradas, saídas e categorias por mês</h2></div>
+  <div class="yeartoggle" id="ytoggle"><button data-y="25" class="active">2025</button><button data-y="26">2026 (Jan–Mai)</button></div>
+ </div>
+ <div class="card" style="margin-top:22px"><h3 id="t-rxd">Receita × Desembolso por mês</h3><div class="chartbox"><canvas id="rxdChart"></canvas></div></div>
+ <div class="card" style="margin-top:20px"><h3 id="t-stack">Desembolso mensal empilhado por categoria</h3><div class="chartbox tall"><canvas id="stackChart"></canvas></div>
+  <div class="note">As 7 maiores categorias aparecem destacadas; as demais somam em “Outros”.</div></div>
+</div></section>
+
+<section><div class="wrap">
+ <div class="eyebrow">Recortes Estruturais</div>
+ <h2 class="sec-title">Por segmento e por driver</h2>
+ <p class="lead">O mesmo caixa, lido por duas lentes: o segmento gerencial (variável, fixo, administrativo…) e o driver econômico do confinamento.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card"><h3>Segmento gerencial</h3><div class="chartbox sm"><canvas id="segChart"></canvas></div>
+   <div class="note">Custos variáveis de produção dominam — saudável para a atividade.</div></div>
+  <div class="card"><h3>Driver de confinamento</h3><div class="chartbox sm"><canvas id="drvChart"></canvas></div>
+   <div class="note">Compra de animais + nutrição = o coração do custo.</div></div>
+ </div>
+ <div class="grid2" style="margin-top:20px">
+  <div class="card"><h3>Top fornecedores · 2025</h3><div class="chartbox sm"><canvas id="f25Chart"></canvas></div></div>
+  <div class="card"><h3>Top fornecedores · 2026</h3><div class="chartbox sm"><canvas id="f26Chart"></canvas></div></div>
+ </div>
+</div></section>
+
+<section><div class="wrap">
+ <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px">
+  <div><div class="eyebrow">Mapa de Calor</div><h2 class="sec-title">Intensidade de gasto · categoria × mês</h2></div>
+  <div class="yeartoggle" id="htoggle"><button data-y="25" class="active">2025</button><button data-y="26">2026</button></div>
+ </div>
+ <div class="card" style="margin-top:20px;overflow-x:auto"><div id="heat" class="heat"></div>
+  <div class="note">Quanto mais escuro o verde, maior o desembolso da categoria naquele mês. Vazio = sem lançamento.</div></div>
+</div></section>
+
+<section><div class="wrap">
+ <div class="eyebrow">Tabela Completa</div>
+ <h2 class="sec-title">Todas as categorias, lado a lado</h2>
+ <div class="card" style="margin-top:20px;overflow-x:auto"><table class="tbl" id="catTable"></table></div>
+</div></section>
+</div>
+
+<div class="page" id="quant">
+<header class="p2hero">
+ <div class="wrap">
+  <div class="eyebrow" style="color:var(--gold2)">Engenharia Econômica · Métricas Avançadas</div>
+  <h1>O que os números ainda têm a dizer</h1>
+  <p>Indicadores econométricos e financeiros construídos sobre o livro-caixa: necessidade de capital de giro, custo implícito do carrego, sazonalidade, concentração de risco, previsibilidade e ferramentas de decisão de margem e hedge.</p>
+  <div class="statline">
+   <div class="stat"><div class="v clay">R$ 18,70 mi</div><div class="l">Pico de necessidade de capital de giro</div></div>
+   <div class="stat"><div class="v">+52,5%</div><div class="l">Desembolso Jan–Mai: 2026 vs 2025</div></div>
+   <div class="stat"><div class="v">238</div><div class="l">Índice sazonal de dez/25 (base 100)</div></div>
+   <div class="stat"><div class="v gold">14,25%</div><div class="l">Selic — custo de capital (Jun/26)</div></div>
+  </div>
+ </div>
+</header>
+
+<!-- A: NCG -->
+<section><div class="wrap">
+ <div class="eyebrow">1 · Capital de Giro</div>
+ <h2 class="sec-title">Necessidade de capital e o custo invisível do carrego</h2>
+ <p class="lead">O livro não registra juros — mas o ciclo consome caixa por meses antes de gerar receita. Esse capital tem um custo de oportunidade real. Aqui ele aparece.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card"><h3>Curva do caixa acumulado (17 meses)</h3><div class="chartbox"><canvas id="cumChart"></canvas></div>
+   <div class="note">O “vale” da curva é o ponto de maior aperto: ~<b>R$ 18,7 mi</b> em mai/26. É o tamanho da linha de giro que a operação precisaria ter contratado para nunca faltar caixa.</div></div>
+  <div class="card">
+   <h3>Custo financeiro implícito</h3>
+   <p class="note">Mesmo sem dívida no livro, manter o capital parado no boi custa o que ele renderia (ou o que se paga por ele).</p>
+   <div style="margin:18px 0 6px;display:flex;justify-content:space-between;font-size:.85rem"><span>Custo de capital (a.a.)</span><b class="mono" id="ccVal">14,25%</b></div>
+   <input type="range" id="ccSlider" min="6" max="20" step="0.25" value="14.25" style="width:100%;accent-color:var(--pine3)">
+   <div class="note" style="display:flex;justify-content:space-between"><span>Pronaf/custeio ~8%</span><span>CDI ~14%</span><span>Mercado ~20%</span></div>
+   <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">Capital médio empregado</div><div class="pv" id="capMed">—</div></div>
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">Custo financeiro do carrego (12m)</div><div class="pv" id="carryCost" style="color:var(--clay)">—</div></div>
+   </div>
+   <div class="note" style="margin-top:12px"><b>Burn</b> médio mensal 2025: R$ 1,21 mi · pico (dez): R$ 2,89 mi.</div>
+  </div>
+ </div>
+</div></section>
+
+<!-- B: Sazonalidade -->
+<section><div class="wrap">
+ <div class="eyebrow">2 · Sazonalidade</div>
+ <h2 class="sec-title">Quando o caixa aperta — índice sazonal</h2>
+ <p class="lead">Cada mês comparado à média do ano (base 100). Acima de 100 = mês que consome mais caixa que a média. Planejar a tesouraria para os picos evita estrangulamento.</p>
+ <div class="card" style="margin-top:24px"><div class="chartbox"><canvas id="seasChart"></canvas></div>
+  <div class="note"><b>Dezembro (238)</b> consome 2,4× um mês médio — pico de entrada de animais/ração; <b>julho–agosto</b> também pesam. <b>Março (31)</b> é o vale. A volatilidade mensal (CV) do desembolso é de <b>50,8%</b>.</div></div>
+</div></section>
+
+<!-- C: Concentração -->
+<section><div class="wrap">
+ <div class="eyebrow">3 · Risco de Concentração</div>
+ <h2 class="sec-title">Dependência de fornecedores — HHI e Gini</h2>
+ <p class="lead">Índices clássicos de concentração aplicados aos fornecedores. O HHI mede o quão dominado é o gasto por poucos; o Gini, a desigualdade entre eles. A foto mudou muito de 2025 para 2026.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card"><h3>2025 — pulverizado</h3>
+   <div class="indgrid" style="grid-template-columns:1fr 1fr">
+    <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">HHI</div><div class="ds">574 fornecedores</div></div><div class="rt"><div class="val">171</div><div class="pill" style="background:#2E7D46">Baixo</div></div></div>
+    <div class="ind" style="border-left-color:#D8A21A"><div><div class="nm">Gini</div><div class="ds">desigualdade</div></div><div class="rt"><div class="val">0,83</div><div class="pill" style="background:#D8A21A">Alto</div></div></div>
+    <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">Top 5</div><div class="ds">do desembolso</div></div><div class="rt"><div class="val">20,3%</div></div></div>
+    <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">Leitura</div></div><div class="rt"><div class="val" style="font-size:.8rem">Diluído</div></div></div>
+   </div></div>
+  <div class="card"><h3>2026 — concentrando</h3>
+   <div class="indgrid" style="grid-template-columns:1fr 1fr">
+    <div class="ind" style="border-left-color:#D8A21A"><div><div class="nm">HHI</div><div class="ds">340 fornecedores</div></div><div class="rt"><div class="val">872</div><div class="pill" style="background:#D8A21A">Subindo</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">Gini</div><div class="ds">desigualdade</div></div><div class="rt"><div class="val">0,87</div><div class="pill" style="background:#B5482E">Muito alto</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">Top 5</div><div class="ds">do desembolso</div></div><div class="rt"><div class="val" style="color:#B5482E">54,2%</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">Leitura</div></div><div class="rt"><div class="val" style="font-size:.8rem">Dependente</div></div></div>
+   </div></div>
+ </div>
+ <div class="alert"><b>Sinal:</b> em 2026 metade do caixa passou por apenas 5 contrapartes (puxado por um fornecedor de gado de R$ 1,53 mi). Concentração dá poder de negociação, mas cria dependência — vale ter fornecedor reserva para insumo e reposição.</div>
+</div></section>
+
+<!-- D: CV -->
+<section><div class="wrap">
+ <div class="eyebrow">4 · Previsibilidade</div>
+ <h2 class="sec-title">O que dá para orçar — e o que é imprevisível</h2>
+ <p class="lead">Coeficiente de variação mensal por categoria. Quanto menor, mais estável e orçável; quanto maior, mais errático (compras pontuais). Define o que entra no orçamento fixo e o que precisa de reserva.</p>
+ <div class="card" style="margin-top:24px"><div class="chartbox tall"><canvas id="cvChart"></canvas></div>
+  <div class="note"><span style="color:#2E7D46">■</span> Estável/orçável (CV &lt; 40%) · <span style="color:#D8A21A">■</span> Moderado · <span style="color:#B5482E">■</span> Errático (CV &gt; 80%). Folha e combustível são âncoras previsíveis; gado, fretes e comissões são lumpy — exigem colchão de caixa.</div></div>
+</div></section>
+
+<!-- E: VaR / hedge -->
+<section><div class="wrap">
+ <div class="eyebrow">5 · Gestão de Risco de Preço</div>
+ <h2 class="sec-title">VaR da arroba e dimensionamento de hedge</h2>
+ <p class="lead">Quanto o valor do lote a vender pode cair num horizonte de 30 dias, com 95% de confiança, dada a volatilidade do boi gordo. Conecta o risco de mercado à decisão de travar preço.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card">
+   <h3>Parâmetros</h3>
+   <div style="margin:14px 0 4px;display:flex;justify-content:space-between;font-size:.85rem"><span>Arrobas do lote a vender</span><b class="mono" id="arbVal">3.000 @</b></div>
+   <input type="range" id="arbSlider" min="500" max="10000" step="100" value="3000" style="width:100%;accent-color:var(--pine3)">
+   <div style="margin:18px 0 4px;display:flex;justify-content:space-between;font-size:.85rem"><span>Volatilidade anual da arroba</span><b class="mono" id="volVal">14%</b></div>
+   <input type="range" id="volSlider" min="8" max="30" step="1" value="14" style="width:100%;accent-color:var(--pine3)">
+   <div class="note">Preço de referência: R$ 327/@ (GO). VaR 95% em 30 dias = 1,645 × σ × √(30/252).</div>
+  </div>
+  <div class="card" style="background:linear-gradient(180deg,#fff,#fbf6f4)">
+   <h3>Exposição</h3>
+   <div style="display:grid;gap:10px;margin-top:10px">
+    <div class="ind" style="border-left-color:#1F4E2C"><div class="nm">Valor do lote (referência)</div><div class="rt"><div class="val" id="lotVal">—</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div class="nm">Queda potencial 95% / 30d</div><div class="rt"><div class="val" id="varPct" style="color:#B5482E">—</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div class="nm">Valor em risco (R$)</div><div class="rt"><div class="val" id="varBrl" style="color:#B5482E">—</div></div></div>
+   </div>
+   <div class="note" style="margin-top:12px">Travar ~50–70% do lote em B3/termo reduz essa exposição sem abrir mão de toda a alta. Estimativa paramétrica — não é recomendação de investimento.</div>
+  </div>
+ </div>
+</div></section>
+
+<!-- F: Break-even -->
+<section><div class="wrap">
+ <div class="eyebrow">6 · A peça que falta</div>
+ <h2 class="sec-title">Break-even por arroba — desbloqueie a margem real</h2>
+ <p class="lead">Com <b>um único dado extra</b> — nº de cabeças e peso de venda — o livro-caixa vira margem. Preencha abaixo para ver o preço de equilíbrio e a margem ao preço de mercado de hoje.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card">
+   <h3>Dados do lote</h3>
+   <div class="beIn"><label>Nº de cabeças</label><input type="number" id="beHead" value="2500" min="1"></div>
+   <div class="beIn"><label>Peso de venda (@/cabeça)</label><input type="number" id="beArb" value="20" min="1" step="0.5"></div>
+   <div class="beIn"><label>Custo total do lote (R$)</label><input type="number" id="beCost" value="16000000" step="100000"></div>
+   <div class="beIn"><label>Preço da arroba (R$/@)</label><input type="number" id="bePrice" value="327" step="1"></div>
+   <div class="note">Valores ilustrativos (2.500 cab · 20 @ · custo do lote). Ajuste com os números do lote real para obter o custo por arroba.</div>
+  </div>
+  <div class="card" style="background:linear-gradient(180deg,#fff,#f5f9f6)">
+   <h3>Resultado</h3>
+   <div style="display:grid;gap:10px;margin-top:10px">
+    <div class="ind" style="border-left-color:#1F4E2C"><div class="nm">Arrobas produzidas (total)</div><div class="rt"><div class="val" id="beTotArb">—</div></div></div>
+    <div class="ind" style="border-left-color:#C9A227"><div class="nm">Custo por arroba</div><div class="rt"><div class="val" id="beCostArb">—</div></div></div>
+    <div class="ind" id="beBeRow" style="border-left-color:#1F4E2C"><div class="nm">Preço de equilíbrio (break-even)</div><div class="rt"><div class="val" id="beBE">—</div></div></div>
+    <div class="ind" id="beMgRow" style="border-left-color:#2E7D46"><div class="nm">Margem ao preço atual</div><div class="rt"><div class="val" id="beMg">—</div><div class="pill" id="beMgPill" style="background:#2E7D46">—</div></div></div>
+    <div class="ind" style="border-left-color:#2E7D46"><div class="nm">Margem por arroba</div><div class="rt"><div class="val" id="beMgArb">—</div></div></div>
+   </div>
+  </div>
+ </div>
+ <div class="grid3" style="margin-top:18px">
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">Relação de troca</h3><p class="note">Hoje, comprar 1 bezerro (~R$ 3.399) custa o equivalente a <b>~10,4 @</b> de boi gordo. Quanto maior, pior para quem repõe — pressão sobre a margem do próximo lote.</p></div>
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">Crescimento de escala</h3><p class="note">O desembolso Jan–Mai cresceu <b>+52,5%</b> ano a ano. Com milho mais barato, boa parte é volume (lote maior), não preço — sinal de expansão da operação.</p></div>
+  <div class="card" style="padding:18px"><h3 style="font-size:1rem">O próximo nível</h3><p class="note">Com peso de entrada/saída e dias de cocho, calculamos <b>GMD, conversão alimentar, custo do ganho e TIR do lote</b> — os indicadores que realmente definem a rentabilidade.</p></div>
+ </div>
+</div></section>
+
+<section><div class="wrap">
+ <div class="eyebrow">6.1 · Hedge na B3 · Trava de Preço</div>
+ <h2 class="sec-title">Futuro ou opção? O resultado de cada vencimento</h2>
+ <p class="lead">Com o custo por arroba do item 6, cada contrato futuro de boi gordo (BGI · 330 @, liquidação financeira) vira um resultado travado. Edite o ajuste de cada vencimento com a tela da sua corretora — o painel recalcula na hora e sinaliza onde trava lucro.</p>
+ <div class="alert" style="margin-top:18px"><b>Atualização:</b> a curva abaixo traz valores de referência da B3 (ajuste, ~19/06/2026). Um HTML estático não puxa a B3 em tempo real — por isso cada vencimento é <b>editável</b>: cole o preço da tela no dia da operação e tudo recalcula.</div>
+ <div class="grid2" style="margin-top:22px">
+  <div class="card">
+   <h3>Parâmetros do hedge</h3>
+   <div class="beIn"><label>Custo por arroba <span style="color:#888">(item 6)</span></label><input id="hgCpa" readonly></div>
+   <div class="beIn"><label>Base SP−GO (R$/@)</label><input type="number" id="hgBase" value="21" step="1"></div>
+   <div class="beIn"><label>Arrobas do lote <span style="color:#888">(item 6)</span></label><input id="hgArb" readonly></div>
+   <div class="note"><b>Preço travado efetivo (GO) = Futuro − base.</b> O futuro BGI liquida no indicador (praça SP); a base ajusta para o preço físico de Goiás.</div>
+  </div>
+  <div class="card" style="background:linear-gradient(180deg,#fff,#f5f9f6)">
+   <h3>Veredito do futuro</h3>
+   <div id="hgVerdict" style="font-size:.95rem;color:#3c3f36;margin-top:6px">—</div>
+   <div id="hgBest" style="margin-top:14px"></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:20px;overflow-x:auto">
+  <h3>Contratos futuros — resultado por vencimento</h3>
+  <table class="tbl" id="hedgeTable"></table>
+  <div class="note"><span style="color:#2E7D46">■</span> Trava lucro (viável) · <span style="color:#D8A21A">■</span> Neutro (≈ custo) · <span style="color:#B5482E">■</span> Trava prejuízo (avalie opção ou aguardar). Nº de contratos = arrobas ÷ 330.</div>
+ </div>
+ <div class="grid2" style="margin-top:20px">
+  <div class="card">
+   <h3>Alternativa: opção de venda (PUT)</h3>
+   <p class="note">Quando o futuro travaria prejuízo mas você quer proteção, a PUT garante um <b>piso</b> pagando prêmio — e mantém a alta se o boi subir. Estimativa Black-76 (ajuste com o prêmio real da tela).</p>
+   <div class="beIn"><label>Prazo até o vencimento (meses)</label><input type="number" id="opT" value="5" step="1" min="1"></div>
+   <div class="beIn"><label>Strike — piso desejado (R$/@)</label><input type="number" id="opK" value="345" step="1"></div>
+   <div class="beIn"><label>Futuro de referência (R$/@)</label><input type="number" id="opF" value="351" step="1"></div>
+   <div class="beIn"><label>Volatilidade anual (%)</label><input type="number" id="opVol" value="14" step="1"></div>
+  </div>
+  <div class="card" style="background:linear-gradient(180deg,#fff,#fbf6f4)">
+   <h3>Resultado da PUT</h3>
+   <div style="display:grid;gap:10px;margin-top:8px">
+    <div class="ind" style="border-left-color:#C9A227"><div class="nm">Prêmio estimado</div><div class="rt"><div class="val" id="opPrem">—</div></div></div>
+    <div class="ind" style="border-left-color:#C9A227"><div class="nm">Custo total do prêmio</div><div class="rt"><div class="val" id="opCost">—</div></div></div>
+    <div class="ind" style="border-left-color:#1F4E2C"><div class="nm">Piso protegido (GO, líq. prêmio)</div><div class="rt"><div class="val" id="opFloor">—</div></div></div>
+    <div class="ind" id="opRecRow" style="border-left-color:#2E7D46"><div class="nm">Recomendação</div><div class="rt"><div class="pill" id="opRec" style="background:#2E7D46">—</div></div></div>
+   </div>
+   <div class="note" style="margin-top:10px">Black-76 · r = Selic 14,25%. Estimativa ilustrativa — não é recomendação de investimento. Atenção ao risco de base.</div>
+  </div>
+ </div>
+</div></section>
+
+</div>
+<style>.beIn{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}.beIn label{font-size:.9rem;color:#3c3f36}.beIn input{font-family:"Spline Sans Mono",monospace;font-size:.95rem;width:46%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;text-align:right;background:#fff}.beIn input:focus{outline:2px solid var(--pine3)}</style>
+<div class="page" id="stress">
+<header class="p2hero">
+ <div class="wrap">
+  <div class="eyebrow" style="color:var(--gold2)">Estatística · Stress Test · Forense</div>
+  <h1>O que pode dar errado — e quanto dói</h1>
+  <p>Simulação probabilística da margem, sensibilidade dos direcionadores, cascata do resultado, stress de liquidez e verificação forense da base. Todos os módulos leem o lote do item 6.</p>
+  <div class="statline">
+   <div class="stat"><div class="v" id="mcPlossTop">—</div><div class="l">Probabilidade de prejuízo (Monte Carlo)</div></div>
+   <div class="stat"><div class="v gold" id="mcMedTop">—</div><div class="l">Margem mediana simulada</div></div>
+   <div class="stat"><div class="v clay">Z = 2,13</div><div class="l">Tendência de alta do gasto (Mann-Kendall)</div></div>
+   <div class="stat"><div class="v clay">Não conf.</div><div class="l">Lei de Benford (MAD 0,018)</div></div>
+  </div>
+ </div>
+</header>
+
+<!-- A Monte Carlo -->
+<section><div class="wrap">
+ <div class="eyebrow">1 · Teste de Stress Probabilístico</div>
+ <h2 class="sec-title">Monte Carlo da margem do lote</h2>
+ <p class="lead">10.000 cenários de preço da arroba na venda, dada a volatilidade do boi. A distribuição mostra a chance de prejuízo, a margem esperada e o pior caso (VaR/Expected Shortfall). Lote vindo do item 6.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card">
+   <h3>Premissas</h3>
+   <div class="beIn"><label>Preço esperado na venda (R$/@)</label><input type="number" id="mcPrice" value="327" step="1"></div>
+   <div class="beIn"><label>Volatilidade anual (%)</label><input type="number" id="mcVol" value="14" step="1"></div>
+   <div class="beIn"><label>Horizonte até a venda (meses)</label><input type="number" id="mcHor" value="4" step="1" min="1"></div>
+   <div class="note">Preço ~ Normal(μ, σ), σ = preço × vol × √(meses/12). Custo do lote fixo (item 6). Estimativa ilustrativa.</div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">P(prejuízo)</div><div class="pv" id="mcPloss" style="color:var(--clay)">—</div></div>
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">Margem esperada</div><div class="pv" id="mcMean">—</div></div>
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">P5 / P95</div><div class="pv" id="mcP590" style="font-size:.8rem">—</div></div>
+    <div class="sg" style="text-align:left"><div class="t" style="height:auto;justify-content:flex-start">Pior 5% (ES)</div><div class="pv" id="mcES" style="color:var(--clay)">—</div></div>
+   </div>
+  </div>
+  <div class="card"><h3>Distribuição da margem</h3><div class="chartbox"><canvas id="mcChart"></canvas></div>
+   <div class="note">Barras à esquerda de zero = cenários de prejuízo. Quanto mais massa à direita, mais robusto o lote.</div></div>
+ </div>
+</div></section>
+
+<!-- B Tornado -->
+<section><div class="wrap">
+ <div class="eyebrow">2 · Análise de Sensibilidade</div>
+ <h2 class="sec-title">Tornado — o que mexe mais na margem</h2>
+ <p class="lead">Variando cada fator isoladamente (±<span id="torS">10</span>%), qual desloca mais o resultado? A maior barra é a sua prioridade de gestão e de hedge.</p>
+ <div class="card" style="margin-top:24px">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:6px"><div class="beIn" style="border:0;width:240px"><label>Amplitude do choque (%)</label><input type="number" id="torSwing" value="10" step="1" min="1" style="width:80px"></div></div>
+  <div class="chartbox"><canvas id="torChart"></canvas></div>
+  <div class="note">Linha central = margem base. Em geral, <b>preço da arroba</b> e <b>custo do lote</b> dominam — por isso travar preço e negociar nutrição são as alavancas-mestre.</div></div>
+</div></section>
+
+<!-- C Waterfall -->
+<section><div class="wrap">
+ <div class="eyebrow">3 · Anatomia do Resultado</div>
+ <h2 class="sec-title">Cascata da margem (waterfall)</h2>
+ <p class="lead">Da receita bruta ao resultado, descontando cada driver de custo. Custo do lote alocado pela estrutura observada em 2026.</p>
+ <div class="card" style="margin-top:24px"><div class="chartbox"><canvas id="wfChart"></canvas></div>
+  <div class="note">Alocação por estrutura histórica (Nutrição 45%, Animais 16%, Combustível 6%, Mão de obra 4%, Fretes 3%, Outros 26%) — aproximação para visualizar o peso de cada bloco.</div></div>
+</div></section>
+
+<!-- D Liquidity stress -->
+<section><div class="wrap">
+ <div class="eyebrow">4 · Stress de Liquidez</div>
+ <h2 class="sec-title">E se a venda atrasar?</h2>
+ <p class="lead">O ciclo já imobiliza ~R$ 18,7 mi no pico. Cada mês de atraso na venda do lote adiciona custo financeiro sobre esse capital. Aqui está o tamanho do estrago.</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card">
+   <h3>Premissas</h3>
+   <div class="beIn"><label>Capital no pico (R$)</label><input type="number" id="lqCap" value="18700000" step="100000"></div>
+   <div class="beIn"><label>Custo de capital — Selic (% a.a.)</label><input type="number" id="lqRate" value="14.25" step="0.25"></div>
+   <div class="note">Custo do atraso = capital × Selic × (meses/12). Não inclui risco de queda de preço no período (ver Monte Carlo).</div>
+  </div>
+  <div class="card"><h3>Custo do atraso</h3><div class="chartbox sm"><canvas id="lqChart"></canvas></div>
+   <div class="note" id="lqNote">—</div></div>
+ </div>
+</div></section>
+
+<!-- E Benford -->
+<section><div class="wrap">
+ <div class="eyebrow">5 · Verificação Forense</div>
+ <h2 class="sec-title">Lei de Benford — a base é "natural"?</h2>
+ <p class="lead">A distribuição do primeiro dígito de 2.485 lançamentos comparada ao padrão de Benford. Desvios não significam fraude — sinalizam onde auditar (valores fixos/redondos recorrentes, categorias pulverizadas).</p>
+ <div class="grid2" style="margin-top:24px">
+  <div class="card"><h3>Primeiro dígito: observado × esperado</h3><div class="chartbox sm"><canvas id="bfChart"></canvas></div></div>
+  <div class="card">
+   <h3>Veredito</h3>
+   <div class="indgrid" style="grid-template-columns:1fr 1fr">
+    <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">Conformidade (MAD)</div><div class="ds">Nigrini</div></div><div class="rt"><div class="val">0,018</div><div class="pill" style="background:#B5482E">Não conforme</div></div></div>
+    <div class="ind" style="border-left-color:#B5482E"><div><div class="nm">Qui-quadrado</div><div class="ds">crít. 15,5</div></div><div class="rt"><div class="val">105,9</div></div></div>
+    <div class="ind" style="border-left-color:#D8A21A"><div><div class="nm">Dígito 7</div><div class="ds">esperado 5,8%</div></div><div class="rt"><div class="val">9,1%</div><div class="pill" style="background:#D8A21A">Inflado</div></div></div>
+    <div class="ind" style="border-left-color:#2E7D46"><div><div class="nm">Tendência 2025</div><div class="ds">Mann-Kendall</div></div><div class="rt"><div class="val">Z=2,13</div><div class="pill" style="background:#2E7D46">Signif.</div></div></div>
+   </div>
+   <div class="note" style="margin-top:14px"><b>Interpretação:</b> o excesso de dígitos 7 e a baixa de dígitos 1 são típicos de <b>pagamentos de valor fixo repetidos</b> (diárias, taxas, parcelas) e de arredondamentos — coerente com a pulverização já vista em “Serviços de Terceiros” e “Investimentos”. Recomenda-se auditar lançamentos recorrentes de valor idêntico. O gasto mensal de 2025 tem <b>tendência de alta estatisticamente significativa</b> (expansão de escala).</div>
+  </div>
+ </div>
+ <div class="alert"><b>Síntese para decisão:</b> o lote é <b>sensível, antes de tudo, ao preço da arroba e ao custo</b> (tornado) — e o Monte Carlo quantifica a chance real de prejuízo. Isso reforça a lógica do item 6.1: <b>travar preço quando o futuro cobre o custo</b> e <b>blindar a liquidez do carrego</b> são as duas decisões que mais reduzem risco.</div>
+</div></section>
+</div>
+<style>#torChart,#wfChart{min-height:300px}</style>
+<footer class="foot">
+ <div class="wrap">
+  <div class="creds">
+   <div class="seal">SS</div>
+   <div>
+    <div class="lab">Análise e Construção</div>
+    <h3>Dr. Sidney Souza</h3>
+    <div class="role">Economista e Adm. Agrícola — Estrategista Econômico do Produtor</div>
+    <div class="desc">Especialista em economia da fazenda e gestão de risco no agro. Transformamos dados da fazenda em decisões econômicas e ajudamos produtores a entender se o mercado sustenta seu negócio.</div>
+    <div class="contact">
+     <a href="https://ruralinai-commits.github.io/ruralin-site/" target="_blank" rel="noopener">ruralinai-commits.github.io/ruralin-site</a>
+     <span>@ruralin.ai</span>
+     <a href="mailto:sidneyagro@gmail.com">sidneyagro@gmail.com</a>
+     <a href="https://wa.me/5564992266886" target="_blank" rel="noopener">(64) 9 9226-6886</a>
+    </div>
+   </div>
+  </div>
+  <p class="disc">Documento gerencial de apoio à decisão — Fazenda Toca da Onça (Aporé/GO), gestão Pedro Henrique e Rogério Teles. Elaborado a partir do livro-caixa do confinamento (regime de caixa) e de cotações públicas de mercado (CEPEA/B3/Farmnews, junho de 2026). As classificações por grupo são interpretações técnicas sobre categorias planas e devem ser ajustadas à realidade da fazenda. Cotações de mercado são variáveis e meramente referenciais; não constituem recomendação de compra ou venda. Rural IN — Inteligência Econômica para o Produtor.</p>
+ </div>
+</footer>
+
+<script>
+const DATA = {"m25": ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"], "m26": ["jan", "fev", "mar", "abr", "mai"], "c25": {"INSUMOS": [774352.81, 282556.14, 119081.05, 397259.48, 186557.85, 447380.26, 579403.87, 709984.54, 575776.36, 636560.98, 551403.74, 598298.27], "GADO": [0.0, 0.0, 0.0, 0.0, 267282.0, 146112.65, 600999.16, 383393.29, 378549.66, 176783.0, 466566.31, 1499269.08], "INVESTIMENTOS": [222654.58, 86344.8, 79156.03, 78522.95, 179026.49, 54212.51, 70338.18, 45332.11, 63508.92, 82475.45, 31538.84, 382324.87], "COMBUSTIVEIS E LUBRIFICANTES": [70753.16, 87530.12, 13869.49, 93582.59, 81306.74, 39889.26, 45232.05, 51438.91, 52715.69, 69506.82, 82874.87, 92221.97], "SERVIÇOS DE TERCEIROS": [35170.38, 115157.18, 20994.0, 91078.44, 65534.0, 50040.0, 47278.18, 50391.57, 26252.0, 43872.0, 40157.0, 68449.95], "MANUTENÇÃO": [25505.18, 50175.41, 27793.35, 66484.57, 64700.4, 42587.54, 45957.4, 72815.16, 28811.02, 74797.71, 23297.91, 31737.66], "ALUGUEL OU ARRENDAMENTO": [30000.0, 30000.0, 31579.0, 68500.0, 28500.0, 28500.0, 28500.0, 38500.0, 0.0, 0.0, 0.0, 38500.0], "FOLHA DE PAGAMENTOS": [26186.59, 32561.34, 16261.26, 27526.75, 22407.67, 32257.93, 23067.2, 28792.48, 15669.41, 12011.44, 24275.73, 29202.79], "FRETES": [7100.0, 0.0, 1700.0, 12308.0, 20127.0, 32206.0, 30385.91, 11913.5, 14670.0, 8430.0, 48378.4, 84003.8], "MEDICAÇÕES": [21251.6, 11674.49, 25870.49, 0.0, 8109.97, 20133.0, 16434.19, 20783.63, 1625.0, 3465.0, 3160.0, 1687.28], "IMPOSTO": [9061.21, 7121.06, 9761.38, 9864.45, 9838.1, 17899.97, 11241.15, 15575.12, 8419.0, 6027.42, 6778.05, 19162.51], "INTERNET E SISTEMAS": [497.9, 10497.9, 6745.52, 15574.72, 11545.52, 11765.92, 4373.73, 4295.52, 4165.52, 3930.0, 3930.0, 4060.0], "COMISSÕES": [5000.0, 2800.0, 0.0, 0.0, 0.0, 3000.0, 794.0, 2350.13, 4020.0, 2100.0, 25942.6, 11900.0], "COZINHA OU ALIMENTAÇÃO": [5867.04, 2020.86, 8742.26, 1959.0, 3835.21, 8519.16, 4694.59, 2184.32, 3043.36, 3798.5, 4250.0, 7151.58], "ENERGIA ELETRICA": [5619.12, 7304.39, 5299.75, 2884.94, 0.0, 4162.33, 6127.22, 28.8, 0.0, 0.0, 356.52, 5233.86], "OUTROS": [0.0, 400.0, 3950.0, 0.0, 200.0, 1150.0, 2000.0, 1300.0, 2355.0, 508.0, 0.0, 11670.0], "DESPESAS DE VIAGEM": [130.0, 1440.92, 561.8, 870.0, 1227.0, 595.0, 0.0, 160.0, 318.0, 1340.63, 600.0, 1475.51], "MATERIAL DE CONSUMO": [0.0, 0.0, 0.0, 0.0, 0.0, 1400.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "c26": {"INSUMOS": [476135.52, 759614.28, 343829.74, 416570.18, 869016.22], "GADO": [747533.83, 0.0, 239630.0, 0.0, 0.0], "INVESTIMENTOS": [199805.71, 92734.05, 193060.57, 125965.56, 142855.48], "COMBUSTIVEIS E LUBRIFICANTES": [74829.42, 42091.39, 64701.69, 88219.63, 111319.97], "FOLHA DE PAGAMENTOS": [38410.16, 55018.59, 34621.09, 66129.92, 57754.61], "SERVIÇOS DE TERCEIROS": [53641.0, 30103.0, 69633.5, 51706.66, 33601.16], "FRETES": [7280.0, 44675.0, 28687.11, 78450.0, 38008.8], "ALUGUEL OU ARRENDAMENTO": [38500.0, 38500.0, 38500.0, 38500.0, 39100.0], "MANUTENÇÃO": [31249.44, 22061.81, 62739.86, 28576.2, 28651.37], "IMPOSTO": [26158.35, 14898.46, 13316.95, 10636.59, 33015.57], "COMISSÕES": [33929.06, 1160.0, 12660.0, 4000.0, 15676.0], "MEDICAÇÕES": [8919.83, 10217.33, 6331.75, 9006.23, 10367.63], "COZINHA OU ALIMENTAÇÃO": [2592.73, 5869.53, 2917.59, 10754.46, 5068.11], "ENERGIA ELETRICA": [4946.63, 5960.24, 4540.88, 4578.38, 5480.9], "OUTROS": [0.0, 80.0, 30.0, 1430.0, 15120.0], "DESPESAS DE VIAGEM": [0.0, 1596.15, 0.0, 622.5, 0.0], "INTERNET": [237.0, 237.0, 237.0, 237.0, 0.0]}, "rec25": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "rec26": [0.0, 316951.0, 169132.67, 1041183.4, 669040.02], "n25": {"ALUGUEL OU ARRENDAMENTO": 12, "COMBUSTIVEIS E LUBRIFICANTES": 58, "COMISSÕES": 14, "COZINHA OU ALIMENTAÇÃO": 62, "DESPESAS DE VIAGEM": 17, "ENERGIA ELETRICA": 15, "FOLHA DE PAGAMENTOS": 125, "FRETES": 56, "GADO": 66, "IMPOSTO": 61, "INSUMOS": 179, "INTERNET E SISTEMAS": 48, "INVESTIMENTOS": 207, "MANUTENÇÃO": 235, "MATERIAL DE CONSUMO": 1, "MEDICAÇÕES": 38, "OUTROS": 16, "SERVIÇOS DE TERCEIROS": 388}, "n26": {"ALUGUEL OU ARRENDAMENTO": 6, "COMBUSTIVEIS E LUBRIFICANTES": 17, "COMISSÕES": 13, "COZINHA OU ALIMENTAÇÃO": 30, "DESPESAS DE VIAGEM": 2, "ENERGIA ELETRICA": 6, "FOLHA DE PAGAMENTOS": 80, "FRETES": 32, "GADO": 7, "IMPOSTO": 43, "INSUMOS": 80, "INTERNET": 4, "INVESTIMENTOS": 240, "MANUTENÇÃO": 101, "MEDICAÇÕES": 13, "OUTROS": 6, "SERVIÇOS DE TERCEIROS": 205}, "f25": [["AUTO POSTO APORE LTDA", 712035.16], ["SÃO MARTINHO S/A", 711111.1], ["CARGILL ALIMENTOS LTDA", 707312.42], ["NORMELIO PELIZON", 418184.1], ["NEOMILLE S.A.", 411650.0], ["TIAGO CADORE", 401077.94], ["CHEQUE N° 11", 387777.0], ["MILHAO INDUSTRIA E COMERCIO DE ING", 372686.8]], "f26": [["PEDRO LOURENÇO MONTES", 1533400.0], ["LOUIS DREYFUS COMPANY BRASIL S.A.", 610207.0], ["SAO MARTINHO S A", 532906.4], ["CARGILL ALIMENTOS LTDA", 382900.0], ["AUTO POSTO APORE LTDA", 373069.32], ["CHEQUE ", 239630.0], ["ARRENDAMENTO TOCA", 192500.0], ["GABRIELLA SAPIA CASTILHO", 176792.44]]};
+const BRL=v=>'R$ '+Math.round(v).toLocaleString('pt-BR');
+const BRLm=v=>'R$ '+(v/1e6).toFixed(2)+' mi';
+Chart.defaults.font.family="Inter, sans-serif";Chart.defaults.color="#6E6B5E";
+const PINE='#1F4E2C',PINE3='#2E7D46',GOLD='#C9A227',CLAY='#B5482E';
+const MES={jan:'jan',fev:'fev',mar:'mar',abr:'abr',mai:'mai',jun:'jun',jul:'jul',ago:'ago',set:'set',out:'out',nov:'nov',dez:'dez'};
+
+/* ===== TABS ===== */
+document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');
+ window.scrollTo({top:0,behavior:'instant'});
+}));
+
+/* ===== PAGE 1 widgets ===== */
+(function(){const svg=document.getElementById('gauge');if(!svg)return;const NS='http://www.w3.org/2000/svg';
+ const cx=130,cy=130,r=104,a0=Math.PI;
+ function pt(a){return[cx+r*Math.cos(a),cy-r*Math.sin(a)]}
+ function arc(s,e,c,w){const[x0,y0]=pt(s);const[x1,y1]=pt(e);const p=document.createElementNS(NS,'path');
+  p.setAttribute('d',`M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`);p.setAttribute('fill','none');p.setAttribute('stroke',c);p.setAttribute('stroke-width',w);p.setAttribute('stroke-linecap','round');svg.appendChild(p);}
+ [[0,.2,'#B5482E'],[.2,.4,'#D98324'],[.4,.6,'#D8A21A'],[.6,.8,'#5BA86B'],[.8,1,'#1F6F3D']].forEach(([s,e,c])=>arc(a0-s*Math.PI,a0-e*Math.PI,c,16));
+ const tgt=a0-0.548*Math.PI;const nl=document.createElementNS(NS,'line');nl.setAttribute('x1',cx);nl.setAttribute('y1',cy);nl.setAttribute('x2',cx);nl.setAttribute('y2',cy);nl.setAttribute('stroke','#13351E');nl.setAttribute('stroke-width','4');nl.setAttribute('stroke-linecap','round');svg.appendChild(nl);
+ const hub=document.createElementNS(NS,'circle');hub.setAttribute('cx',cx);hub.setAttribute('cy',cy);hub.setAttribute('r',7);hub.setAttribute('fill','#13351E');svg.appendChild(hub);
+ let cur=a0;(function st(){cur-=0.025;if(cur<tgt)cur=tgt;nl.setAttribute('x2',cx+(r-26)*Math.cos(cur));nl.setAttribute('y2',cy-(r-26)*Math.sin(cur));if(cur>tgt)requestAnimationFrame(st);})();})();
+
+const dims=[['Liquidez',45,'#D8A21A'],['Geração de caixa',40,'#D98324'],['Eficiência oper.',62,'#5BA86B'],['Controle de despesas',58,'#D8A21A'],['Endividamento',75,'#1F6F3D'],['Cap. investimento',55,'#D8A21A']];
+document.getElementById('subg').innerHTML=dims.map(d=>`<div class="sg"><div class="t">${d[0]}</div><div class="bar"><i style="width:0%;background:${d[2]}" data-w="${d[1]}"></i></div><div class="pv">${d[1]}</div></div>`).join('');
+const inds=[['Geração de caixa','-1,88','Crítico','#B5482E','Carrego do ciclo; normaliza na venda total do lote.'],['Custo variável / receita','1,72x','Crítico','#B5482E','Venda parcial vs. compra do próximo lote.'],['Despesa adm. / receita','~28%','Bom','#2E7D46','Cai p/ <10% sobre receita de ciclo cheio.'],['Despesa financeira','0%','Excelente','#1F6F3D','Sem juros registrados — baixa alavancagem.'],['Participação investimentos','11,9%','Atenção','#D8A21A','Alto e contaminado por custeio/retiradas.'],['Carga tributária','1,5%','Excelente','#1F6F3D','Baixa, coerente com atividade rural.'],['Autofinanciamento','0,35x','Atenção','#D8A21A','Receita cobre 35% do desembolso no carrego.'],['Animais + Nutrição','≈ 65%','—','#1F4E2C','Os dois drivers de rentabilidade do confinamento.']];
+document.getElementById('indgrid').innerHTML=inds.map(i=>`<div class="ind" style="border-left-color:${i[3]}"><div><div class="nm">${i[0]}</div><div class="ds">${i[4]}</div></div><div class="rt"><div class="val">${i[1]}</div><div class="pill" style="background:${i[3]}">${i[2]}</div></div></div>`).join('');
+const th=[['Boi gordo · GO','R$ 327/@','+10,6% no ano',72,'#2E7D46','Recorde nominal; vender favorece.'],['Reposição · bezerro','R$ 3.399/cab','+10,8% no ano',80,'#B5482E','Magro caro aperta a margem.'],['Milho · ração','R$ 64,5/sc','−10% no ano',28,'#C9A227','Mínima de 8 meses; travar custo.']];
+document.getElementById('thermos').innerHTML=th.map(t=>`<div class="thermo"><div class="tube"><div class="glass"><div class="fill" style="height:0%;background:${t[4]}" data-h="${t[3]}"></div></div><div class="bulb" style="background:${t[4]}"></div></div><div class="info"><div class="lab">${t[0]}</div><div class="big">${t[1]}</div><div class="delta" style="color:${t[4]}">${t[2]}</div><div class="cmt">${t[5]}</div></div></div>`).join('');
+
+const m25=DATA.m25,m26=DATA.m26;
+const sum=(o)=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,v.reduce((a,b)=>a+b,0)]));
+const T25=sum(DATA.c25),T26=sum(DATA.c26);
+const despMon=(c,months)=>months.map((_,i)=>Object.values(c).reduce((a,v)=>a+v[i],0));
+const labels=m25.map(m=>m+'/25').concat(m26.map(m=>m+'/26'));
+const despAll=despMon(DATA.c25,m25).concat(despMon(DATA.c26,m26));
+const recAll=DATA.rec25.concat(DATA.rec26);
+new Chart(document.getElementById('cashChart'),{type:'bar',data:{labels,datasets:[
+ {label:'Desembolso',data:despAll,backgroundColor:despAll.map((_,i)=>i<12?'rgba(31,78,44,.78)':'rgba(181,72,46,.82)'),borderRadius:4,order:2},
+ {label:'Receita (vendas)',data:recAll,type:'line',borderColor:GOLD,backgroundColor:GOLD,borderWidth:3,tension:.35,pointRadius:3,order:1}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+BRL(c.parsed.y)}}},
+ scales:{x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true,font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>'R$ '+(v/1e6).toFixed(1)+'mi'}}}}});
+new Chart(document.getElementById('abcChart'),{type:'doughnut',data:{labels:['Insumos/Nutrição','Gado','Investimentos','Combustível','Serv. Terceiros','Manutenção','Outros'],datasets:[{data:[40.2,26.9,9.4,5.4,4.5,3.8,9.8],backgroundColor:['#1F4E2C','#2E7D46','#C9A227','#B5482E','#5BA86B','#D8A21A','#B0B7A6'],borderColor:'#fff',borderWidth:2}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{boxWidth:11,font:{size:11},padding:8}},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'%'}}}}});
+function lc(id,data,color,fill){new Chart(document.getElementById(id),{type:'line',data:{labels:['fev','mar','abr','mai','1ªq jun','hoje'],datasets:[{data,borderColor:color,backgroundColor:fill,fill:true,tension:.35,borderWidth:3,pointRadius:2}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'R$ '+c.parsed.y}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:10}}}}}});}
+lc('boiChart',[330,332,340,349.7,353,347],'#1F4E2C','rgba(31,78,44,.10)');
+lc('milhoChart',[72,70,68,66,64.5,64.5],'#C9A227','rgba(201,162,39,.12)');
+
+/* ===== PAGE 2 ===== */
+const PALETTE=['#1F4E2C','#2E7D46','#C9A227','#B5482E','#5BA86B','#D8A21A','#7BA0B5','#B0B7A6','#8E6BA8','#C77F4A','#5B8C7B','#A05C5C'];
+const SEG={'Custos Variáveis':['INSUMOS','GADO','MEDICAÇÕES','FRETES','COMBUSTIVEIS E LUBRIFICANTES'],'Custos Fixos':['ALUGUEL OU ARRENDAMENTO','FOLHA DE PAGAMENTOS','MANUTENÇÃO','ENERGIA ELETRICA'],'Adm. / Despesas':['SERVIÇOS DE TERCEIROS','COZINHA OU ALIMENTAÇÃO','INTERNET E SISTEMAS','INTERNET','MATERIAL DE CONSUMO','DESPESAS DE VIAGEM','OUTROS','COMISSÕES'],'Tributos':['IMPOSTO'],'Investimentos':['INVESTIMENTOS']};
+const DRV={'Compra de animais':['GADO'],'Nutrição':['INSUMOS'],'Combustíveis':['COMBUSTIVEIS E LUBRIFICANTES'],'Mão de obra':['FOLHA DE PAGAMENTOS'],'Manutenção/Máq.':['MANUTENÇÃO'],'Fretes':['FRETES'],'Sanidade':['MEDICAÇÕES'],'Administração':['SERVIÇOS DE TERCEIROS','COZINHA OU ALIMENTAÇÃO','INTERNET E SISTEMAS','INTERNET','MATERIAL DE CONSUMO','DESPESAS DE VIAGEM','OUTROS','COMISSÕES','ENERGIA ELETRICA','ALUGUEL OU ARRENDAMENTO'],'Tributos':['IMPOSTO'],'Investimentos':['INVESTIMENTOS']};
+function groupTotals(map,tot){return Object.entries(map).map(([g,cats])=>[g,cats.reduce((a,c)=>a+(tot[c]||0),0)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);}
+function donut(id,pairs){return new Chart(document.getElementById(id),{type:'doughnut',data:{labels:pairs.map(p=>p[0]),datasets:[{data:pairs.map(p=>p[1]),backgroundColor:PALETTE,borderColor:'#fff',borderWidth:2}]},options:{maintainAspectRatio:false,cutout:'56%',plugins:{legend:{position:'right',labels:{boxWidth:11,font:{size:10.5},padding:7}},tooltip:{callbacks:{label:c=>c.label+': '+BRL(c.parsed)+' ('+(c.parsed/pairs.reduce((a,p)=>a+p[1],0)*100).toFixed(1)+'%)'}}}}});}
+donut('segChart',groupTotals(SEG,T25));
+donut('drvChart',groupTotals(DRV,T25));
+function fchart(id,arr){new Chart(document.getElementById(id),{type:'bar',data:{labels:arr.map(a=>a[0]),datasets:[{data:arr.map(a=>a[1]),backgroundColor:PINE3,borderRadius:4}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>BRL(c.parsed.x)}}},scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(1)+'mi',font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});}
+fchart('f25Chart',DATA.f25);fchart('f26Chart',DATA.f26);
+
+/* Year-driven charts: receita x desp, stacked, heatmap, table */
+let rxd,stk;
+function topCats(tot,k){const e=Object.entries(tot).sort((a,b)=>b[1]-a[1]);return e.slice(0,k).map(x=>x[0]);}
+function buildYear(y){
+ const c=y==='25'?DATA.c25:DATA.c26, months=y==='25'?m25:m26, rec=y==='25'?DATA.rec25:DATA.rec26, tot=y==='25'?T25:T26;
+ const labs=months.map(m=>MES[m]);
+ const desp=despMon(c,months);
+ if(rxd)rxd.destroy();
+ rxd=new Chart(document.getElementById('rxdChart'),{type:'bar',data:{labels:labs,datasets:[
+  {label:'Desembolso',data:desp,backgroundColor:'rgba(31,78,44,.8)',borderRadius:4},
+  {label:'Receita',data:rec,backgroundColor:GOLD,borderRadius:4}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+BRL(c.parsed.y)}}},
+  scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(1)+'mi'}}}}});
+ const tc=topCats(tot,7);
+ const ds=tc.map((cat,i)=>({label:cat.charAt(0)+cat.slice(1).toLowerCase(),data:c[cat],backgroundColor:PALETTE[i],borderWidth:0}));
+ const others=months.map((_,i)=>Object.entries(c).filter(([k])=>!tc.includes(k)).reduce((a,[,v])=>a+v[i],0));
+ ds.push({label:'Outros',data:others,backgroundColor:'#B0B7A6'});
+ if(stk)stk.destroy();
+ stk=new Chart(document.getElementById('stackChart'),{type:'bar',data:{labels:labs,datasets:ds},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:10.5},padding:8}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+BRL(c.parsed.y)}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(1)+'mi'}}}}});
+ document.getElementById('t-rxd').textContent='Receita × Desembolso por mês — '+(y==='25'?'2025':'2026 (Jan–Mai)');
+ document.getElementById('t-stack').textContent='Desembolso mensal por categoria — '+(y==='25'?'2025':'2026 (Jan–Mai)');
+}
+buildYear('25');
+document.querySelectorAll('#ytoggle button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#ytoggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');buildYear(b.dataset.y);}));
+
+/* Heatmap */
+function buildHeat(y){
+ const c=y==='25'?DATA.c25:DATA.c26, months=y==='25'?m25:m26;
+ const cats=Object.entries(y==='25'?T25:T26).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+ let max=0;cats.forEach(cat=>c[cat].forEach(v=>{if(v>max)max=v;}));
+ const el=document.getElementById('heat');
+ el.style.gridTemplateColumns=`150px repeat(${months.length},1fr)`;
+ let html='<div class="rl" style="font-weight:600;color:#6E6B5E">Categoria</div>'+months.map(m=>`<div class="hh">${MES[m]}</div>`).join('');
+ cats.forEach(cat=>{html+=`<div class="rl" title="${cat}">${cat.charAt(0)+cat.slice(1).toLowerCase()}</div>`;
+  c[cat].forEach(v=>{const t=v/max;const bg=v<=0?'#F2F0E8':`rgba(31,78,44,${(0.12+t*0.85).toFixed(2)})`;const tx=t>0.45?'#fff':'rgba(0,0,0,.5)';
+   html+=`<div class="cell" style="background:${bg};color:${tx}" title="${cat}: ${BRL(v)}">${v>0?(v/1000).toFixed(0)+'k':''}</div>`;});});
+ el.innerHTML=html;
+}
+buildHeat('25');
+document.querySelectorAll('#htoggle button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#htoggle button').forEach(x=>x.classList.remove('active'));b.classList.add('active');buildHeat(b.dataset.y);}));
+
+/* Full table */
+(function(){const cats=Object.keys(T25).concat(Object.keys(T26).filter(k=>!(k in T25)));
+ const uniq=[...new Set(cats)].sort((a,b)=>(T25[b]||0)-(T25[a]||0));
+ const tot25=Object.values(T25).reduce((a,b)=>a+b,0),tot26=Object.values(T26).reduce((a,b)=>a+b,0);
+ let h='<thead><tr><th>Categoria</th><th>Desemb. 2025</th><th>%</th><th>Méd./mês</th><th>Lanç.</th><th>Desemb. 2026</th><th>%</th><th>Méd./mês</th><th>Lanç.</th></tr></thead><tbody>';
+ uniq.forEach(cat=>{const v25=T25[cat]||0,v26=T26[cat]||0;
+  h+=`<tr><td>${cat.charAt(0)+cat.slice(1).toLowerCase()}</td><td>${BRL(v25)}</td><td>${(v25/tot25*100).toFixed(1)}%</td><td>${BRL(v25/12)}</td><td>${DATA.n25[cat]||0}</td><td>${BRL(v26)}</td><td>${v26?(v26/tot26*100).toFixed(1)+'%':'—'}</td><td>${v26?BRL(v26/5):'—'}</td><td>${DATA.n26[cat]||0}</td></tr>`;});
+ h+=`</tbody><tfoot><tr class="tot"><td>TOTAL</td><td>${BRL(tot25)}</td><td>100%</td><td>${BRL(tot25/12)}</td><td>1.598</td><td>${BRL(tot26)}</td><td>100%</td><td>${BRL(tot26/5)}</td><td>887</td></tr></tfoot>`;
+ document.getElementById('catTable').innerHTML=h;})();
+
+/* reveal + fills */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+setTimeout(()=>{document.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%');document.querySelectorAll('.tube .fill').forEach(f=>f.style.height=f.dataset.h+'%');},350);
+
+/* ================= ABA 3 — QUANTITATIVA ================= */
+const QUANT={"seas": [102.1, 60.0, 30.6, 71.4, 78.3, 77.6, 125.0, 118.6, 97.3, 92.8, 108.3, 237.9], "cv_cat": [["FOLHA DE PAGAMENTOS", 24185.0, 27.0], ["COMBUSTIVEIS E LUBRIFICANTES", 65077.0, 38.0], ["IMPOSTO", 10896.0, 40.0], ["INSUMOS", 488218.0, 42.0], ["MANUTENÇÃO", 46222.0, 42.0], ["SERVIÇOS DE TERCEIROS", 54531.0, 50.0], ["COZINHA OU ALIMENTAÇÃO", 4672.0, 52.0], ["INTERNET E SISTEMAS", 6782.0, 66.0], ["ALUGUEL OU ARRENDAMENTO", 26882.0, 73.0], ["DESPESAS DE VIAGEM", 727.0, 74.0], ["MEDICAÇÕES", 11183.0, 83.0], ["INVESTIMENTOS", 114620.0, 88.0], ["ENERGIA ELETRICA", 3085.0, 92.0], ["FRETES", 22602.0, 106.0], ["GADO", 326580.0, 129.0], ["COMISSÕES", 4826.0, 154.0], ["OUTROS", 1961.0, 167.0], ["MATERIAL DE CONSUMO", 117.0, 346.0]], "trough": -18697595.0, "trough_m": "mai/26", "burn_avg": 1213163.0, "burn_max": 2886349.0, "hhi25": 0.017115108077512844, "gini25": 0.8317095674834072, "top5_25": 0.20334536074767035, "nsup25": 574, "hhi26": 0.08716903570848616, "gini26": 0.8720566003808594, "top5_26": 0.5417474390648922, "nsup26": 340, "cum": [-1239150.0, -1966734.0, -2338100.0, -3204515.0, -4154713.0, -5096525.0, -6613352.0, -8052591.0, -9232490.0, -10358097.0, -11671607.0, -14557956.0, -16302125.0, -17121094.0, -18067399.0, -17961599.0, -18697595.0], "yoy_jm": 52.5};
+const meses17=['jan/25','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez','jan/26','fev','mar','abr','mai'];
+/* A — cumulative cash curve */
+new Chart(document.getElementById('cumChart'),{type:'line',data:{labels:meses17,datasets:[{label:'Caixa acumulado',data:QUANT.cum,borderColor:'#B5482E',backgroundColor:'rgba(181,72,46,.10)',fill:true,tension:.25,pointRadius:2,borderWidth:2.5}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>BRL(c.parsed.y)}}},scales:{x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true,font:{size:9}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(0)+'mi'}}}}});
+/* A — carrying cost interactive */
+const capMed=QUANT.cum.reduce((a,b)=>a+Math.abs(b),0)/QUANT.cum.length;
+function carry(){const r=parseFloat(document.getElementById('ccSlider').value);
+ document.getElementById('ccVal').textContent=r.toFixed(2).replace('.',',')+'%';
+ document.getElementById('capMed').textContent=BRL(capMed);
+ document.getElementById('carryCost').textContent=BRL(capMed*r/100);}
+document.getElementById('ccSlider').addEventListener('input',carry);carry();
+/* B — seasonal */
+new Chart(document.getElementById('seasChart'),{type:'bar',data:{labels:['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'],datasets:[{label:'Índice sazonal',data:QUANT.seas,backgroundColor:QUANT.seas.map(v=>v>=130?'#B5482E':v>=100?'#2E7D46':'#9BB7A4'),borderRadius:4}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Índice '+c.parsed.y+' (base 100)'}},
+  annotation:{}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.06)'},suggestedMax:260,ticks:{callback:v=>v}}}}});
+/* D — CV by category */
+const cv=QUANT.cv_cat;
+new Chart(document.getElementById('cvChart'),{type:'bar',data:{labels:cv.map(c=>c[0].charAt(0)+c[0].slice(1).toLowerCase()),datasets:[{data:cv.map(c=>c[2]),backgroundColor:cv.map(c=>c[2]<40?'#2E7D46':c[2]<80?'#D8A21A':'#B5482E'),borderRadius:4}]},
+ options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'CV '+c.parsed.x+'% · média/mês '+BRL(cv[c.dataIndex][1])}}},scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},ticks:{font:{size:9.5}}}}}});
+/* E — VaR */
+function varCalc(){const arb=parseFloat(document.getElementById('arbSlider').value);const vol=parseFloat(document.getElementById('volSlider').value)/100;
+ document.getElementById('arbVal').textContent=arb.toLocaleString('pt-BR')+' @';
+ document.getElementById('volVal').textContent=(vol*100).toFixed(0)+'%';
+ const price=327;const lot=arb*price;const v=1.645*vol*Math.sqrt(30/252);
+ document.getElementById('lotVal').textContent=BRL(lot);
+ document.getElementById('varPct').textContent='−'+(v*100).toFixed(1)+'%';
+ document.getElementById('varBrl').textContent='−'+BRL(lot*v);}
+['arbSlider','volSlider'].forEach(id=>document.getElementById(id).addEventListener('input',varCalc));varCalc();
+/* F — break-even */
+function be(){const h=+document.getElementById('beHead').value||0;const a=+document.getElementById('beArb').value||0;const cost=+document.getElementById('beCost').value||0;const p=+document.getElementById('bePrice').value||0;
+ const tot=h*a;const cpa=tot>0?cost/tot:0;const bep=cpa;const rev=tot*p;const mg=rev-cost;const mgArb=tot>0?mg/tot:0;
+ document.getElementById('beTotArb').textContent=Math.round(tot).toLocaleString('pt-BR')+' @';
+ document.getElementById('beCostArb').textContent='R$ '+cpa.toFixed(2).replace('.',',')+'/@';
+ document.getElementById('beBE').textContent='R$ '+bep.toFixed(2).replace('.',',')+'/@';
+ document.getElementById('beMg').textContent=BRL(mg);
+ document.getElementById('beMgArb').textContent='R$ '+mgArb.toFixed(2).replace('.',',')+'/@';
+ const pos=mg>=0;const pill=document.getElementById('beMgPill');pill.textContent=pos?'Lucro':'Prejuízo';pill.style.background=pos?'#2E7D46':'#B5482E';
+ document.getElementById('beMgRow').style.borderLeftColor=pos?'#2E7D46':'#B5482E';
+ document.getElementById('beBeRow').style.borderLeftColor=(p>=bep)?'#2E7D46':'#B5482E';}
+['beHead','beArb','beCost','bePrice'].forEach(id=>document.getElementById(id).addEventListener('input',be));be();
+
+/* ===== HEDGE B3 (item 6.1) ===== */
+function erf(x){const t=1/(1+0.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;}
+function ncdf(x){return 0.5*(1+erf(x/Math.SQRT2));}
+const FUT=[['jul/26','BGI N26',333],['ago/26','BGI Q26',335],['set/26','BGI U26',340],['out/26','BGI V26',341],['nov/26','BGI X26',351],['dez/26','BGI Z26',358],['jan/27','BGI F27',364],['fev/27','BGI G27',369]];
+let HCPA=0,HARB=0;
+function buildHedgeSkeleton(){
+ let h='<thead><tr><th>Vencimento</th><th>Código</th><th>Futuro (R$/@)</th><th>Travado efetivo</th><th>Result./@</th><th>Result. total</th><th>Contratos</th><th>Veredito</th></tr></thead><tbody>';
+ FUT.forEach((f,i)=>{h+=`<tr><td>${f[0]}</td><td style="font-size:.8rem;color:#888">${f[1]}</td><td><input type="number" id="fut${i}" value="${f[2]}" step="1" style="width:90px;font-family:'Spline Sans Mono',monospace;text-align:right;padding:5px 7px;border:1px solid var(--line);border-radius:6px"></td><td id="lk${i}">—</td><td id="ra${i}">—</td><td id="rt${i}">—</td><td id="ct${i}">—</td><td id="vd${i}">—</td></tr>`;});
+ h+='</tbody>';
+ document.getElementById('hedgeTable').innerHTML=h;
+ FUT.forEach((f,i)=>document.getElementById('fut'+i).addEventListener('input',recompute));
+}
+function recompute(){
+ const base=+document.getElementById('hgBase').value||0;
+ let best={ra:-1e9,m:'',lk:0};
+ FUT.forEach((f,i)=>{
+  const p=+document.getElementById('fut'+i).value||0;
+  const lk=p-base, ra=lk-HCPA, rt=ra*HARB, ct=HARB/330;
+  const col=ra>5?'#2E7D46':(ra<-5?'#B5482E':'#D8A21A');
+  const txt=ra>5?'Trava lucro':(ra<-5?'Trava prejuízo':'Neutro');
+  document.getElementById('lk'+i).textContent='R$ '+lk.toFixed(2).replace('.',',');
+  document.getElementById('ra'+i).innerHTML='<b style="color:'+col+'">'+(ra>=0?'+':'')+'R$ '+ra.toFixed(2).replace('.',',')+'</b>';
+  document.getElementById('rt'+i).textContent=(rt>=0?'+':'−')+'R$ '+Math.abs(Math.round(rt)).toLocaleString('pt-BR');
+  document.getElementById('ct'+i).textContent=ct.toFixed(1);
+  document.getElementById('vd'+i).innerHTML='<span class="pill" style="background:'+col+'">'+txt+'</span>';
+  if(ra>best.ra){best={ra:ra,m:f[0],lk:lk};}
+ });
+ const v=document.getElementById('hgVerdict'),b=document.getElementById('hgBest');
+ if(best.ra>5){v.innerHTML='✅ <b>Viável travar com futuro.</b> O melhor vencimento cobre o custo com folga.';
+  b.innerHTML='<div class="ind" style="border-left-color:#2E7D46"><div class="nm">Melhor vencimento: '+best.m+'</div><div class="rt"><div class="val">+R$ '+best.ra.toFixed(2).replace('.',',')+'/@</div><div class="pill" style="background:#2E7D46">Trava lucro</div></div></div><div class="note" style="margin-top:8px">Efetivo R$ '+best.lk.toFixed(2).replace('.',',')+'/@ · margem travada +R$ '+Math.round(best.ra*HARB).toLocaleString('pt-BR')+' no lote.</div>';}
+ else if(best.ra>-5){v.innerHTML='🟡 <b>Zona neutra.</b> Os vencimentos apenas empatam com o custo — travar não agrega; avalie esperar ou proteger com PUT.';b.innerHTML='';}
+ else{v.innerHTML='⛔ <b>O futuro travaria prejuízo</b> em todos os vencimentos (efetivo &lt; custo/@). Não trave a fundo perdido: reduza custo, aguarde ou use PUT para um piso. Veja o painel ao lado.';b.innerHTML='';}
+}
+function syncHedge(){
+ const h=+document.getElementById('beHead').value||0,a=+document.getElementById('beArb').value||0,c=+document.getElementById('beCost').value||0;
+ const tot=h*a;HARB=tot;HCPA=tot>0?c/tot:0;
+ document.getElementById('hgCpa').value='R$ '+HCPA.toFixed(2).replace('.',',')+'/@';
+ document.getElementById('hgArb').value=Math.round(tot).toLocaleString('pt-BR')+' @';
+ recompute();putCalc();
+}
+buildHedgeSkeleton();
+['beHead','beArb','beCost'].forEach(id=>document.getElementById(id).addEventListener('input',syncHedge));
+document.getElementById('hgBase').addEventListener('input',recompute);
+/* PUT — Black-76 */
+function putCalc(){
+ const T=(+document.getElementById('opT').value||1)/12, K=+document.getElementById('opK').value||0, F=+document.getElementById('opF').value||0, vol=(+document.getElementById('opVol').value||1)/100, r=0.1425, base=+document.getElementById('hgBase').value||0;
+ const sq=vol*Math.sqrt(T); const d1=(Math.log(F/K)+0.5*vol*vol*T)/sq; const d2=d1-sq;
+ const prem=Math.exp(-r*T)*(K*ncdf(-d2)-F*ncdf(-d1));
+ const floor=K-prem-base;
+ document.getElementById('opPrem').textContent='R$ '+prem.toFixed(2).replace('.',',')+'/@';
+ document.getElementById('opCost').textContent='R$ '+Math.round(prem*HARB).toLocaleString('pt-BR');
+ document.getElementById('opFloor').textContent='R$ '+floor.toFixed(2).replace('.',',')+'/@';
+ const rec=document.getElementById('opRec'),row=document.getElementById('opRecRow');
+ let bestFut=-1e9;FUT.forEach((f,i)=>{const p=+document.getElementById('fut'+i).value||0;const ra=(p-base)-HCPA;if(ra>bestFut)bestFut=ra;});
+ if(bestFut>5){rec.textContent='Prefira o futuro';rec.style.background='#2E7D46';row.style.borderLeftColor='#2E7D46';}
+ else if(floor>HCPA){rec.textContent='PUT protege o piso';rec.style.background='#2E7D46';row.style.borderLeftColor='#2E7D46';}
+ else{rec.textContent='Piso < custo: aguardar';rec.style.background='#B5482E';row.style.borderLeftColor='#B5482E';}
+}
+['opT','opK','opF','opVol'].forEach(id=>document.getElementById(id).addEventListener('input',putCalc));
+const _be0=be;be=function(){_be0();syncHedge();putCalc();};
+syncHedge();putCalc();
+
+/* ================= ABA 4 — ESTATÍSTICA & STRESS ================= */
+const STATS={"benford_obs": [27.0, 16.1, 16.1, 8.7, 8.2, 7.7, 9.1, 3.8, 3.3], "benford_exp": [30.1, 17.6, 12.5, 9.7, 7.9, 6.7, 5.8, 5.1, 4.6], "benford_N": 2485, "benford_chi2": 105.9, "benford_mad": 0.0182, "benford_verdict": "Não conforme"};
+function lot(){const h=+document.getElementById('beHead').value||0,a=+document.getElementById('beArb').value||0,c=+document.getElementById('beCost').value||0,p=+document.getElementById('bePrice').value||0;const arb=h*a;return{h,a,c,p,arb,cpa:arb>0?c/arb:0};}
+let mcChart,torChart,wfChart,lqChart,bfChart;
+function gauss(){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+/* A Monte Carlo */
+function runMC(){
+ const L=lot();const mu=+document.getElementById('mcPrice').value||0;const vol=(+document.getElementById('mcVol').value||1)/100;const T=(+document.getElementById('mcHor').value||1)/12;
+ const sd=mu*vol*Math.sqrt(T);const N=10000;const m=[];let loss=0;
+ for(let i=0;i<N;i++){const pr=mu+sd*gauss();const mg=L.arb*pr-L.c;m.push(mg);if(mg<0)loss++;}
+ m.sort((a,b)=>a-b);
+ const mean=m.reduce((a,b)=>a+b,0)/N;const p5=m[Math.floor(0.05*N)];const p50=m[Math.floor(0.5*N)];const p95=m[Math.floor(0.95*N)];
+ const es=m.slice(0,Math.floor(0.05*N)).reduce((a,b)=>a+b,0)/Math.floor(0.05*N);
+ const pl=(100*loss/N);
+ document.getElementById('mcPloss').textContent=pl.toFixed(1)+'%';
+ document.getElementById('mcMean').textContent=BRL(mean);
+ document.getElementById('mcP590').textContent=BRL(p5)+' / '+BRL(p95);
+ document.getElementById('mcES').textContent=BRL(es);
+ document.getElementById('mcPlossTop').textContent=pl.toFixed(0)+'%';
+ document.getElementById('mcMedTop').textContent=BRL(p50);
+ /* histogram */
+ const lo=m[0],hi=m[N-1],B=30,w=(hi-lo)/B;const bins=new Array(B).fill(0);const cen=[];
+ for(let i=0;i<B;i++)cen.push(lo+w*(i+0.5));
+ m.forEach(x=>{let k=Math.min(B-1,Math.floor((x-lo)/w));bins[k]++;});
+ if(mcChart)mcChart.destroy();
+ mcChart=new Chart(document.getElementById('mcChart'),{type:'bar',data:{labels:cen.map(c=>(c/1e6).toFixed(1)),datasets:[{data:bins,backgroundColor:cen.map(c=>c<0?'rgba(181,72,46,.8)':'rgba(46,125,70,.8)'),borderWidth:0,categoryPercentage:1,barPercentage:1}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>'Margem ~ R$ '+i[0].label+' mi',label:c=>c.parsed.y+' cenários'}}},scales:{x:{grid:{display:false},ticks:{maxTicksLimit:9,callback:function(v){return (this.getLabelForValue(v))+'mi'}}},y:{grid:{color:'rgba(0,0,0,.06)'},title:{display:true,text:'nº de cenários'}}}}});
+}
+/* B Tornado */
+function runTor(){
+ const L=lot();const s=(+document.getElementById('torSwing').value||10)/100;const base=L.arb*L.p-L.c;
+ const vars=[
+  ['Preço da arroba',()=>L.arb*(L.p*(1-s))-L.c,()=>L.arb*(L.p*(1+s))-L.c],
+  ['Custo do lote',()=>L.arb*L.p-L.c*(1+s),()=>L.arb*L.p-L.c*(1-s)],
+  ['Peso de venda (@/cab)',()=>L.h*(L.a*(1-s))*L.p-L.c,()=>L.h*(L.a*(1+s))*L.p-L.c],
+  ['Preço do milho (~45% custo)',()=>L.arb*L.p-L.c*(1+0.45*s),()=>L.arb*L.p-L.c*(1-0.45*s)]
+ ];
+ const rows=vars.map(v=>{const a=v[1](),b=v[2]();return{n:v[0],lo:Math.min(a,b),hi:Math.max(a,b),span:Math.abs(b-a)};}).sort((x,y)=>x.span-y.span);
+ if(torChart)torChart.destroy();
+ torChart=new Chart(document.getElementById('torChart'),{type:'bar',data:{labels:rows.map(r=>r.n),datasets:[{data:rows.map(r=>[r.lo,r.hi]),backgroundColor:'#2E7D46',borderColor:'#1F4E2C',borderWidth:1,borderSkipped:false}]},
+  options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Faixa: '+BRL(c.raw[0])+' a '+BRL(c.raw[1])}}},scales:{x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(1)+'mi'}},y:{grid:{display:false}}}}});
+}
+/* C Waterfall */
+function runWF(){
+ const L=lot();const rev=L.arb*L.p;const alloc=[['Compra animais',.16,'#2E7D46'],['Nutrição',.45,'#1F4E2C'],['Combustível',.06,'#B5482E'],['Mão de obra',.04,'#D8A21A'],['Fretes',.03,'#7BA0B5'],['Outros',.26,'#B0B7A6']];
+ const labels=['Receita'];const data=[[0,rev]];const colors=['#C9A227'];let cum=rev;
+ alloc.forEach(a=>{const c=L.c*a[1];labels.push(a[0]);data.push([cum-c,cum]);colors.push(a[2]);cum-=c;});
+ labels.push('Resultado');data.push([0,cum]);colors.push(cum>=0?'#2E7D46':'#B5482E');
+ if(wfChart)wfChart.destroy();
+ wfChart=new Chart(document.getElementById('wfChart'),{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const v=c.raw[1]-c.raw[0];return (c.dataIndex===0||c.dataIndex===labels.length-1?BRL(c.raw[1]):'−'+BRL(v));}}}},scales:{x:{grid:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e6).toFixed(1)+'mi'}}}}});
+}
+/* D Liquidity */
+function runLQ(){
+ const cap=+document.getElementById('lqCap').value||0;const r=(+document.getElementById('lqRate').value||0)/100;
+ const months=[1,2,3];const costs=months.map(mn=>cap*r*(mn/12));
+ if(lqChart)lqChart.destroy();
+ lqChart=new Chart(document.getElementById('lqChart'),{type:'bar',data:{labels:['+30 dias','+60 dias','+90 dias'],datasets:[{data:costs,backgroundColor:['#D8A21A','#D98324','#B5482E'],borderRadius:4}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Custo extra: '+BRL(c.parsed.y)}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>(v/1e3).toFixed(0)+'k'}}}}});
+ document.getElementById('lqNote').innerHTML='Atrasar a venda em 90 dias custa <b>'+BRL(costs[2])+'</b> só de capital parado — sem contar eventual queda de preço. É o preço de não ter giro estruturado.';
+}
+/* E Benford */
+function runBF(){
+ if(bfChart)bfChart.destroy();
+ bfChart=new Chart(document.getElementById('bfChart'),{type:'bar',data:{labels:['1','2','3','4','5','6','7','8','9'],datasets:[
+  {label:'Observado',data:STATS.benford_obs,backgroundColor:'#1F4E2C',borderRadius:3},
+  {label:'Benford (esperado)',data:STATS.benford_exp,type:'line',borderColor:'#C9A227',backgroundColor:'#C9A227',borderWidth:2.5,pointRadius:3,tension:.2}]},
+  options:{maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},scales:{x:{grid:{display:false},title:{display:true,text:'Primeiro dígito'}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{callback:v=>v+'%'}}}}});
+}
+function runAllStress(){runMC();runTor();runWF();runLQ();runBF();}
+['mcPrice','mcVol','mcHor'].forEach(id=>document.getElementById(id).addEventListener('input',runMC));
+document.getElementById('torSwing').addEventListener('input',runTor);
+['lqCap','lqRate'].forEach(id=>document.getElementById(id).addEventListener('input',runLQ));
+['beHead','beArb','beCost','bePrice'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{runMC();runTor();runWF();}));
+runAllStress();
+
+</script>
+</body></html>
