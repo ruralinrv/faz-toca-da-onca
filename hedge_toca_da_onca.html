@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório de Hedge — Faz. Toca da Onça</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{
+ --paper:#F6F4EF; --ink:#16211C; --g900:#14261C; --g700:#1F4032; --g500:#2E6B4F;
+ --gold:#B0782A; --goldd:#8A6D3B; --brick:#A6412E; --line:#DED7C7; --muted:#6E7268;
+ --steel:#3E6E7A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#EDE9DF;color:var(--ink);
+ font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.62;
+ -webkit-font-smoothing:antialiased}
+.page{max-width:920px;margin:26px auto;background:var(--paper);
+ box-shadow:0 2px 24px rgba(20,38,28,.14)}
+h1,h2,h3,.mono,.eyebrow,.ax,.axb,.bl,.lg,.cap,.wl,th,.metric b,.tag,.rec-h{font-family:'Libre Franklin',system-ui,sans-serif}
+.mono,.tk{font-family:'IBM Plex Mono',ui-monospace,monospace}
+
+/* header */
+.hero{background:var(--g900);color:#EFE7D8;padding:34px 46px 28px}
+.brand{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.mark{width:52px;height:52px;border:2px solid var(--gold);border-radius:50%;
+ display:flex;align-items:center;justify-content:center;color:var(--gold);
+ font-family:'Libre Franklin';font-weight:800;font-size:26px;flex:none}
+.brand small{display:block;color:#9FB0A2;font-family:'Libre Franklin';font-weight:600;
+ letter-spacing:.14em;text-transform:uppercase;font-size:10.5px}
+.brand .bn{font-family:'Libre Franklin';font-weight:700;font-size:15px;letter-spacing:.02em}
+.hero h1{font-size:33px;line-height:1.08;font-weight:800;margin:.1em 0 .05em;letter-spacing:-.01em;color:#fff}
+.hero .sub{color:#B9C7B8;font-size:15px;max-width:60ch}
+.meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:22px;padding-top:18px;border-top:1px solid #2C4638}
+.meta div{font-size:12.5px;color:#9FB0A2;font-family:'Libre Franklin'}
+.meta b{display:block;color:#EFE7D8;font-weight:600;font-size:14px;margin-top:2px}
+.tk{color:var(--gold)}
+
+.body{padding:10px 46px 40px}
+section{padding:30px 0;border-bottom:1px solid var(--line)}
+section:last-child{border-bottom:0}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--goldd);
+ font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:11px;margin-bottom:6px}
+.eyebrow .no{color:var(--gold);font-family:'IBM Plex Mono';font-weight:600}
+h2{font-size:23px;font-weight:700;margin:0 0 14px;letter-spacing:-.01em;color:var(--g900)}
+h3{font-size:15px;font-weight:700;margin:0 0 4px;color:var(--g700)}
+p{margin:0 0 12px}
+.lead{font-size:17px;color:#2A362E}
+
+/* summary rec box */
+.rec{background:var(--g700);color:#EEF0E6;border-radius:10px;padding:24px 26px;margin:4px 0 6px}
+.rec .rec-h{color:var(--gold);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:11px;margin-bottom:8px}
+.rec h3{color:#fff;font-size:20px;margin-bottom:8px}
+.rec p{color:#D5DCD1;margin-bottom:0;font-size:15px}
+.rec .big{font-family:'IBM Plex Mono';color:var(--gold);font-weight:600}
+
+/* metric strip */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+ border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:6px 0 4px}
+.metric{background:var(--paper);padding:16px 18px}
+.metric small{display:block;font-family:'Libre Franklin';color:var(--muted);font-size:10.5px;
+ letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.metric b{display:block;font-size:23px;color:var(--g900);font-weight:700;margin-top:4px;font-family:'IBM Plex Mono'}
+.metric span{font-size:12px;color:var(--muted)}
+
+figure{margin:14px 0 6px}
+figcaption{font-family:'Libre Franklin';font-size:12px;color:var(--muted);margin-top:6px}
+.ax{font-size:11px;fill:var(--muted)}
+.axb{font-size:12px;fill:#3A3F38;font-weight:600}
+.bl{font-size:11px;font-weight:600}
+.lg{font-size:12px;fill:#3A3F38;font-weight:600}
+.cap{font-size:12px;fill:var(--muted);font-weight:600}
+.wl{font-size:12px;font-weight:700;fill:#fff}
+
+/* cards estratégias */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+.card{border:1px solid var(--line);border-radius:10px;padding:18px 18px 16px;background:#FCFBF7;position:relative}
+.card.pri{border:1.5px solid var(--g700);box-shadow:0 3px 14px rgba(31,64,50,.10)}
+.card .tag{position:absolute;top:-10px;left:16px;background:var(--g700);color:#fff;
+ font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.card.alt .tag{background:var(--steel)}
+.card.opt .tag{background:var(--gold)}
+.card h3{font-size:16px;margin-bottom:2px}
+.card .tk{font-size:12px;color:var(--muted);margin-bottom:12px}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:13.5px}
+.card dt{color:var(--muted);font-family:'Libre Franklin';font-weight:600;font-size:12px}
+.card dd{margin:0;text-align:right;font-family:'IBM Plex Mono';color:var(--g900)}
+.card .note{margin-top:12px;font-size:12.5px;color:#55605A;line-height:1.5}
+
+/* tabela */
+table{width:100%;border-collapse:collapse;margin:8px 0 6px;font-size:14px}
+th{background:var(--g900);color:#EFE7D8;font-size:11.5px;font-weight:600;letter-spacing:.04em;
+ text-align:right;padding:11px 14px}
+th:first-child{text-align:left;border-radius:0}
+td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--line);font-family:'IBM Plex Mono';font-size:13.5px}
+td.sc{text-align:left;font-family:'Libre Franklin';font-weight:700;color:var(--g900)}
+tr.dn{background:#FBF3F0}tr.up{background:#F1F6F1}
+td.pos{color:var(--g500)}td.neg{color:var(--brick);font-weight:600}
+.tnote{font-size:12px;color:var(--muted);margin-top:4px}
+
+ul.clean{margin:6px 0 12px;padding-left:0;list-style:none}
+ul.clean li{position:relative;padding-left:22px;margin-bottom:9px;font-size:15px}
+ul.clean li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;
+ background:var(--gold);border-radius:2px;transform:rotate(45deg)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.pill{display:inline-block;background:#EDE7D7;color:var(--goldd);font-family:'Libre Franklin';
+ font-weight:600;font-size:11px;padding:2px 9px;border-radius:20px;letter-spacing:.04em}
+
+.foot{background:var(--g900);color:#93A396;padding:22px 46px;font-size:11.5px;line-height:1.55;font-family:'Libre Franklin'}
+.foot b{color:#CBD3C6}
+.disc{background:#F0ECE0;border-left:3px solid var(--gold);padding:14px 18px;font-size:12.5px;color:#55605A;border-radius:0 6px 6px 0;margin-top:10px}
+
+@media (max-width:720px){
+ .body,.hero,.foot{padding-left:22px;padding-right:22px}
+ .metrics{grid-template-columns:repeat(2,1fr)}
+ .cards{grid-template-columns:1fr}
+ .split{grid-template-columns:1fr}
+ .hero h1{font-size:26px}
+}
+@media print{
+ body{background:#fff}.page{box-shadow:none;margin:0;max-width:100%}
+ section{page-break-inside:avoid}
+}
+</style></head><body>
+<div class="page">
+
+<header class="hero">
+ <div class="brand">
+  <div class="mark">@</div>
+  <div><small>Relatório de Estratégia · Mercado de Boi Gordo B3</small>
+   <div class="bn">FAZENDA TOCA DA ONÇA</div></div>
+ </div>
+ <h1>Hedge do confinamento:<br>trava de margem no vencimento Out/Nov 2026</h1>
+ <p class="sub">Análise fundamentalista, técnica e estruturação de derivativos para 100 cabeças em terminação, com liquidação prevista para meados de outubro.</p>
+ <div class="meta">
+  <div>Cliente<b>Faz. Toca da Onça · Aporé/GO</b></div>
+  <div>Gestor<b>Rogério Teles</b></div>
+  <div>Lote<b>100 cab · 1.816@ produzidas</b></div>
+  <div>Contrato-alvo<b class="tk">BGIV26 / BGIX26</b></div>
+ </div>
+</header>
+
+<div class="body">
+
+<section>
+ <div class="eyebrow"><span class="no">00</span> Sumário executivo</div>
+ <h2>Recomendação</h2>
+ <p class="lead">A curva futura está <b>rica frente ao seu custo</b>: o vencimento de outubro (~R$355/@) trava a arroba <b>R$&nbsp;49 acima do break-even de R$&nbsp;306,26</b>. Com o físico de curto prazo pressionado por oferta recorde, essa é uma janela para <b>cravar margem</b> — não para torcer.</p>
+ <div class="rec">
+  <div class="rec-h">Estratégia recomendada</div>
+  <h3>Vender Futuro BGIV26 — 5 contratos (90,9% da produção)</h3>
+  <p>Trava preço efetivo de <span class="big">~R$&nbsp;355/@</span> e garante margem realizada em Aporé entre <span class="big">R$&nbsp;56 mil e R$&nbsp;69 mil</span> em qualquer cenário de preço. Prêmio zero; exige apenas reserva de caixa para ajuste diário. <b style="color:#fff">Alternativa:</b> Collar 340/372 se o objetivo for fluxo de caixa mais leve preservando parte da alta.</p>
+ </div>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">01</span> Parâmetros e break-even</div>
+ <h2>O número que comanda a decisão</h2>
+ <div class="metrics">
+  <div class="metric"><small>Custo boi magro</small><b>3.960</b><span>12@ × R$330 /cab</span></div>
+  <div class="metric"><small>Custo do ganho</small><b>1.601</b><span>6,16@ × R$260 /cab</span></div>
+  <div class="metric"><small>Break-even</small><b>306,26</b><span>custo da @ na saída</span></div>
+  <div class="metric"><small>Produção total</small><b>1.816@</b><span>100 cab × 18,16@</span></div>
+ </div>
+ <figure><svg viewBox="0 0 880 300" role="img" aria-label="Formação do custo">
+<line x1="90" y1="196.0" x2="840" y2="196.0" stroke="#E4DECF"/>
+<text x="82" y="200.0" text-anchor="end" class="ax">100</text>
+<line x1="90" y1="142.0" x2="840" y2="142.0" stroke="#E4DECF"/>
+<text x="82" y="146.0" text-anchor="end" class="ax">200</text>
+<line x1="90" y1="88.0" x2="840" y2="88.0" stroke="#E4DECF"/>
+<text x="82" y="92.0" text-anchor="end" class="ax">300</text>
+<line x1="90" y1="34.0" x2="840" y2="34.0" stroke="#E4DECF"/>
+<text x="82" y="38.0" text-anchor="end" class="ax">400</text>
+<rect x="120" y="132.2" width="110" height="117.8" fill="#7C8B79" rx="2"/>
+<text x="175.0" y="124.2" text-anchor="middle" class="wl">218,06</text>
+<text x="175.0" y="270" text-anchor="middle" class="axb">Boi magro<tspan x="175.0" dy="13" class="ax">12@ × 330</tspan></text>
+<rect x="270" y="84.6" width="110" height="47.6" fill="#B0782A" rx="2"/>
+<line x1="230" y1="132.2" x2="270" y2="132.2" stroke="#B7AE9C" stroke-dasharray="3 3"/>
+<text x="325.0" y="76.6" text-anchor="middle" class="wl">+88,19</text>
+<text x="325.0" y="270" text-anchor="middle" class="axb">Ganho confin.<tspan x="325.0" dy="13" class="ax">6,16@ × 260</tspan></text>
+<rect x="420" y="84.6" width="110" height="165.4" fill="#14261C" rx="2"/>
+<text x="475.0" y="76.6" text-anchor="middle" class="wl" fill="#14261C">306,26</text>
+<text x="475.0" y="270" text-anchor="middle" class="axb">Break-even<tspan x="475.0" dy="13" class="ax">custo/@ saída</tspan></text>
+<line x1="420" y1="78.3" x2="830" y2="78.3" stroke="#8A6D3B" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="830" y="72.3" text-anchor="end" class="lg" fill="#8A6D3B">Físico Aporé ~318</text>
+<line x1="420" y1="58.3" x2="830" y2="58.3" stroke="#1F4032" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="830" y="52.3" text-anchor="end" class="lg" fill="#1F4032">Futuro V26 ~355</text>
+<line x1="824" y1="84.6" x2="824" y2="58.3" stroke="#2E6B4F" stroke-width="2"/>
+<text x="816" y="75.5" text-anchor="end" class="lg" fill="#2E6B4F">colchão +49/@</text>
+</svg><figcaption>Formação do custo por arroba produzida. O contrato de outubro (~R$355) abre um colchão de +R$49/@ sobre o break-even; o físico de Aporé (~R$318) já rende margem apertada.</figcaption></figure>
+ <p>Dimensionamento: 1.816@ ÷ 330@ = <b>5,5 contratos</b>. Recomenda-se <b>5 contratos (1.650@)</b> para não sobre-hedgear; os 166@ residuais flutuam a mercado. Se a venda física for escalonada, dividir <span class="tk">3× V26 + 2× X26</span>.</p>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">02</span> Análise fundamentalista</div>
+ <h2>Curva rica sobre físico pressionado</h2>
+ <div class="split">
+  <div>
+   <h3>Pressão de curto prazo</h3>
+   <p>O primeiro semestre registrou <b>abate recorde</b> (Mato Grosso no maior volume histórico), elevando a oferta de animais terminados e pressionando a arroba. Analistas já apontam <b>arrefecimento da queda</b> e busca de um piso — cenário típico para montar hedge em repique.</p>
+   <h3>Suporte pela demanda externa</h3>
+   <p>A exportação de carne segue firme, com <b>receita recorde</b> e embarques acima de 2025, sustentada por câmbio em ~R$5,15. A modulação da cota chinesa é o principal risco de demanda a monitorar.</p>
+  </div>
+  <div>
+   <h3>Estrutura de mercado</h3>
+   <p>A curva de futuros é <b>ascendente</b>: contratos de janeiro/27 já superam R$365/@. Isso significa que o mercado precifica valorização rumo à entressafra — e que <b>travar out/nov a ~R$355–360 embute prêmio relevante</b> sobre o físico atual e, sobretudo, sobre o custo.</p>
+   <figure><svg viewBox="0 0 880 230" role="img" aria-label="Curva de futuros">
+<line x1="70" y1="130.6" x2="720" y2="130.6" stroke="#E4DECF"/>
+<text x="62" y="134.6" text-anchor="end" class="ax">320</text>
+<line x1="70" y1="91.9" x2="720" y2="91.9" stroke="#E4DECF"/>
+<text x="62" y="95.9" text-anchor="end" class="ax">340</text>
+<line x1="70" y1="53.2" x2="720" y2="53.2" stroke="#E4DECF"/>
+<text x="62" y="57.2" text-anchor="end" class="ax">360</text>
+<rect x="395" y="30" width="260" height="120" fill="#B0782A" opacity="0.10"/>
+<text x="525" y="44" text-anchor="middle" class="lg" fill="#8A6D3B">janela de trava</text>
+<polyline points="70.0,136.5 200.0,111.3 330.0,82.3 460.0,62.9 590.0,53.2 720.0,41.6" fill="none" stroke="#1F4032" stroke-width="2.5"/>
+<circle cx="70.0" cy="136.5" r="4.5" fill="#1F4032"/>
+<text x="70.0" y="126.5" text-anchor="middle" class="bl" fill="#14261C">317</text>
+<text x="70.0" y="170" text-anchor="middle" class="axb">Físico<tspan x="70.0" dy="12" class="ax">GO</tspan></text>
+<circle cx="200.0" cy="111.3" r="4.5" fill="#1F4032"/>
+<text x="200.0" y="101.3" text-anchor="middle" class="bl" fill="#14261C">330</text>
+<text x="200.0" y="170" text-anchor="middle" class="axb">Físico<tspan x="200.0" dy="12" class="ax">SP</tspan></text>
+<circle cx="330.0" cy="82.3" r="4.5" fill="#1F4032"/>
+<text x="330.0" y="72.3" text-anchor="middle" class="bl" fill="#14261C">345</text>
+<text x="330.0" y="170" text-anchor="middle" class="axb">1º venc</text>
+<circle cx="460.0" cy="62.9" r="4.5" fill="#1F4032"/>
+<text x="460.0" y="52.9" text-anchor="middle" class="bl" fill="#14261C">355</text>
+<text x="460.0" y="170" text-anchor="middle" class="axb">Out V26</text>
+<circle cx="590.0" cy="53.2" r="4.5" fill="#1F4032"/>
+<text x="590.0" y="43.2" text-anchor="middle" class="bl" fill="#14261C">360</text>
+<text x="590.0" y="170" text-anchor="middle" class="axb">Nov X26</text>
+<circle cx="720.0" cy="41.6" r="4.5" fill="#1F4032"/>
+<text x="720.0" y="31.6" text-anchor="middle" class="bl" fill="#14261C">366</text>
+<text x="720.0" y="170" text-anchor="middle" class="axb">Jan F27</text>
+</svg><figcaption>Do físico à ponta longa da curva (valores de referência, jul/26).</figcaption></figure>
+  </div>
+ </div>
+ <p><span class="pill">Leitura</span> &nbsp;Viés de curto prazo baixista no físico + curva rica = <b>ambiente favorável a travar</b>. A demanda externa firme limita quedas profundas, o que reforça o uso de estruturas que preservem algum potencial de alta.</p>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">03</span> Análise técnica &amp; contrato</div>
+ <h2>Zona de trava e vencimento</h2>
+ <ul class="clean">
+  <li><b>Físico de referência:</b> GO ~R$317/@ · SP ~R$330/@ · primeiro vencimento BGI ~R$345/@.</li>
+  <li><b>Zona de venda do produtor (hedge):</b> a faixa <b>R$355–360</b> em out/nov é a região atrativa para travar, alinhada à ponta média da curva e bem acima do custo.</li>
+  <li><b>Momentum:</b> físico em correção com possível formação de piso — favorece montar a posição aproveitando repiques de preço, sem esperar o "topo perfeito".</li>
+  <li><b>Vencimento:</b> saída em ~100 dias (meados de out) → <b>BGIV26 (Outubro)</b> casa melhor com a data de venda, pois liquida pela média do ESALQ de outubro. <b>BGIX26 (Novembro)</b> serve se a venda escorregar ou para capturar o prêmio de entressafra.</li>
+ </ul>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">04</span> As três estruturas</div>
+ <h2>Custo, piso e teto de cada caminho</h2>
+ <div class="cards">
+  <div class="card pri"><span class="tag">Recomendada</span>
+   <h3>Futuro V26</h3><div class="tk">Venda · BGIV26 · 5 ctr</div>
+   <dl>
+    <dt>Prêmio</dt><dd>R$ 0</dd>
+    <dt>Preço travado</dt><dd>~355/@</dd>
+    <dt>Piso / Teto</dt><dd>355 / 355</dd>
+    <dt>Margem garantia</dt><dd>~19.564</dd>
+   </dl>
+   <div class="note">Maior margem travada e melhor proteção de queda. Exige caixa para <b>ajuste diário</b>; abre mão da alta acima de R$355. Garantia depositável em CDB/Tesouro (custo de oportunidade).</div>
+  </div>
+  <div class="card alt"><span class="tag">Alternativa</span>
+   <h3>Collar 340/372</h3><div class="tk">Compra put + venda call</div>
+   <dl>
+    <dt>Custo líquido</dt><dd>~2,5/@</dd>
+    <dt>Desembolso</dt><dd>~4.125</dd>
+    <dt>Piso / Teto</dt><dd>337,5 / 369,5</dd>
+    <dt>Margem garantia</dt><dd>~32.500</dd>
+   </dl>
+   <div class="note">Protege a queda a custo baixo e preserva a alta até ~R$370. Fluxo de caixa mais previsível que o futuro; a call vendida exige margem (~R$6,5 mil/ctr).</div>
+  </div>
+  <div class="card opt"><span class="tag">Se viés altista</span>
+   <h3>Put seca 340</h3><div class="tk">Compra de opção · out</div>
+   <dl>
+    <dt>Prêmio</dt><dd>6/@</dd>
+    <dt>Desembolso</dt><dd>~9.900</dd>
+    <dt>Piso / Teto</dt><dd>334 / ∞</dd>
+    <dt>Margem garantia</dt><dd>nenhuma</dd>
+   </dl>
+   <div class="note">Piso rígido e <b>alta ilimitada</b>, sem chamada de margem. É o "seguro" mais caro e a menor margem garantida no pior cenário.</div>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">05</span> Cenários</div>
+ <h2>Margem realizada em Aporé por preço de liquidação</h2>
+ <p>Resultado da operação completa (1.816@), já descontada a base regional de <b>~R$12/@</b> (praça de Aporé, divisa GO/MS — faixa −R$12 a −R$15 conforme o frigorífico de referência) e os prêmios/custos de cada estrutura. Hedge de 5 contratos; 166@ residuais a mercado.</p>
+ <table>
+  <thead><tr><th>Liquidação</th><th>Sem hedge</th><th>Futuro V26</th><th>Put 340</th><th>Collar 340/372</th></tr></thead>
+  <tbody><tr><td class="sc">R$ 290</td><td class="neg">-R$ 51.312</td><td class="pos">R$ 55.938</td><td class="pos">R$ 21.288</td><td class="pos">R$ 27.063</td></tr>
+<tr><td class="sc">R$ 310</td><td class="neg">-R$ 14.992</td><td class="pos">R$ 59.258</td><td class="pos">R$ 24.608</td><td class="pos">R$ 30.383</td></tr>
+<tr><td class="sc">R$ 330</td><td class="pos">R$ 21.328</td><td class="pos">R$ 62.578</td><td class="pos">R$ 27.928</td><td class="pos">R$ 33.703</td></tr>
+<tr><td class="sc">R$ 350</td><td class="pos">R$ 57.648</td><td class="pos">R$ 65.898</td><td class="pos">R$ 47.748</td><td class="pos">R$ 53.523</td></tr>
+<tr><td class="sc">R$ 370</td><td class="pos">R$ 93.968</td><td class="pos">R$ 69.218</td><td class="pos">R$ 84.068</td><td class="pos">R$ 89.843</td></tr>
+</tbody>
+ </table>
+ <p class="tnote">Linhas em vermelho = cenários de queda; em verde = alta. Base ESALQ (referência do contrato): some ~R$21.792 a cada célula.</p>
+ <figure><svg viewBox="0 0 880 430" role="img" aria-label="Margem por cenário">
+<line x1="78" y1="298.0" x2="846" y2="298.0" stroke="#E4DECF" stroke-width="1"/>
+<text x="68" y="302.0" text-anchor="end" class="ax">-40k</text>
+<line x1="78" y1="218.0" x2="846" y2="218.0" stroke="#E4DECF" stroke-width="1"/>
+<text x="68" y="222.0" text-anchor="end" class="ax">0k</text>
+<line x1="78" y1="138.0" x2="846" y2="138.0" stroke="#E4DECF" stroke-width="1"/>
+<text x="68" y="142.0" text-anchor="end" class="ax">40k</text>
+<line x1="78" y1="58.0" x2="846" y2="58.0" stroke="#E4DECF" stroke-width="1"/>
+<text x="68" y="62.0" text-anchor="end" class="ax">80k</text>
+<line x1="78" y1="218.0" x2="846" y2="218.0" stroke="#3A3F38" stroke-width="1.5"/>
+<rect x="99.5" y="218.0" width="24.6" height="102.6" fill="#B7AE9C" rx="1.5"/>
+<text x="111.8" y="332.6" text-anchor="middle" class="bl" fill="#B7AE9C">-51</text>
+<rect x="127.2" y="106.1" width="24.6" height="111.9" fill="#1F4032" rx="1.5"/>
+<text x="139.5" y="102.1" text-anchor="middle" class="bl" fill="#1F4032">+56</text>
+<rect x="154.8" y="175.4" width="24.6" height="42.6" fill="#B0782A" rx="1.5"/>
+<text x="167.1" y="171.4" text-anchor="middle" class="bl" fill="#B0782A">+21</text>
+<rect x="182.4" y="163.9" width="24.6" height="54.1" fill="#3E6E7A" rx="1.5"/>
+<text x="194.8" y="159.9" text-anchor="middle" class="bl" fill="#3E6E7A">+27</text>
+<text x="154.8" y="360" text-anchor="middle" class="axb">R$ 290/@</text>
+<rect x="253.1" y="218.0" width="24.6" height="30.0" fill="#B7AE9C" rx="1.5"/>
+<text x="265.4" y="260.0" text-anchor="middle" class="bl" fill="#B7AE9C">-15</text>
+<rect x="280.8" y="99.5" width="24.6" height="118.5" fill="#1F4032" rx="1.5"/>
+<text x="293.1" y="95.5" text-anchor="middle" class="bl" fill="#1F4032">+59</text>
+<rect x="308.4" y="168.8" width="24.6" height="49.2" fill="#B0782A" rx="1.5"/>
+<text x="320.7" y="164.8" text-anchor="middle" class="bl" fill="#B0782A">+25</text>
+<rect x="336.0" y="157.2" width="24.6" height="60.8" fill="#3E6E7A" rx="1.5"/>
+<text x="348.4" y="153.2" text-anchor="middle" class="bl" fill="#3E6E7A">+30</text>
+<text x="308.4" y="360" text-anchor="middle" class="axb">R$ 310/@</text>
+<rect x="406.7" y="175.3" width="24.6" height="42.7" fill="#B7AE9C" rx="1.5"/>
+<text x="419.0" y="171.3" text-anchor="middle" class="bl" fill="#B7AE9C">+21</text>
+<rect x="434.4" y="92.8" width="24.6" height="125.2" fill="#1F4032" rx="1.5"/>
+<text x="446.7" y="88.8" text-anchor="middle" class="bl" fill="#1F4032">+63</text>
+<rect x="462.0" y="162.1" width="24.6" height="55.9" fill="#B0782A" rx="1.5"/>
+<text x="474.3" y="158.1" text-anchor="middle" class="bl" fill="#B0782A">+28</text>
+<rect x="489.6" y="150.6" width="24.6" height="67.4" fill="#3E6E7A" rx="1.5"/>
+<text x="502.0" y="146.6" text-anchor="middle" class="bl" fill="#3E6E7A">+34</text>
+<text x="462.0" y="360" text-anchor="middle" class="axb">R$ 330/@</text>
+<rect x="560.3" y="102.7" width="24.6" height="115.3" fill="#B7AE9C" rx="1.5"/>
+<text x="572.6" y="98.7" text-anchor="middle" class="bl" fill="#B7AE9C">+58</text>
+<rect x="588.0" y="86.2" width="24.6" height="131.8" fill="#1F4032" rx="1.5"/>
+<text x="600.3" y="82.2" text-anchor="middle" class="bl" fill="#1F4032">+66</text>
+<rect x="615.6" y="122.5" width="24.6" height="95.5" fill="#B0782A" rx="1.5"/>
+<text x="627.9" y="118.5" text-anchor="middle" class="bl" fill="#B0782A">+48</text>
+<rect x="643.2" y="111.0" width="24.6" height="107.0" fill="#3E6E7A" rx="1.5"/>
+<text x="655.6" y="107.0" text-anchor="middle" class="bl" fill="#3E6E7A">+54</text>
+<text x="615.6" y="360" text-anchor="middle" class="axb">R$ 350/@</text>
+<rect x="713.9" y="30.1" width="24.6" height="187.9" fill="#B7AE9C" rx="1.5"/>
+<text x="726.2" y="26.1" text-anchor="middle" class="bl" fill="#B7AE9C">+94</text>
+<rect x="741.6" y="79.6" width="24.6" height="138.4" fill="#1F4032" rx="1.5"/>
+<text x="753.9" y="75.6" text-anchor="middle" class="bl" fill="#1F4032">+69</text>
+<rect x="769.2" y="49.9" width="24.6" height="168.1" fill="#B0782A" rx="1.5"/>
+<text x="781.5" y="45.9" text-anchor="middle" class="bl" fill="#B0782A">+84</text>
+<rect x="796.8" y="38.3" width="24.6" height="179.7" fill="#3E6E7A" rx="1.5"/>
+<text x="809.2" y="34.3" text-anchor="middle" class="bl" fill="#3E6E7A">+90</text>
+<text x="769.2" y="360" text-anchor="middle" class="axb">R$ 370/@</text>
+<rect x="78" y="407" width="13" height="13" rx="2.5" fill="#B7AE9C"/>
+<text x="96" y="417" class="lg">Sem hedge</text>
+<rect x="263" y="407" width="13" height="13" rx="2.5" fill="#1F4032"/>
+<text x="281" y="417" class="lg">Futuro V26</text>
+<rect x="448" y="407" width="13" height="13" rx="2.5" fill="#B0782A"/>
+<text x="466" y="417" class="lg">Put seca 340</text>
+<rect x="633" y="407" width="13" height="13" rx="2.5" fill="#3E6E7A"/>
+<text x="651" y="417" class="lg">Collar 340/372</text>
+</svg><figcaption>Em queda e no neutro, o Futuro domina; na alta forte, Collar e "sem hedge" capturam mais — mas o Futuro sacrifica pouco (a R$370, R$69,2k vs R$94,0k sem proteção alguma).</figcaption></figure>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">06</span> Perfil de payoff</div>
+ <h2>Preço efetivo travado por estrutura</h2>
+ <figure><svg viewBox="0 0 880 430" role="img" aria-label="Preço efetivo travado">
+<line x1="70" y1="297.8" x2="850" y2="297.8" stroke="#E4DECF"/>
+<text x="62" y="301.8" text-anchor="end" class="ax">300</text>
+<line x1="70" y1="228.6" x2="850" y2="228.6" stroke="#E4DECF"/>
+<text x="62" y="232.6" text-anchor="end" class="ax">320</text>
+<line x1="70" y1="159.4" x2="850" y2="159.4" stroke="#E4DECF"/>
+<text x="62" y="163.4" text-anchor="end" class="ax">340</text>
+<line x1="70" y1="90.2" x2="850" y2="90.2" stroke="#E4DECF"/>
+<text x="62" y="94.2" text-anchor="end" class="ax">360</text>
+<line x1="148.0" y1="28" x2="148.0" y2="360" stroke="#EFEADD"/>
+<text x="148.0" y="380" text-anchor="middle" class="axb">290</text>
+<line x1="304.0" y1="28" x2="304.0" y2="360" stroke="#EFEADD"/>
+<text x="304.0" y="380" text-anchor="middle" class="axb">310</text>
+<line x1="460.0" y1="28" x2="460.0" y2="360" stroke="#EFEADD"/>
+<text x="460.0" y="380" text-anchor="middle" class="axb">330</text>
+<line x1="616.0" y1="28" x2="616.0" y2="360" stroke="#EFEADD"/>
+<text x="616.0" y="380" text-anchor="middle" class="axb">350</text>
+<line x1="772.0" y1="28" x2="772.0" y2="360" stroke="#EFEADD"/>
+<text x="772.0" y="380" text-anchor="middle" class="axb">370</text>
+<line x1="70" y1="276.1" x2="850" y2="276.1" stroke="#A6412E" stroke-width="1.3" stroke-dasharray="5 4"/>
+<text x="846" y="270.1" text-anchor="end" class="lg" fill="#A6412E">break-even 306</text>
+<polyline points="70.0,366.9 85.6,360.0 101.2,353.1 116.8,346.2 132.4,339.2 148.0,332.3 163.6,325.4 179.2,318.5 194.8,311.6 210.4,304.7 226.0,297.8 241.6,290.8 257.2,283.9 272.8,277.0 288.4,270.1 304.0,263.2 319.6,256.2 335.2,249.3 350.8,242.4 366.4,235.5 382.0,228.6 397.6,221.7 413.2,214.8 428.8,207.8 444.4,200.9 460.0,194.0 475.6,187.1 491.2,180.2 506.8,173.2 522.4,166.3 538.0,159.4 553.6,152.5 569.2,145.6 584.8,138.7 600.4,131.8 616.0,124.8 631.6,117.9 647.2,111.0 662.8,104.1 678.4,97.2 694.0,90.2 709.6,83.3 725.2,76.4 740.8,69.5 756.4,62.6 772.0,55.7 787.6,48.8 803.2,41.8 818.8,34.9 834.4,28.0 850.0,21.1" fill="none" stroke="#B7AE9C" stroke-width="2"/>
+<polyline points="70.0,197.2 85.6,196.6 101.2,196.0 116.8,195.3 132.4,194.7 148.0,194.1 163.6,193.4 179.2,192.8 194.8,192.2 210.4,191.5 226.0,190.9 241.6,190.3 257.2,189.7 272.8,189.0 288.4,188.4 304.0,187.8 319.6,187.1 335.2,186.5 350.8,185.9 366.4,185.2 382.0,184.6 397.6,184.0 413.2,183.3 428.8,182.7 444.4,182.1 460.0,181.4 475.6,180.8 491.2,180.2 506.8,179.5 522.4,178.9 538.0,178.3 553.6,171.4 569.2,164.4 584.8,157.5 600.4,150.6 616.0,143.7 631.6,136.8 647.2,129.9 662.8,122.9 678.4,116.0 694.0,109.1 709.6,102.2 725.2,95.3 740.8,88.4 756.4,81.4 772.0,74.5 787.6,67.6 803.2,60.7 818.8,53.8 834.4,46.9 850.0,39.9" fill="none" stroke="#B0782A" stroke-width="2.4"/>
+<polyline points="70.0,186.2 85.6,185.6 101.2,185.0 116.8,184.3 132.4,183.7 148.0,183.1 163.6,182.4 179.2,181.8 194.8,181.2 210.4,180.5 226.0,179.9 241.6,179.3 257.2,178.7 272.8,178.0 288.4,177.4 304.0,176.8 319.6,176.1 335.2,175.5 350.8,174.9 366.4,174.2 382.0,173.6 397.6,173.0 413.2,172.3 428.8,171.7 444.4,171.1 460.0,170.4 475.6,169.8 491.2,169.2 506.8,168.5 522.4,167.9 538.0,167.3 553.6,160.4 569.2,153.4 584.8,146.5 600.4,139.6 616.0,132.7 631.6,125.8 647.2,118.9 662.8,111.9 678.4,105.0 694.0,98.1 709.6,91.2 725.2,84.3 740.8,77.4 756.4,70.4 772.0,63.5 787.6,56.6 803.2,56.0 818.8,55.3 834.4,54.7 850.0,54.1" fill="none" stroke="#3E6E7A" stroke-width="2.4"/>
+<polyline points="70.0,131.3 85.6,130.6 101.2,130.0 116.8,129.4 132.4,128.7 148.0,128.1 163.6,127.5 179.2,126.8 194.8,126.2 210.4,125.6 226.0,124.9 241.6,124.3 257.2,123.7 272.8,123.0 288.4,122.4 304.0,121.8 319.6,121.1 335.2,120.5 350.8,119.9 366.4,119.2 382.0,118.6 397.6,118.0 413.2,117.3 428.8,116.7 444.4,116.1 460.0,115.4 475.6,114.8 491.2,114.2 506.8,113.5 522.4,112.9 538.0,112.3 553.6,111.7 569.2,111.0 584.8,110.4 600.4,109.8 616.0,109.1 631.6,108.5 647.2,107.9 662.8,107.2 678.4,106.6 694.0,106.0 709.6,105.3 725.2,104.7 740.8,104.1 756.4,103.4 772.0,102.8 787.6,102.2 803.2,101.5 818.8,100.9 834.4,100.3 850.0,99.6" fill="none" stroke="#1F4032" stroke-width="2.8"/>
+<text x="838.4" y="104.3" class="lg" fill="#1F4032">Futuro</text>
+<text x="838.4" y="72.7" class="lg" fill="#3E6E7A">Collar</text>
+<text x="838.4" y="78.9" class="lg" fill="#B0782A">Put</text>
+<text x="838.4" y="16.0" class="lg" fill="#B7AE9C">Sem hedge</text>
+<text x="460" y="398" text-anchor="middle" class="cap">Preço de mercado na liquidação (R$/@, base ESALQ) →</text>
+<text x="18" y="194" transform="rotate(-90 18 194)" text-anchor="middle" class="cap">Preço efetivo travado (R$/@)</text>
+</svg><figcaption>O Futuro (verde) achata o preço em ~R$355 independentemente do mercado. A Put (dourado) fixa piso e libera a alta. O Collar (aço) combina piso e teto. Tudo acima da linha de break-even.</figcaption></figure>
+</section>
+
+<section>
+ <div class="eyebrow"><span class="no">07</span> Recomendação detalhada</div>
+ <h2>Decisão por objetivo</h2>
+ <ul class="clean">
+  <li><b>Certeza + maior margem + suporta ajuste diário → Futuro BGIV26 (5 ctr).</b> Trava ~R$355/@, garante R$56–69 mil em Aporé. Manter reserva de ~R$30–40 mil para ajustes; garantia ~R$19,5 mil em CDB/Tesouro.</li>
+  <li><b>Proteção barata + preservar alta + caixa mais leve → Collar 340/372.</b> Piso ~R$337,5 e teto ~R$369,5 por custo líquido de ~R$4,1 mil; garantia ~R$32,5 mil (depositável).</li>
+  <li><b>Aposta na alta com piso rígido → Put seca 340.</b> Desembolso ~R$9,9 mil, sem margem, alta total — aceitando a menor margem garantida no pior caso.</li>
+ </ul>
+ <div class="disc"><b>Execução:</b> montar em repiques na faixa R$355–360 do V26; se a venda física for escalonada, dividir 3× V26 + 2× X26. Reavaliar prêmios e strikes na tela no momento da montagem — o resultado da Put e do Collar é sensível ao prêmio praticado no book.</div>
+</section>
+
+</div>
+
+<footer class="foot">
+ <b>Premissas (ilustrativas, a confirmar na tela):</b> Futuro V26 R$355/@ · Put 340 prêmio R$6/@ · Collar 340/372 custo líquido R$2,5/@ · base regional Aporé/SW-GO −R$12/@ (faixa −R$12 a −R$15) · margem de garantia da call ~R$6.500/ctr. Break-even R$306,26/@ derivado dos custos informados (magro 12@×330; ganho 6,16@×260).<br><br>
+ <b>Aviso:</b> documento preparado exclusivamente para a Faz. Toca da Onça (a/c Rogério Teles). Trata-se de análise técnica de estruturação de hedge, <b>não constituindo recomendação personalizada de investimento</b>. Preços de futuros e prêmios de opções variam intradia; margens de garantia são definidas pela B3 e pela corretora. Rentabilidade passada não garante resultados futuros.
+</footer>
+
+</div></body></html>
